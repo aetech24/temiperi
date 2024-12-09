@@ -26,10 +26,10 @@ const App = ({data}) => {
   }, [])
   return (
     <>
-      {showLogin ? < Login url={url}/> : setShowLogin='/analysis'}
+      
     <div>
       <Routes>
-        <Route path='/analysis' element={<Analysis url={url}/>}/>
+        <Route path='/' element={<Analysis url={url}/>}/>
         <Route path='/product' element={<Products url={url}/>}/>
         <Route path='/addproduct' element={<AddProduct url={url}/>}/>
         <Route path='/settings' element={<Settings url={url}/>}/>
