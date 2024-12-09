@@ -12,7 +12,7 @@ import Footer from './components/Footer/Footer'
 
 const App = ({data}) => {
 
-  const url = 'http://localhost:4000'
+  const url = 'https://temiperi-backend.onrender.com'
   const [showLogin, setShowLogin] = useState(true)
 
   const navigate = useNavigate()
