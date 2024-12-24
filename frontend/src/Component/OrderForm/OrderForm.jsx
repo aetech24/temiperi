@@ -82,7 +82,7 @@ const OrderForm = () => {
 
     try {
       const newInvoice = await axios.post(
-        "http://localhost:4000/temiperi/invoice",
+        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
         invoiceData
       );
       console.log(newInvoice);
