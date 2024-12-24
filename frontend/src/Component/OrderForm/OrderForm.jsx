@@ -4,7 +4,7 @@ import { asset } from "../../assets/assets";
 import "./sales.css";
 import axios from "axios";
 
-const url = "http://localhost:4000/temiperi/products";
+const url = "https://temiperi-stocks-backend.onrender.com/temiperi/products";
 
 const OrderForm = () => {
   const [data, setData] = useState({
