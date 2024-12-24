@@ -13,7 +13,7 @@ const Invoice = () => {
       const fetchInvoices = async () => {
          try {
             const response = await axios.get(
-              "http://localhost:4000/temiperi/invoice"
+              "https://temiperi-stocks-backend.onrender.com/temiperi/invoice"
             );
             console.log(response.data);
             setInvoices(response.data.invoice)
