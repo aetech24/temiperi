@@ -8,7 +8,7 @@ const Sales = () => {
 
   useEffect(() => {
     const getSales = async () => {
-      const response = await fetch("http://localhost:4000/temiperi/orders");
+      const response = await fetch("https://temiperi-stocks-backend.onrender.com/temiperi/orders");
       const products = await response.json();
       console.log(products);
       setProducts(products);
