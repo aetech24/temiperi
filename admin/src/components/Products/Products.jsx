@@ -20,7 +20,7 @@ const Products = ({
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get(
-        "http://localhost:4000/temiperi/products"
+        "https://temiperi-stocks-backend.onrender.com/temiperi/products"
       );
       console.log(response.data);
       const stock = await response.data;
