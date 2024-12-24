@@ -30,7 +30,7 @@ const AddProduct = () => {
     formData.append('wholesale_price', Number(data.wholesale_price));
     formData.append('retail_price', Number(data.retail_price));
     
-    const response = await axios.post('http://localhost:4000/temiperi/products', formData);
+    const response = await axios.post('https://temiperi-stocks-backend.onrender.com/temiperi/products', formData);
     console.log(response.data)
     if(response.data.success){
       setData({
