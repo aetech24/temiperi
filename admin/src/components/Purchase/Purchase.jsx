@@ -11,7 +11,7 @@ const Purchase = () => {
       const fetchStock = async () => {
          try {
             const response = await axios.get(
-              "http://localhost:4000/temiperi/products"
+              "https://temiperi-stocks-backend.onrender.com/temiperi/products"
             ); 
             console.log(response.data);
             setProducts(response.data.products)
