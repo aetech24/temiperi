@@ -15,10 +15,10 @@ export const getAllProducts = async (req, res)=> {
 export const addProdut = async (req, res) => {
    try {
       const products = await Product.create(req.body)
-      res.status(201).json({sucess: true, message: 'Product added', products})
+      res.status(201).json({success: true, message: 'Product added', products})
    } catch (error) {
       console.log(error);
-      res.json({sucess: false, message: error})
+      res.json({success: false, message: error})
    }
 }
 //get a product 

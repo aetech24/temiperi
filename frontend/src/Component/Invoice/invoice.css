@@ -20,16 +20,7 @@
    border-radius: 10px;
 }
 
-.invoice_details {
-   align-items: center;
-   padding: 20px;
-}
 
-.invoice_details p {
-   font-weight: 500;
-   padding-bottom: 10px;
-   border-bottom: solid 1px #ccc;
-}
 
 .invoice_btn {
    width: 80%;
@@ -66,4 +57,27 @@
 .purchase_company_info p {
    font-weight: 700;
    padding: 10px 0;
+}
+
+.invoice_details {
+   align-items: center;
+   padding: 20px;
+}
+
+.invoice_container ul {
+   display: flex;
+   flex-direction: column;
+   align-items: start;
+   justify-content: start;
+   width: 80%;
+   margin: auto;
+}
+
+.invoice_container ul li {
+   list-style: none;
+   text-align: start;
+   background: #cccccc5e;
+   margin-bottom: 20px;
+   justify-content: space-between;
+   width: 100%;
 }

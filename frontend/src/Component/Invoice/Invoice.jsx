@@ -34,13 +34,14 @@ const Invoice = () => {
             <p>Total Amount: ${invoice.totalAmount}</p>
 
             <h3>Items: </h3>
-             <ul>
-               {invoices.map((invoice) => (
-               <li key={invoice._id}>
-                  <strong>${invoice.invoiceNumber}</strong> - ${invoice.customerName} - ${invoice.totalAmount}
-                </li>
-             ))}
-         </ul>   
+            <ul>
+          ${invoice.items
+            .map(
+              (item) => `
+            <li>${item.description} - ${item.quantity} x GH${item.price}</li>`
+            )
+            .join("")}
+        </ul>
          </div>
       `;
 
@@ -84,8 +85,8 @@ const Invoice = () => {
 
       <ul>
         {Array.isArray(invoices) && invoices.map((invoice) => (
-            <li key={invoice._id}>
-               <strong>{invoice.invoiceNumber}</strong> - {invoice.customerName} - ${invoice.totalAmount}
+            <li key={invoice._id} className='invoice_details'>
+               <strong>{invoice.invoiceNumber}</strong> - {invoice.customerName} - GH{invoice.totalAmount}
                <button onClick={() => handlePrint(invoice)}>Print</button>
             </li>
          ))}
