@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './order.css'
 import axios from 'axios'
 
-const url = `http://localhost:4000/temiperi/orders?_=${new Date().getTime()}`;
+const url = `http://localhost:4000/temiperi/invoice?_=${new Date().getTime()}`;
 
 const Orders = () => {
   const [orderList, setOrderList] = useState([]);

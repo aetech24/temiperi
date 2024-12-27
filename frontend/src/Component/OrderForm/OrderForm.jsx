@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { asset } from "../../assets/assets";
-//import { createInvoice } from "../../../../backend/controllers/invocieControllers";
 import "./sales.css";
 import axios from "axios";
 
