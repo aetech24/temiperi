@@ -81,25 +81,21 @@ export const getInvoice = async (req, res) => {
 
 // Generate Random Invoice Number
 export const generateRandomInvoiceNumber = async (retryCount = 0) => {
-  if (retryCount > 10) {
-    throw new Error(
-      "Max retries reached while generating unique invoice number."
-    );
-  }
-
+   if(retryCount > 10) {
+     throw new Error(
+       "Max retries reached while generating unique invoice number."
+     );
+   }
   const prefix = "tm";
   const randomPart = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
   const newInvoiceNumber = `${prefix}${randomPart}`;
 
-  // Check if the generated number is unique
-  const existingInvoice = await Invoice.findOne({
-    invoiceNumber: newInvoiceNumber,
-  });
+  // Ensure the generated number is unique
+  const existingInvoice = await Invoice.findOne({ invoiceNumber: req.body.invoiceNumber });
   if (existingInvoice) {
-    // Retry with incremented retryCount
-    return generateRandomInvoiceNumber(retryCount + 1);
+    // If the number already exists, recursively generate a new one
+    return generateRandomInvoiceNumber();
   }
-
   return newInvoiceNumber;
 };
 

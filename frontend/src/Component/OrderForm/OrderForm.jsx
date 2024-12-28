@@ -83,8 +83,8 @@ const OrderForm = () => {
       if (selectedProduct) {
         items[index].price =
           value > 10
-            ? selectedProduct.price?.wholeSale_price || 0
-            : selectedProduct.price?.retail_price || 0;
+            ? selectedProduct.price?.retail_price || 0
+            : selectedProduct.price?.wholeSale_price_price || 0;
       }
     }
 
@@ -145,8 +145,9 @@ const OrderForm = () => {
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (error.response?.status === 400) {
         alert("Invoice number already exists. Please refresh and try again." + error.message);
+        setLatestInvoiceNumber();
       } else {
         alert("Error creating invoice: " + error.message);
       }
