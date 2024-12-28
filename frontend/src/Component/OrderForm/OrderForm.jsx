@@ -3,18 +3,28 @@ import { asset } from "../../assets/assets";
 import "./sales.css";
 import axios from "axios";
 
-const url = "https://temiperi-stocks-backend.onrender.com/temiperi/products";
+const url = "http://localhost:4000/temiperi/products";
 
 const OrderForm = () => {
   const [data, setData] = useState({
     invoiceNumber: "",
     customerName: "",
-    items: [{ description: "", quantity: 0, price: 0 }],
+    items: [
+      {
+        description: "",
+        quantity: 0,
+        size: "medium",
+        price: {
+          retail_price: 0,
+          wholeSale_price: 0,
+        },
+      },
+    ],
   });
   const [products, setProducts] = useState([]);
   const [previewItems, setPreviewItems] = useState([]);
-  const [latestInvoiceNumber, setLatestInvoiceNumber] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [latestInvoiceNumber, setLatestInvoiceNumber] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -30,20 +40,19 @@ const OrderForm = () => {
     const fetchLatestInvoiceNumber = async () => {
       try {
         const response = await axios.get(
-          "https://temiperi-stocks-backend.onrender.com/temiperi/invoice/latest"
+          "http://localhost:4000/temiperi/invoice/latest"
         );
-        const latestNumber = response.data.latestInvoiceNumber || 0;
-        setLatestInvoiceNumber(latestNumber);
-        setData((prevData) => ({
-          ...prevData,
-          invoiceNumber: `${latestNumber + 1}`,
-        }));
+        if (response.data.latestInvoiceNumber) {
+          setData((prevData) => ({
+            ...prevData,
+            invoiceNumber: response.data.latestInvoiceNumber,
+          }));
+        }
       } catch (error) {
         console.error("Error fetching latest invoice number:", error);
-        alert(`Failed to fetch the latest invoice number: ${error.message}`);
         setData((prevData) => ({
           ...prevData,
-          invoiceNumber: `tm001`,
+          invoiceNumber: "tm001",
         }));
       }
     };
@@ -65,116 +74,161 @@ const OrderForm = () => {
   };
 
   const handleItemChange = (index, field, value) => {
-    const items = [...data.items];
-    if (field === "quantity" && value <= 0) return;
-
-    items[index][field] = value;
+    const updatedItems = [...data.items];
 
     if (field === "description") {
       const selectedProduct = products.find((p) => p.name === value);
       if (selectedProduct) {
-        items[index].price = selectedProduct.price?.retail_price || 0;
+        updatedItems[index] = {
+          ...updatedItems[index],
+          description: value,
+          price: {
+            retail_price: selectedProduct.price.retail_price,
+            wholeSale_price: selectedProduct.price.wholeSale_price,
+          },
+        };
       }
-    }
+    } else if (field === "quantity") {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        quantity: Math.max(0, Number(value)),
+      };
+    } else if (field === "size") {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        size: value,
+      };
 
-    if (field === "quantity") {
       const selectedProduct = products.find(
-        (p) => p.name === items[index].description
+        (p) => p.name === updatedItems[index].description
       );
       if (selectedProduct) {
-        items[index].price =
-          value > 10
-            ? selectedProduct.price?.retail_price || 0
-            : selectedProduct.price?.wholeSale_price_price || 0;
+        const basePrice = selectedProduct.price;
+        let adjustedPrice;
+        switch (value) {
+          case "small":
+            adjustedPrice = {
+              retail_price: basePrice.retail_price * 0.8,
+              wholeSale_price: basePrice.wholeSale_price * 0.8,
+            };
+            break;
+          case "large":
+            adjustedPrice = {
+              retail_price: basePrice.retail_price * 1.2,
+              wholeSale_price: basePrice.wholeSale_price * 1.2,
+            };
+            break;
+          default: // medium
+            adjustedPrice = basePrice;
+        }
+        updatedItems[index].price = adjustedPrice;
       }
     }
 
-    setData({ ...data, items });
+    setData((prevData) => ({
+      ...prevData,
+      items: updatedItems,
+    }));
   };
 
   const addItem = () => {
     const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+    if (
+      !currentItem.description ||
+      currentItem.quantity <= 0 ||
+      currentItem.price.wholeSale_price <= 0
+    ) {
       alert("Please select a product and ensure quantity and price are valid.");
       return;
     }
-  const addItem = () => {
-    const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
-      alert("Please select a product and ensure quantity and price are valid.");
+
+    const selectedProduct = products.find(
+      (product) => product.name === currentItem.description
+    );
+
+    if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
+      alert("Not enough stock available for this product.");
       return;
     }
 
-  const selectedProduct = products.find((product) => product.name === currentItem.description);
-  
-  // Check if there's enough stock
-  if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
-    alert("Not enough stock available for this product.");
-    return;
-  }
+    const updatedProducts = products.map((product) =>
+      product.name === currentItem.description
+        ? { ...product, quantity: product.quantity - currentItem.quantity }
+        : product
+    );
+    setProducts(updatedProducts);
 
-  // Update the stock in the products array
-  const updatedProducts = products.map((product) =>
-    product.name === currentItem.description
-      ? { ...product, quantity: product.quantity - currentItem.quantity }
-      : product
-  );
-  setProducts(updatedProducts); // Update the products state to reflect the stock decrease
+    setPreviewItems((prev) => [...prev, { ...currentItem }]);
 
-  // Add the item to preview items
-  setPreviewItems((prev) => [...prev, { ...currentItem }]);
+    setData({
+      ...data,
+      items: [
+        {
+          description: "",
+          quantity: 0,
+          size: "medium",
+          price: {
+            retail_price: 0,
+            wholeSale_price: 0,
+          },
+        },
+      ],
+    });
+  };
 
-  // Reset form fields
-  setData({
-    ...data,
-    items: [{ description: "", quantity: 0, price: 0 }],
-  });
-};
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
-const handleSearchChange = (e) => {
-  setSearchQuery(e.target.value);
-};
-
-const getFilteredProducts = () => {
-  return products.filter((product) =>
-    product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
-};
+  const getFilteredProducts = () => {
+    return products.filter((product) =>
+      product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-  
+
     const currentItem = data.items[0];
     if (!currentItem.description || currentItem.quantity <= 0) {
       alert("Please select a product and enter a valid quantity before submitting.");
       return;
     }
-  
+
     setPreviewItems((prev) => [...prev, { ...currentItem }]);
-  
+
     const totalAmount = previewItems.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      currentItem.quantity * currentItem.price
+      (sum, item) => sum + item.quantity * item.price.wholeSale_price,
+      currentItem.quantity * currentItem.price.wholeSale_price
     );
-  
+
     const invoiceData = { ...data, totalAmount };
-  
+
     try {
       const response = await axios.post(
-        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
+        "http://localhost:4000/temiperi/invoice",
         invoiceData
       );
       if (response.status === 201) {
         alert("Order submitted successfully!");
 
-        //updating invoice number
-          const updatedInvoiceNumber = latestInvoiceNumber + 1;
+        const updatedInvoiceNumber = latestInvoiceNumber + 1;
 
         setLatestInvoiceNumber(updatedInvoiceNumber);
         setData({
           invoiceNumber: `tm00${updatedInvoiceNumber + 1}`,
           customerName: "",
-          items: [{ description: "", quantity: 0, price: 0 }],
+          items: [
+            {
+              description: "",
+              quantity: 0,
+              size: "medium",
+              price: {
+                retail_price: 0,
+                wholeSale_price: 0,
+              },
+            },
+          ],
         });
         setPreviewItems([]);
       }
@@ -185,7 +239,7 @@ const getFilteredProducts = () => {
         alert("Error creating invoice: " + error.message);
       }
     }
-  };  
+  };
 
   const now = new Date();
   const formattedDate = now.toLocaleDateString("en-US", {
@@ -193,11 +247,11 @@ const getFilteredProducts = () => {
     month: "long",
     day: "numeric",
   });
-  
+
   const formattedTime = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-  });  
+  });
 
   return (
     <div className="main_container">
@@ -306,25 +360,40 @@ const getFilteredProducts = () => {
                   </div>
                 </label>
                 <label>
+                  Size:
+                  <select
+                    value={data.items[0].size}
+                    onChange={(e) => handleItemChange(0, "size", e.target.value)}
+                    required
+                  >
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                  </select>
+                </label>
+                <label>
                   Quantity:
                   <input
                     type="number"
                     value={data.items[0].quantity || ""}
                     onChange={(e) =>
-                      handleItemChange(0, "quantity", Number(e.target.value))
+                      handleItemChange(0, "quantity", e.target.value)
                     }
                     required
-                    min="1" // Ensures quantity starts from 1
+                    min="1"
                   />
                 </label>
                 <label className="price-label">
                   Price:
                   <span className="price-display">
-                    GH₵{data.items[0].price.toFixed(2)}
+                    GH₵{data.items[0].price.wholeSale_price.toFixed(2)}
                   </span>
                   <span className="total-display">
                     <strong>
-                      Total: GH₵{(data.items[0].quantity * data.items[0].price).toFixed(2)}
+                      Total: GH₵
+                      {(data.items[0].quantity * data.items[0].price.wholeSale_price).toFixed(
+                        2
+                      )}
                     </strong>
                   </span>
                 </label>
@@ -341,11 +410,6 @@ const getFilteredProducts = () => {
                 <div className="preview-section">
                   <div className="preview-header">
                     <img src={asset.logo} alt="Company Logo" width={100} />
-                    {/* <div className="preview-company-info">
-                      <h2>Temiperi Enterprise</h2>
-                      <p>Wholesale and Retail of Drinks</p>
-                      <p>Contact: +233 24 123 4567</p>
-                    </div> */}
                     <div className="preview-date">
                       <p>Date: {formattedDate}</p>
                       <p>Time: {formattedTime}</p>
@@ -378,22 +442,28 @@ const getFilteredProducts = () => {
                           <td>{item.quantity}</td>
                           <td>
                             <span className="currency-symbol">GH₵</span>
-                            {item.price.toFixed(2)}
+                            {item.price.wholeSale_price.toFixed(2)}
                           </td>
                           <td>
                             <span className="currency-symbol">GH₵</span>
-                            {(item.quantity * item.price).toFixed(2)}
+                            {(item.quantity * item.price.wholeSale_price).toFixed(2)}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan="4"><strong>Total Amount:</strong></td>
+                        <td colSpan="4">
+                          <strong>Total Amount:</strong>
+                        </td>
                         <td>
                           <strong>
                             <span className="currency-symbol">GH₵</span>
-                            {previewItems.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}
+                            {previewItems.reduce(
+                              (sum, item) =>
+                                sum + item.quantity * item.price.wholeSale_price,
+                              0
+                            ).toFixed(2)}
                           </strong>
                         </td>
                       </tr>
