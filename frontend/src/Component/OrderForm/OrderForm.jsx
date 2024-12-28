@@ -29,17 +29,17 @@ const OrderForm = () => {
     const fetchLatestInvoiceNumber = async () => {
       try {
         const response = await axios.get(
-          "https://temiperi-stocks-backend.onrender.com/temiperi/invoices/latest"
+          "http://localhost:4000/temiperi/invoice/latest"
         );
         const latestNumber = response.data.latestInvoiceNumber || 0;
         setLatestInvoiceNumber(latestNumber);
         setData((prevData) => ({
           ...prevData,
-          invoiceNumber: `tm00${latestNumber + 1}`,
+          invoiceNumber: `${latestNumber + 1}`,
         }));
       } catch (error) {
         console.error("Error fetching latest invoice number:", error);
-        alert("Failed to fetch the latest invoice number. Defaulting to tm001.");
+        alert(`Failed to fetch the latest invoice number: ${error.message}`);
         setData((prevData) => ({
           ...prevData,
           invoiceNumber: `tm001`,
@@ -294,11 +294,11 @@ const OrderForm = () => {
                 <div className="preview-section">
                   <div className="preview-header">
                     <img src={asset.logo} alt="Company Logo" width={100} />
-                    <div className="preview-company-info">
+                    {/* <div className="preview-company-info">
                       <h2>Temiperi Enterprise</h2>
                       <p>Wholesale and Retail of Drinks</p>
                       <p>Contact: +233 24 123 4567</p>
-                    </div>
+                    </div> */}
                     <div className="preview-date">
                       <p>Date: {formattedDate}</p>
                       <p>Time: {formattedTime}</p>
