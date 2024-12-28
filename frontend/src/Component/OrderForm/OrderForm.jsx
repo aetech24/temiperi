@@ -98,12 +98,7 @@ const OrderForm = () => {
       alert("Please select a product and ensure quantity and price are valid.");
       return;
     }
-  const addItem = () => {
-    const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
-      alert("Please select a product and ensure quantity and price are valid.");
-      return;
-    }
+
 
   const selectedProduct = products.find((product) => product.name === currentItem.description);
   
