@@ -223,7 +223,7 @@ const OrderForm = () => {
                   name="invoiceNumber"
                   placeholder="tm001"
                   required
-                  readOnly // Makes the field non-editable
+                  readOnly
                 />
               </label>
               <label>
