@@ -13,14 +13,12 @@ const OrderForm = () => {
   });
   const [products, setProducts] = useState([]);
   const [previewItems, setPreviewItems] = useState([]);
+  const [latestInvoiceNumber, setLatestInvoiceNumber] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-         //  "http://localhost:4000/temiperi/products"
-         url
-        );
+        const response = await axios.get(url);
         setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -28,9 +26,30 @@ const OrderForm = () => {
       }
     };
 
-    fetchProduct();
-  }, []);
+    const fetchLatestInvoiceNumber = async () => {
+      try {
+        const response = await axios.get(
+          "https://temiperi-stocks-backend.onrender.com/temiperi/invoices/latest"
+        );
+        const latestNumber = response.data.latestInvoiceNumber || 0;
+        setLatestInvoiceNumber(latestNumber);
+        setData((prevData) => ({
+          ...prevData,
+          invoiceNumber: `tm00${latestNumber + 1}`,
+        }));
+      } catch (error) {
+        console.error("Error fetching latest invoice number:", error);
+        alert("Failed to fetch the latest invoice number. Defaulting to tm001.");
+        setData((prevData) => ({
+          ...prevData,
+          invoiceNumber: `tm001`,
+        }));
+      }
+    };
 
+    fetchProduct();
+    fetchLatestInvoiceNumber();
+  }, []);
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -38,94 +57,95 @@ const OrderForm = () => {
   };
 
   const getProductOptions = () => {
-    return products.map(product => ({
+    return products.map((product) => ({
       name: product.name,
-      price: product.retail_price // or wholesale_price depending on your needs
+      price: product.retail_price,
     }));
   };
 
   const handleItemChange = (index, field, value) => {
     const items = [...data.items];
+    if (field === "quantity" && value <= 0) return;
+
     items[index][field] = value;
-    
+
     if (field === "description") {
-      const selectedProduct = products.find(p => p.name === value);
+      const selectedProduct = products.find((p) => p.name === value);
       if (selectedProduct) {
-        items[index].price = selectedProduct.retail_price || 0;
+        items[index].price = selectedProduct.price?.retail_price || 0;
       }
     }
-    
+
+    if (field === "quantity") {
+      const selectedProduct = products.find(
+        (p) => p.name === items[index].description
+      );
+      if (selectedProduct) {
+        items[index].price =
+          value > 10
+            ? selectedProduct.price?.wholeSale_price || 0
+            : selectedProduct.price?.retail_price || 0;
+      }
+    }
+
     setData({ ...data, items });
   };
 
   const addItem = () => {
     const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0) {
-      alert("Please select a product and enter a valid quantity");
+    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+      alert("Please select a product and ensure quantity and price are valid.");
       return;
     }
 
-    // Add current item to preview
     setPreviewItems([...previewItems, { ...currentItem }]);
-
-    // Reset the input fields
     setData({
       ...data,
       items: [{ description: "", quantity: 0, price: 0 }],
     });
   };
 
-  const calculateTotal = () => {
-    return data.items.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      0
-    );
-  };
-
-  const validateForm = () => {
-    if (!data.invoiceNumber || !data.customerName) {
-      alert("Invoice number and customer name are required.");
-      return false;
-    }
-    if (
-      data.items.some(
-        (item) => !item.description || item.quantity <= 0 || item.price <= 0
-      )
-    ) {
-      alert("All items must have a description, quantity > 0, and price > 0.");
-      return false;
-    }
-    return true;
-  };
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    const totalAmount = calculateTotal();
+  
+    const currentItem = data.items[0];
+    if (!currentItem.description || currentItem.quantity <= 0) {
+      alert("Please select a product and enter a valid quantity before submitting.");
+      return;
+    }
+  
+    setPreviewItems((prev) => [...prev, { ...currentItem }]);
+  
+    const totalAmount = previewItems.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      currentItem.quantity * currentItem.price
+    );
+  
     const invoiceData = { ...data, totalAmount };
-
+  
     try {
-      const newInvoice = await axios.post(
+      const response = await axios.post(
         "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
         invoiceData
       );
-      console.log(newInvoice);
-      if (newInvoice.status === 201) {
-        console.log("Invoice created successfully:", newInvoice.data);
-      } else {
-        console.error("Unexpected response status:", newInvoice.status);
+      if (response.status === 201) {
+        alert("Order submitted successfully!");
+        setLatestInvoiceNumber((prev) => prev + 1);
+        setData({
+          invoiceNumber: `tm00${latestInvoiceNumber + 2}`,
+          customerName: "",
+          items: [{ description: "", quantity: 0, price: 0 }],
+        });
+        setPreviewItems([]);
       }
-      console.log(newInvoice)
-      setData({
-        invoiceNumber: "",
-        customerName: "",
-        items: [{ description: "", quantity: 0, price: 0 }],
-      });
     } catch (error) {
-      alert("Error creating invoice: " + error.message);
+      if (error.response && error.response.status === 400) {
+        alert("Invoice number already exists. Please refresh and try again.");
+      } else {
+        alert("Error creating invoice: " + error.message);
+      }
     }
-  };
+  };  
 
   const now = new Date();
   const formattedDate = now.toLocaleDateString("en-US", {
@@ -136,9 +156,7 @@ const OrderForm = () => {
   const formattedTime = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-  });
-
-  
+  });  
 
   return (
     <div className="main_container">
@@ -158,32 +176,38 @@ const OrderForm = () => {
           <h2>Stock Update</h2>
           <div className="stocks">
             <h3>Available Stocks</h3>
-            <div className="stock_details_container">
-              <article className="stock_details">
-                <p>Name</p>
-                <div className="price">
-                  <div className="price_info">
-                    <small>Whole Sale</small>
-                    <small>Retail</small>
-                  </div>
-                </div>
-                <small>Quantity</small>
-              </article>
-
-              {Array.isArray(products) &&
-                products.map((product) => (
-                  <article key={product._id} className="stock_info">
-                    <p>{product.name || "Unnamed Product"}</p>
-                    <div className="price">
-                      <div className="price_info">
-                        {/* <small>{product.price ?? 'N/A'}</small>
-                        <small>{product.price ?? 'N/A'}</small> */}
-                      </div>
-                    </div>
-                    <small>{product.quantity ?? "N/A"}</small>
-                  </article>
-                ))}
-            </div>
+            <table className="stocks-table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Wholesale Price</th>
+                  <th>Retail Price</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(products) && products.length > 0 ? (
+                  products.map((product) => (
+                    <tr key={product._id}>
+                      <td>{product.name || "Unnamed Product"}</td>
+                      <td>
+                        <span className="currency-symbol">GH₵</span>
+                        {product.price?.wholeSale_price?.toFixed(2) || "N/A"}
+                      </td>
+                      <td>
+                        <span className="currency-symbol">GH₵</span>
+                        {product.price?.retail_price?.toFixed(2) || "N/A"}
+                      </td>
+                      <td>{product.quantity || "N/A"}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4">No products available</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -196,10 +220,10 @@ const OrderForm = () => {
                 <input
                   type="text"
                   value={data.invoiceNumber}
-                  onChange={onChangeHandler}
                   name="invoiceNumber"
                   placeholder="tm001"
                   required
+                  readOnly // Makes the field non-editable
                 />
               </label>
               <label>
@@ -235,24 +259,29 @@ const OrderForm = () => {
                   Quantity:
                   <input
                     type="number"
-                    value={data.items[0].quantity}
+                    value={data.items[0].quantity || ""}
                     onChange={(e) =>
                       handleItemChange(0, "quantity", Number(e.target.value))
                     }
                     required
+                    min="1" // Ensures quantity starts from 1
                   />
                 </label>
-                <label>
+                <label className="price-label">
                   Price:
-                  <input
-                    type="number"
-                    value={data.items[0].price}
-                    onChange={(e) =>
-                      handleItemChange(0, "quantity", Number(e.target.value))
-                    }
-                  />
+                  <span className="price-display">
+                    GH₵{data.items[0].price.toFixed(2)}
+                  </span>
+                  <span className="total-display">
+                    <strong>
+                      Total: GH₵
+                      {(data.items[0].quantity * data.items[0].price).toFixed(2)}
+                    </strong>
+                  </span>
                 </label>
               </div>
+
+
 
               <button type="button" onClick={addItem}>
                 Add Item
@@ -328,18 +357,11 @@ const OrderForm = () => {
                     <div className="signature-section">
                       <div className="signature-box">
                         <p>____________________</p>
-                        <p>Customer Signature</p>
-                      </div>
-                      <div className="signature-box">
-                        <p>____________________</p>
                         <p>Authorized Signature</p>
                       </div>
                     </div>
                     <div className="terms-section">
-                      <p>Terms & Conditions:</p>
-                      <small>1. Goods once sold cannot be returned</small>
-                      <small>2. All prices include VAT</small>
-                      <small>3. This is a computer generated invoice</small>
+                      <p>All Terms & Conditions applied</p>
                     </div>
                   </div>
                 </div>

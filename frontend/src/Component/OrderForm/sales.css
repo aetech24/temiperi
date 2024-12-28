@@ -326,3 +326,30 @@ button[type="submit"] {
   margin: 5px 0;
   font-size: 12px;
 }
+
+.stocks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.stocks-table th, .stocks-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.stocks-table th {
+  background-color: blue;
+  color: white;
+}
+
+.price-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.total-display {
+  margin-left: auto;
+  font-weight: bold;
+  color: #333; /* Optional: Customize the color */
+}

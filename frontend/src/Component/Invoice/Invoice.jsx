@@ -236,19 +236,12 @@ const Invoice = () => {
             <div class="signature-section">
               <div class="signature-box">
                 <p>____________________</p>
-                <p>Customer Signature</p>
-              </div>
-              <div class="signature-box">
-                <p>____________________</p>
                 <p>Authorized Signature</p>
               </div>
             </div>
 
             <div class="terms-section">
-              <p>Terms & Conditions:</p>
-              <small>1. Goods once sold cannot be returned</small>
-              <small>2. All prices include VAT</small>
-              <small>3. This is a computer generated invoice</small>
+              <p>All Terms & Conditions applied</p>
             </div>
           </body>
           </html>
