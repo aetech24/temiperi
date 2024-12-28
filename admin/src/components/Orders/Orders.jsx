@@ -6,57 +6,63 @@ const url = `http://localhost:4000/temiperi/invoice?_=${new Date().getTime()}`;
 
 const Orders = () => {
   const [orderList, setOrderList] = useState([]);
-   
-   useEffect(() => {
-    console.log('hello')
 
-     const fetchOrder = async() => {
+  useEffect(() => {
+    console.log('Fetching orders...');
+    const fetchOrder = async () => {
       try {
-        const response = await axios.get(url,  { headers: {
-        'Cache-Control': 'no-cache', // Force server to bypass caching
-      }},)
-        const data = response.data
-        console.log(data)
-        setOrderList(data.orderList || [])
+        const response = await axios.get(url, {
+          headers: {
+            'Cache-Control': 'no-cache', // Force server to bypass caching
+          },
+        });
+        const data = response.data;
+        console.log(data);
+        setOrderList(data.orderList || []);
       } catch (error) {
-        console.log(error)
+        console.log('Error fetching orders:', error);
       }
     };
-    fetchOrder()
-   }, [])
-
+    fetchOrder();
+  }, []);
 
   return (
     <div className='table_container'>
       <h2>Recent Orders</h2>
-      <div className="product_table">
-        <div className="product_table_format title">
-          <b>Invoice Number</b>
-          <b>Customer Name</b>
-          <b>Order Date</b>
-          <b>Price</b>
-          <b>Quantity</b>
-          <b>Status</b>
-          <b>Total Amount</b>
-        </div>
-
-        {Array.isArray(orderList) && orderList.map((order) => {
-          console.log('this is the new: ' + order)
-          return (
-            <div className='product_table_format' key={order._id}>
-              <p>{order.invoiceNumber ?? 'N/A'}</p>
-              <p>{order.customerName ?? 'N/A'} </p>
-              <p>{order.createdAt ?? 'N/A'} </p>
-              <p>{order.price ?? 'N/A'} </p>
-              <p>{order.quantity ?? 'N/A'} </p>
-              <p>{order.status ?? 'N/A'} </p>
-              <p>{order.totalAmount ?? 'N/A'} </p>
-            </div>
-          )
-        })}
-      </div>
-   </div>
-  )
+      <table className="product_table">
+        <thead>
+          <tr>
+            <th>Invoice Number</th>
+            <th>Customer Name</th>
+            <th>Order Date</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(orderList) && orderList.length > 0 ? (
+            orderList.map((order) => (
+              <tr key={order._id}>
+                <td>{order.invoiceNumber ?? 'N/A'}</td>
+                <td>{order.customerName ?? 'N/A'}</td>
+                <td>{order.createdAt ?? 'N/A'}</td>
+                <td>{order.price ?? 'N/A'}</td>
+                <td>{order.quantity ?? 'N/A'}</td>
+                <td>{order.status ?? 'N/A'}</td>
+                <td>{order.totalAmount ?? 'N/A'}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No orders available</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
-export default Orders
+export default Orders;
