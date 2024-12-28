@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { asset } from "../../assets/assets";
 import "./sales.css";
 import axios from "axios";
+import InvoiceGenerator from "../Invoice/InvoiceGenerator";
 
-const url = "https://temiperi-stocks-backend.onrender.com/temiperi/products";
+const baseURL = process.env.NODE_ENV === 'production' 
+  ? "https://temiperi-stocks-backend.onrender.com/temiperi"
+  : "http://localhost:4000/temiperi";
 
 const OrderForm = () => {
   const [data, setData] = useState({
@@ -13,13 +16,14 @@ const OrderForm = () => {
   });
   const [products, setProducts] = useState([]);
   const [previewItems, setPreviewItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [latestInvoiceNumber, setLatestInvoiceNumber] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(`${baseURL}/products`);
         setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -27,29 +31,32 @@ const OrderForm = () => {
       }
     };
 
-    const fetchLatestInvoiceNumber = async () => {
+    const generateInvoiceNumber = async () => {
       try {
-        const response = await axios.get(
-          "https://temiperi-stocks-backend.onrender.com/temiperi/invoice/latest"
+        setLoading(true);
+        const response = await axios.post(
+          `${baseURL}/invoice/number`
         );
-        const latestNumber = response.data.latestInvoiceNumber || 0;
-        setLatestInvoiceNumber(latestNumber);
-        setData((prevData) => ({
+        const { invoiceNumber } = response.data;
+        setData(prevData => ({
           ...prevData,
-          invoiceNumber: `${latestNumber + 1}`,
+          invoiceNumber: `tm${invoiceNumber}`
         }));
       } catch (error) {
-        console.error("Error fetching latest invoice number:", error);
-        alert(`Failed to fetch the latest invoice number: ${error.message}`);
-        setData((prevData) => ({
+        console.error("Error generating invoice number:", error);
+        // Don't show alert, just use a fallback
+        const fallbackNumber = Math.floor(1000 + Math.random() * 9000).toString().padStart(6, '0');
+        setData(prevData => ({
           ...prevData,
-          invoiceNumber: `tm001`,
+          invoiceNumber: `tm${fallbackNumber}`
         }));
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
-    fetchLatestInvoiceNumber();
+    generateInvoiceNumber();
   }, []);
 
   const onChangeHandler = (e) => {
@@ -71,21 +78,21 @@ const OrderForm = () => {
     items[index][field] = value;
 
     if (field === "description") {
-      const selectedProduct = products.find((p) => p.name === value);
+      const selectedProduct = products.find(p => p.name === value);
       if (selectedProduct) {
+        // Default to retail price when product is first selected
         items[index].price = selectedProduct.price?.retail_price || 0;
+        items[index].wholesalePrice = selectedProduct.price?.wholeSale_price || 0;
       }
     }
 
     if (field === "quantity") {
-      const selectedProduct = products.find(
-        (p) => p.name === items[index].description
-      );
+      const selectedProduct = products.find(p => p.name === items[index].description);
       if (selectedProduct) {
-        items[index].price =
-          value > 10
-            ? selectedProduct.price?.retail_price || 0
-            : selectedProduct.price?.wholeSale_price_price || 0;
+        // Use wholesale price if quantity > 10, otherwise use retail price
+        items[index].price = value > 10 
+          ? (selectedProduct.price?.wholeSale_price || 0)
+          : (selectedProduct.price?.retail_price || 0);
       }
     }
 
@@ -99,88 +106,112 @@ const OrderForm = () => {
       return;
     }
 
+    const selectedProduct = products.find((product) => product.name === currentItem.description);
 
-  const selectedProduct = products.find((product) => product.name === currentItem.description);
-  
-  // Check if there's enough stock
-  if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
-    alert("Not enough stock available for this product.");
-    return;
-  }
+    // Check if there's enough stock
+    if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
+      alert("Not enough stock available for this product.");
+      return;
+    }
 
-  // Update the stock in the products array
-  const updatedProducts = products.map((product) =>
-    product.name === currentItem.description
-      ? { ...product, quantity: product.quantity - currentItem.quantity }
-      : product
-  );
-  setProducts(updatedProducts); // Update the products state to reflect the stock decrease
+    // Update the stock in the products array
+    const updatedProducts = products.map((product) =>
+      product.name === currentItem.description
+        ? { ...product, quantity: product.quantity - currentItem.quantity }
+        : product
+    );
+    setProducts(updatedProducts); // Update the products state to reflect the stock decrease
 
-  // Add the item to preview items
-  setPreviewItems((prev) => [...prev, { ...currentItem }]);
+    // Add the item to preview items
+    setPreviewItems((prev) => [...prev, { ...currentItem }]);
 
-  // Reset form fields
-  setData({
-    ...data,
-    items: [{ description: "", quantity: 0, price: 0 }],
-  });
-};
+    // Reset form fields
+    setData({
+      ...data,
+      items: [{ description: "", quantity: 0, price: 0 }],
+    });
+  };
 
-const handleSearchChange = (e) => {
-  setSearchQuery(e.target.value);
-};
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
-const getFilteredProducts = () => {
-  return products.filter((product) =>
-    product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
-};
+  const getFilteredProducts = () => {
+    return products.filter((product) =>
+      product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-  
+
     const currentItem = data.items[0];
     if (!currentItem.description || currentItem.quantity <= 0) {
       alert("Please select a product and enter a valid quantity before submitting.");
       return;
     }
-  
-    setPreviewItems((prev) => [...prev, { ...currentItem }]);
-  
-    const totalAmount = previewItems.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      currentItem.quantity * currentItem.price
-    );
-  
-    const invoiceData = { ...data, totalAmount };
-  
+
+    // Add the current item to preview items
+    const updatedPreviewItems = [...previewItems, { ...currentItem }];
+    
+    // Format items to match backend schema
+    const formattedItems = updatedPreviewItems.map(item => {
+      const product = products.find(p => p.name === item.description);
+      const isWholesale = item.quantity > 10;
+      
+      // Get the retail and wholesale prices from the product
+      const retail_price = product?.price?.retail_price || 0;
+      const wholeSale_price = product?.price?.wholeSale_price || 0;
+      
+      // Calculate the unit price based on quantity
+      const unitPrice = isWholesale ? wholeSale_price : retail_price;
+      
+      return {
+        description: item.description,
+        quantity: item.quantity,
+        price: {
+          retail_price,
+          wholeSale_price
+        },
+        appliedPrice: isWholesale ? 'wholesale' : 'retail',
+        unitPrice
+      };
+    });
+
+    // Calculate total amount based on formatted items
+    const totalAmount = formattedItems.reduce((sum, item) => {
+      return sum + (item.quantity * item.unitPrice);
+    }, 0);
+
+    const invoiceData = {
+      invoiceNumber: data.invoiceNumber,
+      customerName: data.customerName,
+      items: formattedItems,
+      totalAmount,
+      status: "unpaid"
+    };
+
     try {
       const response = await axios.post(
-        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
+        `${baseURL}/invoice`,
         invoiceData
       );
+      
       if (response.status === 201) {
         alert("Order submitted successfully!");
-
-        //updating invoice number
-          const updatedInvoiceNumber = latestInvoiceNumber + 1;
-
-        setLatestInvoiceNumber(updatedInvoiceNumber);
+        // Reset form after successful submission
         setData({
-          invoiceNumber: `tm00${updatedInvoiceNumber + 1}`,
+          invoiceNumber: `tm${Math.floor(100000 + Math.random() * 900000)}`,
           customerName: "",
           items: [{ description: "", quantity: 0, price: 0 }],
         });
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert("Invoice number already exists. Please refresh and try again.");
-      } else {
-        alert("Error creating invoice: " + error.message);
-      }
+      console.error('Error submitting invoice:', error);
+      alert("Error creating invoice. Please check the console for details.");
     }
-  };  
+  };
 
   const now = new Date();
   const formattedDate = now.toLocaleDateString("en-US", {
@@ -188,11 +219,11 @@ const getFilteredProducts = () => {
     month: "long",
     day: "numeric",
   });
-  
+
   const formattedTime = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-  });  
+  });
 
   return (
     <div className="main_container">
@@ -253,13 +284,9 @@ const getFilteredProducts = () => {
               <h1>Submit Order</h1>
               <label>
                 Invoice Number
-                <input
-                  type="text"
+                <InvoiceGenerator 
                   value={data.invoiceNumber}
-                  name="invoiceNumber"
-                  placeholder="tm001"
-                  required
-                  readOnly
+                  loading={loading}
                 />
               </label>
               <label>
