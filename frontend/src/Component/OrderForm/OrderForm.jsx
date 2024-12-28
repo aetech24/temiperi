@@ -91,43 +91,72 @@ const OrderForm = () => {
     setData({ ...data, items });
   };
 
-  const addItem = () => {
-    const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
-      alert("Please select a product and ensure quantity and price are valid.");
-      return;
-    }
+  // Add Item to Preview and Decrease Stock in the Available Stocks Section
+const addItem = () => {
+  const currentItem = data.items[0];
 
-    setPreviewItems([...previewItems, { ...currentItem }]);
-    setData({
-      ...data,
-      items: [{ description: "", quantity: 0, price: 0 }],
-    });
-  };
+  if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+    alert("Please select a product and ensure quantity and price are valid.");
+    return;
+  }
+
+  const selectedProduct = products.find((product) => product.name === currentItem.description);
+  
+  // Check if there's enough stock
+  if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
+    alert("Not enough stock available for this product.");
+    return;
+  }
+
+  // Update the stock in the products array
+  const updatedProducts = products.map((product) =>
+    product.name === currentItem.description
+      ? { ...product, quantity: product.quantity - currentItem.quantity }
+      : product
+  );
+  setProducts(updatedProducts); // Update the products state to reflect the stock decrease
+
+  // Add the item to preview items
+  setPreviewItems((prev) => [...prev, { ...currentItem }]);
+
+  // Reset form fields
+  setData({
+    ...data,
+    items: [{ description: "", quantity: 0, price: 0 }],
+  });
+};
+
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
   
     const currentItem = data.items[0];
-    if (!currentItem.description || currentItem.quantity <= 0) {
+   
+    // Ensure that at least one item has been added and is valid
+    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
       alert("Please select a product and enter a valid quantity before submitting.");
       return;
     }
   
+    // Add the current item to the preview list
     setPreviewItems((prev) => [...prev, { ...currentItem }]);
   
+    // Calculate the total amount
     const totalAmount = previewItems.reduce(
       (sum, item) => sum + item.quantity * item.price,
       currentItem.quantity * currentItem.price
     );
   
+    // Ensure totalAmount is properly set
     const invoiceData = { ...data, totalAmount };
   
     try {
       const response = await axios.post(
-        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
+        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice", // API endpoint for invoice creation
         invoiceData
       );
+  
+      // Check for successful submission (201)
       if (response.status === 201) {
         alert("Order submitted successfully!");
         setLatestInvoiceNumber((prev) => prev + 1);
@@ -139,10 +168,15 @@ const OrderForm = () => {
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert("Invoice number already exists. Please refresh and try again.");
+      if (error.response) {
+        // Handle specific errors based on status code
+        if (error.response.status === 400) {
+          alert("Invoice number already exists. Please refresh and try again.");
+        } else {
+          alert("Error creating invoice: " + error.message);
+        }
       } else {
-        alert("Error creating invoice: " + error.message);
+        alert("Network error: Unable to submit order.");
       }
     }
   };  
@@ -190,14 +224,8 @@ const OrderForm = () => {
                   products.map((product) => (
                     <tr key={product._id}>
                       <td>{product.name || "Unnamed Product"}</td>
-                      <td>
-                        <span className="currency-symbol">GH₵</span>
-                        {product.price?.wholeSale_price?.toFixed(2) || "N/A"}
-                      </td>
-                      <td>
-                        <span className="currency-symbol">GH₵</span>
-                        {product.price?.retail_price?.toFixed(2) || "N/A"}
-                      </td>
+                      <td><span className="currency-symbol">GH₵</span>{product.price?.wholeSale_price?.toFixed(2) || "N/A"}</td>
+                      <td><span className="currency-symbol">GH₵</span>{product.price?.retail_price?.toFixed(2) || "N/A"}</td>
                       <td>{product.quantity || "N/A"}</td>
                     </tr>
                   ))
