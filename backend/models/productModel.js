@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
   },
   quantity: { type: Number, require: true },
   category: { type: String, require: true },
+  createdAt: { type: Date, default: Date.now() },
 });
 
 export default mongoose.model('Product', productSchema)
