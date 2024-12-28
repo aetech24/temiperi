@@ -123,13 +123,13 @@ export const generateInvoiceNumber = async (req, res) => {
       // If no invoices exist, start from 1
       nextNumber = 1;
     } else {
-      // Extract the number from the existing invoice number or use 1 if can't extract
-      const currentNumber = parseInt(latestInvoice.invoiceNumber.replace(/\D/g, '')) || 0;
+      // Extract the number from the existing invoice number, removing the 'tm' prefix
+      const currentNumber = parseInt(latestInvoice.invoiceNumber.replace(/^tm/, '')) || 0;
       nextNumber = currentNumber + 1;
     }
     
-    // Format the new invoice number with leading zeros
-    const formattedNumber = nextNumber.toString().padStart(6, '0');
+    // Format the new invoice number with tm prefix and leading zeros
+    const formattedNumber = `tm${nextNumber.toString().padStart(6, '0')}`;
     
     res.status(200).json({ invoiceNumber: formattedNumber });
   } catch (error) {

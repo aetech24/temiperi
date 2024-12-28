@@ -40,7 +40,7 @@ const OrderForm = () => {
         const { invoiceNumber } = response.data;
         setData(prevData => ({
           ...prevData,
-          invoiceNumber: `tm${invoiceNumber}`
+          invoiceNumber: invoiceNumber
         }));
       } catch (error) {
         console.error("Error generating invoice number:", error);
@@ -48,7 +48,7 @@ const OrderForm = () => {
         const fallbackNumber = Math.floor(1000 + Math.random() * 9000).toString().padStart(6, '0');
         setData(prevData => ({
           ...prevData,
-          invoiceNumber: `tm${fallbackNumber}`
+          invoiceNumber: fallbackNumber
         }));
       } finally {
         setLoading(false);
@@ -201,7 +201,7 @@ const OrderForm = () => {
         alert("Order submitted successfully!");
         // Reset form after successful submission
         setData({
-          invoiceNumber: `tm${Math.floor(100000 + Math.random() * 900000)}`,
+          invoiceNumber: Math.floor(100000 + Math.random() * 900000),
           customerName: "",
           items: [{ description: "", quantity: 0, price: 0 }],
         });
