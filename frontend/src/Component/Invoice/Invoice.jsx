@@ -16,7 +16,7 @@ const Invoice = () => {
               "https://temiperi-stocks-backend.onrender.com/temiperi/invoice"
             );
             console.log(response.data);
-            setInvoices(response.data.invoice)
+            setInvoices(response.data.invoices)
 
          } catch (error) {
            console.log('Error fetching invoices: ' + error);
