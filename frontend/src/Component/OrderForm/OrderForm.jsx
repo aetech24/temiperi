@@ -13,6 +13,7 @@ const OrderForm = () => {
     items: [{ description: "", quantity: 0, price: 0 }],
   });
   const [products, setProducts] = useState([]);
+  const [previewItems, setPreviewItems] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -37,16 +38,41 @@ const OrderForm = () => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
+  const getProductOptions = () => {
+    return products.map(product => ({
+      name: product.name,
+      price: product.retail_price // or wholesale_price depending on your needs
+    }));
+  };
+
   const handleItemChange = (index, field, value) => {
     const items = [...data.items];
     items[index][field] = value;
+    
+    if (field === "description") {
+      const selectedProduct = products.find(p => p.name === value);
+      if (selectedProduct) {
+        items[index].price = selectedProduct.retail_price || 0;
+      }
+    }
+    
     setData({ ...data, items });
   };
 
   const addItem = () => {
+    const currentItem = data.items[0];
+    if (!currentItem.description || currentItem.quantity <= 0) {
+      alert("Please select a product and enter a valid quantity");
+      return;
+    }
+
+    // Add current item to preview
+    setPreviewItems([...previewItems, { ...currentItem }]);
+
+    // Reset the input fields
     setData({
       ...data,
-      items: [...data.items, { description: "", quantity: 0, price: 0 }],
+      items: [{ description: "", quantity: 0, price: 0 }],
     });
   };
 
@@ -187,52 +213,138 @@ const OrderForm = () => {
                   required
                 />
               </label>
-              <h3>Items</h3>
-              {data.items.map((item, index) => (
-                <div key={index} className="items">
-                  <label>
-                    Description:
-                    <input
-                      type="text"
-                      value={item.description}
-                      onChange={(e) =>
-                        handleItemChange(index, "description", e.target.value)
-                      }
-                    />
-                  </label>
-                  <label>
-                    Quantity:
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        handleItemChange(
-                          index,
-                          "quantity",
-                          Number(e.target.value)
-                        )
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    Price:
-                    <input
-                      type="number"
-                      value={item.price}
-                      onChange={(e) =>
-                        handleItemChange(index, "price", Number(e.target.value))
-                      }
-                    />
-                  </label>
-                </div>
-              ))}
+              <h3>Add Item</h3>
+              <div className="items">
+                <label>
+                  Description:
+                  <select
+                    value={data.items[0].description}
+                    onChange={(e) =>
+                      handleItemChange(0, "description", e.target.value)
+                    }
+                    required
+                  >
+                    <option value="">Select a product</option>
+                    {getProductOptions().map((product, idx) => (
+                      <option key={idx} value={product.name}>
+                        {product.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Quantity:
+                  <input
+                    type="number"
+                    value={data.items[0].quantity}
+                    onChange={(e) =>
+                      handleItemChange(0, "quantity", Number(e.target.value))
+                    }
+                    required
+                  />
+                </label>
+                <label>
+                  Price:
+                  <input
+                    type="number"
+                    value={data.items[0].price}
+                    onChange={(e) =>
+                      handleItemChange(0, "quantity", Number(e.target.value))
+                    }
+                  />
+                </label>
+              </div>
 
               <button type="button" onClick={addItem}>
                 Add Item
               </button>
-              <h3>Total Amount: {calculateTotal()}</h3>
+
               <button type="submit">Submit</button>
+
+              {/* Preview Section */}
+              {previewItems.length > 0 && (
+                <div className="preview-section">
+                  <div className="preview-header">
+                    <img src={asset.logo} alt="Company Logo" width={100} />
+                    <div className="preview-company-info">
+                      <h2>Temiperi Enterprise</h2>
+                      <p>Wholesale and Retail of Drinks</p>
+                      <p>Contact: +233 24 123 4567</p>
+                    </div>
+                    <div className="preview-date">
+                      <p>Date: {formattedDate}</p>
+                      <p>Time: {formattedTime}</p>
+                    </div>
+                  </div>
+
+                  <div className="preview-customer-info">
+                    <div>
+                      <h4>Invoice #: {data.invoiceNumber}</h4>
+                      <h4>Customer: {data.customerName}</h4>
+                    </div>
+                  </div>
+
+                  <h3>Order Summary</h3>
+                  <table className="preview-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {previewItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.description}</td>
+                          <td>{item.quantity}</td>
+                          <td>
+                            <span className="currency-symbol">GH₵</span>
+                            {item.price.toFixed(2)}
+                          </td>
+                          <td>
+                            <span className="currency-symbol">GH₵</span>
+                            {(item.quantity * item.price).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="4"><strong>Total Amount:</strong></td>
+                        <td>
+                          <strong>
+                            <span className="currency-symbol">GH₵</span>
+                            {previewItems.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}
+                          </strong>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+
+                  <div className="preview-footer">
+                    <div className="signature-section">
+                      <div className="signature-box">
+                        <p>____________________</p>
+                        <p>Customer Signature</p>
+                      </div>
+                      <div className="signature-box">
+                        <p>____________________</p>
+                        <p>Authorized Signature</p>
+                      </div>
+                    </div>
+                    <div className="terms-section">
+                      <p>Terms & Conditions:</p>
+                      <small>1. Goods once sold cannot be returned</small>
+                      <small>2. All prices include VAT</small>
+                      <small>3. This is a computer generated invoice</small>
+                    </div>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         </div>
