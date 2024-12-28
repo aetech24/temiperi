@@ -29,7 +29,7 @@ const OrderForm = () => {
     const fetchLatestInvoiceNumber = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/temiperi/invoice/latest"
+          "https://temiperi-stocks-backend.onrender.com/temiperi/invoice/latest"
         );
         const latestNumber = response.data.latestInvoiceNumber || 0;
         setLatestInvoiceNumber(latestNumber);
@@ -128,11 +128,17 @@ const OrderForm = () => {
         "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
         invoiceData
       );
+     console.log("Invoice created successfully:", response.data);
+
       if (response.status === 201) {
         alert("Order submitted successfully!");
-        setLatestInvoiceNumber((prev) => prev + 1);
+
+        //updating invoice number
+          const updatedInvoiceNumber = latestInvoiceNumber + 1;
+
+        setLatestInvoiceNumber(updatedInvoiceNumber);
         setData({
-          invoiceNumber: `tm00${latestInvoiceNumber + 2}`,
+          invoiceNumber: `tm00${updatedInvoiceNumber + 1}`,
           customerName: "",
           items: [{ description: "", quantity: 0, price: 0 }],
         });
@@ -140,7 +146,7 @@ const OrderForm = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        alert("Invoice number already exists. Please refresh and try again.");
+        alert("Invoice number already exists. Please refresh and try again." + error.message);
       } else {
         alert("Error creating invoice: " + error.message);
       }
@@ -198,7 +204,7 @@ const OrderForm = () => {
                         <span className="currency-symbol">GH₵</span>
                         {product.price?.retail_price?.toFixed(2) || "N/A"}
                       </td>
-                      <td>{product.quantity || "N/A"}</td>
+                      <td>{product.quantity || 0}</td>
                     </tr>
                   ))
                 ) : (
