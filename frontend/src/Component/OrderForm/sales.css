@@ -348,6 +348,24 @@ button[type="submit"] {
   width: 100%;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-input {
+  padding: 5px;
+  font-size: 14px;
+  width: 150px;
+}
+
+select {
+  padding: 5px;
+  font-size: 14px;
+  flex-grow: 1; /* Allows the select element to grow */
+}
+
 .total-display {
   margin-left: auto;
   font-weight: bold;

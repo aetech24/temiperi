@@ -14,6 +14,7 @@ const OrderForm = () => {
   const [products, setProducts] = useState([]);
   const [previewItems, setPreviewItems] = useState([]);
   const [latestInvoiceNumber, setLatestInvoiceNumber] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -126,6 +127,15 @@ const addItem = () => {
   });
 };
 
+const handleSearchChange = (e) => {
+  setSearchQuery(e.target.value);
+};
+
+const getFilteredProducts = () => {
+  return products.filter((product) =>
+    product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+  );
+};
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -268,20 +278,29 @@ const addItem = () => {
               <div className="items">
                 <label>
                   Description:
-                  <select
-                    value={data.items[0].description}
-                    onChange={(e) =>
-                      handleItemChange(0, "description", e.target.value)
-                    }
-                    required
-                  >
-                    <option value="">Select a product</option>
-                    {getProductOptions().map((product, idx) => (
-                      <option key={idx} value={product.name}>
-                        {product.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="search-container">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      placeholder="Search products..."
+                      className="search-input"
+                    />
+                    <select
+                      value={data.items[0].description}
+                      onChange={(e) =>
+                        handleItemChange(0, "description", e.target.value)
+                      }
+                      required
+                    >
+                      <option value="">Select a product</option>
+                      {getFilteredProducts().map((product, idx) => (
+                        <option key={idx} value={product.name}>
+                          {product.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </label>
                 <label>
                   Quantity:
@@ -302,14 +321,11 @@ const addItem = () => {
                   </span>
                   <span className="total-display">
                     <strong>
-                      Total: GH₵
-                      {(data.items[0].quantity * data.items[0].price).toFixed(2)}
+                      Total: GH₵{(data.items[0].quantity * data.items[0].price).toFixed(2)}
                     </strong>
                   </span>
                 </label>
               </div>
-
-
 
               <button type="button" onClick={addItem}>
                 Add Item
