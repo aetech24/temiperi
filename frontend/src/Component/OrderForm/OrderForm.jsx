@@ -29,7 +29,7 @@ const OrderForm = () => {
     const fetchLatestInvoiceNumber = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/temiperi/invoice/latest"
+          "https://temiperi-stocks-backend.onrender.com/temiperi/invoice/latest"
         );
         const latestNumber = response.data.latestInvoiceNumber || 0;
         setLatestInvoiceNumber(latestNumber);
@@ -155,28 +155,28 @@ const addItem = () => {
         "https://temiperi-stocks-backend.onrender.com/temiperi/invoice", // API endpoint for invoice creation
         invoiceData
       );
-  
+     console.log("Invoice created successfully:", response.data);
+
       // Check for successful submission (201)
       if (response.status === 201) {
         alert("Order submitted successfully!");
-        setLatestInvoiceNumber((prev) => prev + 1);
+
+        //updating invoice number
+          const updatedInvoiceNumber = latestInvoiceNumber + 1;
+
+        setLatestInvoiceNumber(updatedInvoiceNumber);
         setData({
-          invoiceNumber: `tm00${latestInvoiceNumber + 2}`,
+          invoiceNumber: `tm00${updatedInvoiceNumber + 1}`,
           customerName: "",
           items: [{ description: "", quantity: 0, price: 0 }],
         });
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response) {
-        // Handle specific errors based on status code
-        if (error.response.status === 400) {
-          alert("Invoice number already exists. Please refresh and try again.");
-        } else {
-          alert("Error creating invoice: " + error.message);
-        }
+      if (error.response && error.response.status === 400) {
+        alert("Invoice number already exists. Please refresh and try again." + error.message);
       } else {
-        alert("Network error: Unable to submit order.");
+        alert("Error creating invoice: " + error.message);
       }
     }
   };  
