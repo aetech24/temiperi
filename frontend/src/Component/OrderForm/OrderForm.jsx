@@ -98,6 +98,12 @@ const OrderForm = () => {
       alert("Please select a product and ensure quantity and price are valid.");
       return;
     }
+  const addItem = () => {
+    const currentItem = data.items[0];
+    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+      alert("Please select a product and ensure quantity and price are valid.");
+      return;
+    }
 
   const selectedProduct = products.find((product) => product.name === currentItem.description);
   
@@ -158,8 +164,6 @@ const getFilteredProducts = () => {
         "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
         invoiceData
       );
-  
-      // Check for successful submission (201)
       if (response.status === 201) {
         alert("Order submitted successfully!");
 
@@ -175,15 +179,10 @@ const getFilteredProducts = () => {
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response) {
-        // Handle specific errors based on status code
-        if (error.response.status === 400) {
-          alert("Invoice number already exists. Please refresh and try again.");
-        } else {
-          alert("Error creating invoice: " + error.message);
-        }
+      if (error.response && error.response.status === 400) {
+        alert("Invoice number already exists. Please refresh and try again.");
       } else {
-        alert("Network error: Unable to submit order.");
+        alert("Error creating invoice: " + error.message);
       }
     }
   };  
