@@ -198,6 +198,7 @@ const getFilteredProducts = () => {
     month: "long",
     day: "numeric",
   });
+  
   const formattedTime = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
