@@ -80,22 +80,43 @@ export const getInvoice = async (req, res) => {
 }
 
 // Generate Random Invoice Number
-export const generateRandomInvoiceNumber = async (retryCount = 0) => {
-   if(retryCount > 10) {
-     throw new Error(
-       "Max retries reached while generating unique invoice number."
-     );
-   }
-  const prefix = "tm";
-  const randomPart = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
-  const newInvoiceNumber = `${prefix}${randomPart}`;
+// export const generateRandomInvoiceNumber = async (retryCount = 0) => {
+//    if(retryCount > 10) {
+//      throw new Error(
+//        "Max retries reached while generating unique invoice number."
+//      );
+//    }
+//   const prefix = "tm";
+//   const randomPart = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+//   const newInvoiceNumber = `${prefix}${randomPart}`;
 
-  // Ensure the generated number is unique
-  const existingInvoice = await Invoice.findOne({ invoiceNumber: req.body.invoiceNumber });
-  if (existingInvoice) {
-    // If the number already exists, recursively generate a new one
-    return generateRandomInvoiceNumber();
+//   // Ensure the generated number is unique
+//   const existingInvoice = await Invoice.findOne({ invoiceNumber: req.body.invoiceNumber });
+//   if (existingInvoice) {
+//     // If the number already exists, recursively generate a new one
+//     return generateRandomInvoiceNumber();
+//   }
+//   return newInvoiceNumber;
+// };
+
+
+
+export const generateInvoiceNumber = async (req, res) => {
+  try {
+    const existingNumbers = await Invoice.find();
+    const newNumber = generateRandomNumber(existingNumbers);
+    const invoice = new Invoice({ number: newNumber });
+    await invoice.save();
+    res.json({ invoiceNumber: newNumber });
+  } catch (error) {
+    res.status(400).json({ message: "Failed to generate invoice number" });
   }
-  return newInvoiceNumber;
 };
 
+const generateRandomNumber = (existingNumbers) => {
+  let newNumber;
+  do {
+    newNumber = Math.floor(Math.random() * 900000) + 100000;
+  } while (existingNumbers.includes(newNumber));
+  return newNumber;
+};
