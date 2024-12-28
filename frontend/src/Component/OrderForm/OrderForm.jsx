@@ -92,14 +92,12 @@ const OrderForm = () => {
     setData({ ...data, items });
   };
 
-  // Add Item to Preview and Decrease Stock in the Available Stocks Section
-const addItem = () => {
-  const currentItem = data.items[0];
-
-  if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
-    alert("Please select a product and ensure quantity and price are valid.");
-    return;
-  }
+  const addItem = () => {
+    const currentItem = data.items[0];
+    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+      alert("Please select a product and ensure quantity and price are valid.");
+      return;
+    }
 
   const selectedProduct = products.find((product) => product.name === currentItem.description);
   
@@ -141,32 +139,26 @@ const getFilteredProducts = () => {
     e.preventDefault();
   
     const currentItem = data.items[0];
-   
-    // Ensure that at least one item has been added and is valid
-    if (!currentItem.description || currentItem.quantity <= 0 || currentItem.price <= 0) {
+    if (!currentItem.description || currentItem.quantity <= 0) {
       alert("Please select a product and enter a valid quantity before submitting.");
       return;
     }
   
-    // Add the current item to the preview list
     setPreviewItems((prev) => [...prev, { ...currentItem }]);
   
-    // Calculate the total amount
     const totalAmount = previewItems.reduce(
       (sum, item) => sum + item.quantity * item.price,
       currentItem.quantity * currentItem.price
     );
   
-    // Ensure totalAmount is properly set
     const invoiceData = { ...data, totalAmount };
   
     try {
       const response = await axios.post(
-        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice", // API endpoint for invoice creation
+        "https://temiperi-stocks-backend.onrender.com/temiperi/invoice",
         invoiceData
       );
-     console.log("Invoice created successfully:", response.data);
-
+  
       // Check for successful submission (201)
       if (response.status === 201) {
         alert("Order submitted successfully!");
@@ -183,11 +175,15 @@ const getFilteredProducts = () => {
         setPreviewItems([]);
       }
     } catch (error) {
-      if (error.response?.status === 400) {
-        alert("Invoice number already exists. Please refresh and try again." + error.message);
-        setLatestInvoiceNumber();
+      if (error.response) {
+        // Handle specific errors based on status code
+        if (error.response.status === 400) {
+          alert("Invoice number already exists. Please refresh and try again.");
+        } else {
+          alert("Error creating invoice: " + error.message);
+        }
       } else {
-        alert("Error creating invoice: " + error.message);
+        alert("Network error: Unable to submit order.");
       }
     }
   };  
@@ -236,8 +232,14 @@ const getFilteredProducts = () => {
                   products.map((product) => (
                     <tr key={product._id}>
                       <td>{product.name || "Unnamed Product"}</td>
-                      <td><span className="currency-symbol">GH₵</span>{product.price?.wholeSale_price?.toFixed(2) || "N/A"}</td>
-                      <td><span className="currency-symbol">GH₵</span>{product.price?.retail_price?.toFixed(2) || "N/A"}</td>
+                      <td>
+                        <span className="currency-symbol">GH₵</span>
+                        {product.price?.wholeSale_price?.toFixed(2) || "N/A"}
+                      </td>
+                      <td>
+                        <span className="currency-symbol">GH₵</span>
+                        {product.price?.retail_price?.toFixed(2) || "N/A"}
+                      </td>
                       <td>{product.quantity || "N/A"}</td>
                     </tr>
                   ))
