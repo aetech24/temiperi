@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './invoice.css'
 import { asset } from '../../assets/assets'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 
 const Invoice = () => {
@@ -17,10 +18,9 @@ const Invoice = () => {
             );
             console.log(response.data);
             setInvoices(response.data.invoices)
-
          } catch (error) {
            console.log('Error fetching invoices: ' + error);
-           console.log(error)
+           toast.error('Failed to fetch invoices. Please try again.');
          }
       };
       fetchInvoices();
@@ -211,15 +211,18 @@ const Invoice = () => {
                 </tr>
               </thead>
               <tbody>
-                ${invoice.items.map((item, index) => `
-                  <tr>
-                    <td>${index + 1}</td>
-                    <td>${item.description}</td>
-                    <td>${item.quantity}</td>
-                    <td><span class="currency-symbol">GH₵</span>${Number(item.price).toFixed(2)}</td>
-                    <td><span class="currency-symbol">GH₵</span>${(item.quantity * item.price).toFixed(2)}</td>
-                  </tr>
-                `).join('')}
+                ${invoice.items.map((item, index) => {
+                  const price = item.price.retail_price || item.price.wholeSale_price || 0;
+                  return `
+                    <tr>
+                      <td>${index + 1}</td>
+                      <td>${item.description}</td>
+                      <td>${item.quantity}</td>
+                      <td><span class="currency-symbol">GH₵</span>${Number(price).toFixed(2)}</td>
+                      <td><span class="currency-symbol">GH₵</span>${(item.quantity * price).toFixed(2)}</td>
+                    </tr>
+                  `;
+                }).join('')}
               </tbody>
               <tfoot>
                 <tr>

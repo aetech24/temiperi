@@ -116,7 +116,9 @@ export const getInvoice = async (req, res) => {
 export const generateInvoiceNumber = async (req, res) => {
   try {
     // Get the latest invoice to determine the next number
-    const latestInvoice = await Invoice.findOne().sort({ createdAt: -1 });
+    const latestInvoice = await Invoice.findOne({}, { invoiceNumber: 1 })
+      .sort({ createdAt: -1, invoiceNumber: -1 })
+      .limit(1);
     
     let nextNumber;
     if (!latestInvoice) {
@@ -124,12 +126,21 @@ export const generateInvoiceNumber = async (req, res) => {
       nextNumber = 1;
     } else {
       // Extract the number from the existing invoice number, removing the 'tm' prefix
-      const currentNumber = parseInt(latestInvoice.invoiceNumber.replace(/^tm/, '')) || 0;
+      const currentNumber = parseInt(latestInvoice.invoiceNumber.replace(/^tm/, ''));
       nextNumber = currentNumber + 1;
     }
     
     // Format the new invoice number with tm prefix and leading zeros
     const formattedNumber = `tm${nextNumber.toString().padStart(6, '0')}`;
+    
+    // Verify this number doesn't exist (just in case)
+    const existingInvoice = await Invoice.findOne({ invoiceNumber: formattedNumber });
+    if (existingInvoice) {
+      // In the rare case it exists, add a random suffix
+      const randomSuffix = Math.floor(Math.random() * 100);
+      nextNumber = nextNumber + randomSuffix;
+      formattedNumber = `tm${nextNumber.toString().padStart(6, '0')}`;
+    }
     
     res.status(200).json({ invoiceNumber: formattedNumber });
   } catch (error) {
