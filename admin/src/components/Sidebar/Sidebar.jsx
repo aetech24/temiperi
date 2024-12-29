@@ -16,7 +16,7 @@ export const Sidebar = () => {
 
       <div className="content">
          <img src={asset.analytics_icon} alt="" />
-         <NavLink to={'/analysis'}>
+         <NavLink to={'/'}>
             Analysis
          </NavLink>
       </div>

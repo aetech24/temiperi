@@ -7,29 +7,35 @@ import products from "./route/productRoute.js";
 import { notFound } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import invoiceRouter from "./route/inoviceRoute.js";
+import cors from "cors";
 
-const app = express()
+const app = express();
 const port = process.env.PORT || 4000;
 
 connectDB();
 
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
-app.use(morgan('tiny'))
-app.use('/temiperi', router)
-app.use('/temiperi', orderRouter)
-app.use('/temiperi', products)
-app.use('/temiperi', invoiceRouter)
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-app.get('/', (req, res) => {
-   res.send('software is working');
-})
+app.use(express.json());
+app.use(morgan("tiny"));
+app.use("/temiperi", router);
+app.use("/temiperi", orderRouter);
+app.use("/temiperi", products);
+app.use("/temiperi", invoiceRouter);
+
+app.get("/", (req, res) => {
+  res.send("software is working");
+});
 
 app.use(notFound);
 app.use(errorHandler);
 
-
-
 app.listen(port, () => {
-   console.log(`app is listening on ${port}`)
-})
+  console.log(`app is listening on ${port}`);
+});

@@ -32,7 +32,7 @@ const Sales = async () => {
       </div> 
       <div className="form_container">
          <h1>Submit Order</h1>
-         <p>Please fill all inputs with neccessary information required. Thank You</p>
+         <p>Please fill all inputs with necessary information required. Thank You</p>
       <form>
          
       </form>
