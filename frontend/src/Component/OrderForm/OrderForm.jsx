@@ -127,7 +127,7 @@ const OrderForm = () => {
       if (previewItems.length === 0) {
         const currentItem = data.items[0];
         // If no items in preview and current item is empty, show error
-        if (!currentItem.description && currentItem.quantity <= 0) {
+        if (!currentItem.description || currentItem.quantity <= 0) {
           toast.error("Please add at least one item before submitting.");
           return;
         }
@@ -150,30 +150,20 @@ const OrderForm = () => {
         finalItems.push({ ...data.items[0] });
       }
 
-      // Format items to match backend schema
-      const formattedItems = finalItems.map(item => {
-        const product = products.find(p => p.name === item.description);
-        const isWholesale = item.quantity > 10;
-        
-        return {
-          description: item.description,
-          quantity: item.quantity,
-          price: product?.price || { retail_price: 0, wholeSale_price: 0 }
-        };
-      });
-
       // Calculate total amount
-      const totalAmount = formattedItems.reduce((sum, item) => {
-        const isWholesale = item.quantity > 10;
-        const price = isWholesale ? item.price.wholeSale_price : item.price.retail_price;
-        return sum + (item.quantity * price);
+      const totalAmount = finalItems.reduce((sum, item) => {
+        return sum + (item.quantity * item.price);
       }, 0);
 
       // Prepare the invoice data
       const invoiceData = {
         invoiceNumber: data.invoiceNumber,
         customerName: data.customerName,
-        items: formattedItems,
+        items: finalItems.map(item => ({
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price
+        })),
         totalAmount
       };
 
@@ -184,7 +174,30 @@ const OrderForm = () => {
       );
       
       if (response.status === 201) {
-      toast.success("Order submitted successfully!", {
+        toast.success("Order submitted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        
+        // Reset form after successful submission
+        setData({
+          invoiceNumber: "",
+          customerName: "",
+          items: [{ description: "", quantity: 0, price: 0 }]
+        });
+        setPreviewItems([]);
+        
+        // Generate new invoice number
+        generateInvoiceNumber();
+      }
+    } catch (error) {
+      console.error("Error submitting invoice:", error);
+      toast.error(error.response?.data?.error || "Failed to submit invoice. Please try again.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -193,24 +206,6 @@ const OrderForm = () => {
         draggable: true,
         progress: undefined,
       });
-        alert("Order submitted successfully!");
-        
-        // Reset form after successful submission
-        setData({
-          invoiceNumber: Math.floor(100000 + Math.random() * 900000),
-          customerName: "",
-          items: [{ description: "", quantity: 0, price: 0 }],
-        });
-        setPreviewItems([]);
-        
-        // Reload the page after successful submission
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      }
-    } catch (error) {
-      console.error('Error submitting invoice:', error);
-      toast.error(error.response?.data?.message || 'Failed to submit invoice. Please try again.');
     }
   };
 
@@ -261,6 +256,27 @@ const OrderForm = () => {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const generatePDF = async () => {
+    const invoice = document.getElementById('invoice-content');
+    if (!invoice) return null;
+    
+    const options = {
+      margin: 1,
+      filename: `Invoice-${data.invoiceNumber}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    try {
+      const pdfBlob = await html2pdf().set(options).from(invoice).outputPdf('blob');
+      return pdfBlob;
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      return null;
+    }
+  };
 
   const handlePrintInvoice = () => {
     const printContent = document.querySelector('.preview-section');
@@ -522,44 +538,31 @@ const OrderForm = () => {
       return;
     }
 
-    try {
-      // Generate PDF from invoice element
-      const element = document.getElementById('invoice-content');
-      const opt = {
-        margin: 1,
-        filename: `invoice-${data.invoiceNumber}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-
-      const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
-      const pdfFile = new File([pdfBlob], `invoice-${data.invoiceNumber}.pdf`, { type: 'application/pdf' });
-
-      // Create message content
-      const message = `*TEMIPERI ENTERPRISE*\n\n` +
-        `*Invoice #:* ${data.invoiceNumber}\n` +
-        `*Customer:* ${data.customerName}\n` +
-        `*Date:* ${formattedDate}\n` +
-        `*Time:* ${formattedTime}\n\n` +
-        `Please find your invoice attached.\n\n` +
-        `Thank you for your business!`;
-
-      // Create WhatsApp URL with the formatted phone number
-      const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
-      
-      // Open WhatsApp in new window
-      window.open(whatsappUrl, '_blank');
-      
-      // Reset prompt
-      setShowPhonePrompt(false);
-      setCustomerPhone("");
-    } catch (error) {
-      toast.error("Error generating PDF. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    // Generate PDF
+    const pdfBlob = await generatePDF();
+    if (!pdfBlob) {
+      toast.error("Error generating PDF invoice");
+      return;
     }
+
+    // Create message content with proper formatting
+    const message = `*TEMIPERI ENTERPRISE*\n\n` +
+      `*Invoice #:* ${data.invoiceNumber}\n` +
+      `*Customer:* ${data.customerName}\n` +
+      `*Date:* ${formattedDate}\n` +
+      `*Time:* ${formattedTime}\n\n` +
+      `Please find your invoice attached.\n\n` +
+      `Thank you for your business!`;
+
+    // Create WhatsApp URL with the formatted phone number
+    const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+    
+    // Open WhatsApp in new window
+    window.open(whatsappUrl, '_blank');
+    
+    // Reset prompt
+    setShowPhonePrompt(false);
+    setCustomerPhone("");
   };
 
   return (
@@ -698,7 +701,7 @@ const OrderForm = () => {
               {/* Preview Section */}
               {previewItems.length > 0 && (
                 <>
-                  <div id="invoice-content" className="preview-section">
+                  <div className="preview-section" id="invoice-content">
                     <div className="preview-header">
                       <img src={asset.logo} alt="Company Logo" width={100} />
                       <div className="preview-date">
@@ -782,31 +785,18 @@ const OrderForm = () => {
                   {showPhonePrompt && (
                     <div className="phone-prompt-overlay">
                       <div className="phone-prompt">
-                        <h4>Enter Customer's Phone Number</h4>
+                        <h3>Enter Customer's Phone Number</h3>
                         <PhoneInput
                           country={'gh'}
                           value={customerPhone}
                           onChange={phone => setCustomerPhone(phone)}
                           inputProps={{
                             required: true,
-                            placeholder: 'Enter phone number'
                           }}
-                          containerClass="phone-input-container"
-                          inputClass="phone-input"
                         />
-                        <div className="prompt-buttons">
-                          <button onClick={sendToWhatsApp} className="send">
-                            Send
-                          </button>
-                          <button 
-                            onClick={() => {
-                              setShowPhonePrompt(false);
-                              setCustomerPhone("");
-                            }} 
-                            className="cancel"
-                          >
-                            Cancel
-                          </button>
+                        <div className="phone-prompt-buttons">
+                          <button onClick={sendToWhatsApp}>Send</button>
+                          <button onClick={() => setShowPhonePrompt(false)}>Cancel</button>
                         </div>
                       </div>
                     </div>

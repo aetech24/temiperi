@@ -4,6 +4,7 @@ import { asset } from '../../assets/assets'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
+const baseURL = "https://temiperi-stocks-backend.onrender.com/temiperi";
 
 const Invoice = () => {
    const [invoices, setInvoices] = useState([]);
@@ -13,14 +14,23 @@ const Invoice = () => {
    useEffect(() => {
       const fetchInvoices = async () => {
          try {
-            const response = await axios.get(
-              "https://temiperi-stocks-backend.onrender.com/temiperi/invoice"
-            );
-            console.log(response.data);
-            setInvoices(response.data.invoices)
+            const response = await axios.get(`${baseURL}/get-invoices`);
+            if (response.data && response.data.data) {
+               setInvoices(response.data.data);
+            } else {
+               setInvoices([]);
+            }
          } catch (error) {
-           console.log('Error fetching invoices: ' + error);
-           toast.error('Failed to fetch invoices. Please try again.');
+           console.error('Error fetching invoices:', error);
+           toast.error('Failed to fetch invoices. Please try again.', {
+             position: "top-right",
+             autoClose: 3000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
          }
       };
       fetchInvoices();

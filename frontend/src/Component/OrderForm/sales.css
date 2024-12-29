@@ -422,8 +422,8 @@ select {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -433,88 +433,53 @@ select {
 
 .phone-prompt {
   background-color: white;
-  padding: 24px;
+  padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 90%;
-  max-width: 400px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 90%;
 }
 
-.phone-prompt h4 {
-  margin: 0 0 16px;
+.phone-prompt h3 {
+  margin-bottom: 1.5rem;
+  text-align: center;
   color: #333;
 }
 
-.phone-input {
+.phone-prompt .react-phone-input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  font-size: 14px;
+  margin-bottom: 1.5rem;
 }
 
-.phone-input:focus {
-  border-color: #25D366;
-  outline: none;
-}
-
-.prompt-buttons {
+.phone-prompt-buttons {
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.prompt-buttons button {
-  padding: 10px 20px;
+.phone-prompt-buttons button {
+  flex: 1;
+  padding: 0.75rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s;
 }
 
-.prompt-buttons .send {
-  background-color: #25D366;
+.phone-prompt-buttons button:first-child {
+  background-color: #4CAF50;
   color: white;
 }
 
-.prompt-buttons .send:hover {
-  background-color: #128C7E;
-}
-
-.prompt-buttons .cancel {
-  background-color: #dc3545;
+.phone-prompt-buttons button:last-child {
+  background-color: #f44336;
   color: white;
 }
 
-.prompt-buttons .cancel:hover {
-  background-color: #c82333;
-}
-
-/* Phone Input Styles */
-.phone-input-container {
-  margin: 15px 0;
-  width: 100%;
-}
-
-.phone-input {
-  width: 100% !important;
-  height: 40px !important;
-  padding: 8px 45px !important;
-  font-size: 16px !important;
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
-}
-
-.phone-input:focus {
-  border-color: #007bff !important;
-  box-shadow: 0 0 0 2px rgba(0,123,255,0.25) !important;
-  outline: none !important;
-}
-
-.react-tel-input .flag-dropdown {
-  border-radius: 4px 0 0 4px !important;
+.phone-prompt-buttons button:hover {
+  opacity: 0.9;
 }
 
 /* Hide buttons in print */

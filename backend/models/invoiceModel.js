@@ -7,19 +7,11 @@ const invoiceSchema = new mongoose.Schema({
     {
       description: { type: String, required: true },
       quantity: { type: Number, required: true },
-      price: {
-        retail_price: { type: Number, required: true },
-        wholeSale_price: { type: Number, required: true },
-      },
+      price: { type: Number, required: true },
     },
   ],
   totalAmount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: ["paid", "unpaid", "overdue"],
-    default: "unpaid",
-  },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now(), required: false },
 });
 
-export default mongoose.model('Invoice', invoiceSchema)
+export const InvoiceModel = mongoose.model("Invoice", invoiceSchema);

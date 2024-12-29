@@ -1,5 +1,7 @@
+import React from 'react'
 import './sales.css'
 import { asset } from '../../assets/assets'
+import { useState } from 'react'
 import {NavLink} from 'react-router-dom'
 
 
