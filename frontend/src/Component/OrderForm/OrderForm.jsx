@@ -130,7 +130,6 @@ const OrderForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       // Check if there are any items to submit
       if (previewItems.length === 0) {
@@ -181,10 +180,32 @@ const OrderForm = () => {
         totalAmount,
       };
 
-      // Submit the invoice
-      const response = await axios.post(`${baseURL}/invoice`, invoiceData);
+      //order payload
+      const orderPayload = {
+        invoiceNumber: data.invoiceNumber,
+        customerName: data.customerName,
+        items: finalItems.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      };
 
-      if (response.status === 201) {
+      // Submit the invoice
+      const response = await axios.post(`${baseURL}/invoice`, invoiceData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      //submit the order
+      const orderResponse = await axios.post(`${baseURL}/order`, orderPayload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (orderResponse.status === 201) {
         toast.success("Order submitted successfully!", {
           position: "top-right",
           autoClose: 3000,
@@ -195,6 +216,11 @@ const OrderForm = () => {
           progress: undefined,
         });
 
+        //refresh the page after response is provided
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
         // Reset form after successful submission
         setData({
           invoiceNumber: "",
