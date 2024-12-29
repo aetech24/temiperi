@@ -3,8 +3,8 @@
       "category": "beer",
       "name": "guniness bottle",
       "price": 
-         {"retail_price": 192,
-         "wholeSale_price": 204}
+         {"retail_price": 204,
+         "wholeSale_price": 192}
       ,
       "sizes": "330ml",
       "quantity": 162
@@ -35,7 +35,7 @@
      "price": { "retail_price": 120 ,  "wholeSale_price": 113 },
      "category": "beer",
      "sizes": "625ml",
-     "quantity": 0
+     "quantity": 127
    },
    {
      "name": "star mini",
@@ -91,14 +91,14 @@
      "price": { "retail_price": 286 ,  "wholeSale_price": 267 },
      "category": "Beer",
      "size": "330ml",
-     "quantity": 0
+     "quantity": 39
    },
    {
      "name": "Smirnoff Ice Pine Punch",
      "price": { "retail_price": 286 ,  "wholeSale_price": 267 },
      "category": "beer",
      "size": "330ml",
-     "quantity": 0
+     "quantity": 39
    },
    {
      "name": "Smir Ice Bk Grn CAN",
@@ -143,154 +143,24 @@
      "quantity": 60
    },
    {
-     "name": "guinness can",
-     "price": { "retail_price": 93 ,  "wholeSale_price": 86 },
-     "category": "beer",
-     "size": "330ml 12x01",
-     "quantity": 0
-   },
-   {
-     "name": "guinness can",
-     "price": { "retail_price": 184 ,  "wholeSale_price": 170 },
-     "category": "Beer",
-     "size": "24x1",
-     "quantity": 0
-   },
-   {
-     "name": "guinness can",
-     "price": { "retail_price": 49 ,  "wholeSale_price": 45 },
-     "category": "Beer",
-     "size": "6x1",
-     "quantity": 0
-   },
-   {
-     "name": "guniness malt can",
-     "price": { "retail_price": 123.5 ,  "wholeSale_price": 114.5 },
-     "category": "Beer",
-     "size": "330ml 12x1",
-     "quantity": 0
-   },
-   {
      "name": "Alvaro Pine",
-     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "price": { "retail_price": 98 ,  "wholeSale_price": 94 },
      "category": "beer",
      "sizes": "",
      "quantity": 0
    },
    {
      "name": "Alvaro Pear",
-     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "price": { "retail_price": 98 ,  "wholeSale_price": 94 },
      "category": "beer",
      "sizes": "",
      "quantity": 0
    },
    {
      "name": "Alvaro Passion",
-     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "price": { "retail_price": 98 ,  "wholeSale_price": 94 },
      "category": "beer",
      "sizes": "",
-     "quantity": 0
-   },
-   {
-     "name": "jw black 1L 12Y",
-     "price": { "retail_price": 493 ,  "wholeSale_price": 455 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw black  20cl 12Y",
-     "price": { "retail_price": 97.38 ,  "wholeSale_price": 89.5 },
-     "category": "",
-     "size": "24x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw black  75cl 12Y",
-     "price": { "retail_price": 443.58 ,  "wholeSale_price": 409.5 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw BLK ICONS 1L   12Y",
-     "price": { "retail_price": 360.92 ,  "wholeSale_price": 333.17 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Red 1L   12Y",
-     "price": { "retail_price": 245.21 ,  "wholeSale_price": 227.05 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Red 20cl    12Y",
-     "price": { "retail_price": 60.92 ,  "wholeSale_price": 56.21 },
-     "category": "",
-     "size": "24x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Red 75cl    12Y",
-     "price": { "retail_price": 219.88 ,  "wholeSale_price": 203.91 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Red ICONS 1L    12Y",
-     "price": { "retail_price": 192.75 ,  "wholeSale_price": 177.83 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Blue 75cl   12Y",
-     "price": { "retail_price": 3219.83 ,  "wholeSale_price": 2931.33},
-     "category": "",
-     "size": "06x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Gold Rsv 75cl   ",
-     "price": { "retail_price": 831.67 ,  "wholeSale_price": 681.33 },
-     "category": "",
-     "size": "06x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Gold Rsv 75cl icons  ",
-     "price": { "retail_price": 527.5 ,  "wholeSale_price": 486.67 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw Aged 18 Yrs75cl 18Y  ",
-     "retails_price": 1305.33,
-     "wholeSale_price": 1188.5,
-     "price": { "retail_price": 1305.33 ,  "wholeSale_price": 1188.5 },
-     "category": "",
-     "size": "06x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw BLACK HIGHLAND 1L ",
-     "retails_price": 266.67,
-     "wholeSale_price": 245.54,
-     "price": { "retail_price": 266.67 ,  "wholeSale_price": 245.54 },
-     "category": "",
-     "size": "12x01",
-     "quantity": 0
-   },
-   {
-     "name": "jw BLACK ASLAY 1L ",
-     "price": { "retail_price": 266.67 ,  "wholeSale_price": 245.54 },
-     "category": "",
-     "size": "12x01",
      "quantity": 0
    },
    {
@@ -429,10 +299,10 @@
 
    {
      "name": "Black & White 20cl  ",
-     "price": { "retail_price": 49.33 ,  "wholeSale_price": 44.9 },
+     "price": { "retail_price": 50 ,  "wholeSale_price": 45 },
      "category": "",
      "size": "08x06",
-     "quantity": 0
+     "quantity": 36
    },
    {
      "name": "CptMrg Jam Rum 1L  ",
@@ -470,20 +340,6 @@
      "price": { "retail_price": 43 ,  "wholeSale_price": 41 },
      "category": "bell product",
      "quantity": 2475
-   },
-   {
-     "name": "bel water meduim",
-     "price": { "retail_price": 28 ,  "wholeSale_price": 26 },
-     "category": "bell product",
-     "quantity": 0,
-     "size": "500ml"
-   },
-   {
-     "name": "bel water small",
-     "price": { "retail_price": 26 ,  "wholeSale_price": 24},
-     "category": "bell product",
-     "quantity": 0,
-     "size": "720ml"
    },
    {
      "name": "bigo cocktail",
@@ -557,27 +413,7 @@
      "category": "peeva product",
      "quantity": 100
    },
-   {
-     "name": "verna water small",
-     "price": { "retail_price": 24 ,  "wholeSale_price": 22 },
-     "category": "twellium product",
-     "quantity": 100,
-     "size": "500ml 16x01"
-   },
-   {
-     "name": "verna water small",
-     "price": { "retail_price": 47 ,  "wholeSale_price": 45 },
-     "category": "twellium product",
-     "quantity": 100,
-     "size": "500ml 36x01"
-   },
-   {
-     "name": "verna water small",
-     "price": { "retail_price": 28 ,  "wholeSale_price": 26 },
-     "category": "twellium product",
-     "quantity": 100,
-     "size": "500ml 24x01"
-   },
+  
    {
      "name": "bel ice",
      "price": { "retail_price": 55 ,  "wholeSale_price": 52 },
@@ -828,10 +664,10 @@
       "quantity": 50
    }, 
    {
-      "name": "5Star largge",
+      "name": "5Star ",
          "price": { "retail_price": 45,  "wholeSale_price": 43},
       "category": "water",
-      "quantity": 127
+      "quantity": 14
    },
    {
       "name": "Fanta small",
@@ -840,31 +676,25 @@
       "quantity": 18
    } ,
    {
-      "name": "Fanta medium",
-         "price": { "retail_price": 88,  "wholeSale_price": 84},
-      "category": "water",
-      "quantity": 15
-   } ,
-   {
-      "name": "sprit medium",
+      "name": "sprite medium",
          "price": { "retail_price": 88,  "wholeSale_price": 84},
       "category": "water",
       "quantity": 0
    }, 
      {
-      "name": "sprit small",
+      "name": "sprite small",
          "price": { "retail_price": 62,  "wholeSale_price": 58},
       "category": "water",
       "quantity": 4
    } ,
      {
-      "name": "sprit large",
+      "name": "sprite large",
          "price": { "retail_price": 62,  "wholeSale_price": 58},
       "category": "water",
       "quantity": 15
    } ,
      {
-      "name": "sprit RGB",
+      "name": "sprite RGB",
          "price": { "retail_price": 62,  "wholeSale_price": 58},
       "category": "water",
       "quantity": 8
