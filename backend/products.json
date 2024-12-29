@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 97e05c18e7d04786bdefc534ce840a5ec71f1cf3
 [
    {
       "category": "beer",
       "name": "guniness bottle",
+<<<<<<< HEAD
       "retails_price": 192,
       "wholeSale_price": 204,
       "sizes": "330ml",
@@ -730,4 +734,873 @@
       "quantity": 100
    }
 
+=======
+      "price": 
+         {"retail_price": 192,
+         "wholeSale_price": 204}
+      ,
+      "sizes": "330ml",
+      "quantity": 162
+   },
+   {
+     "category": "beer",
+     "name": "malta guniness can",
+     "price": { "retail_price": 247 ,  "wholeSale_price": 238 },
+     "sizes": "330ml 24x01",
+     "quantity": 100
+   },
+   {
+     "name": "guniness malt  pet",
+     "price": { "retail_price": 100 ,  "wholeSale_price": 95 },
+     "category": "beer",
+     "size": "330ml 12x01",
+     "quantity": 258
+   },
+   {
+     "name": "Guniness malt bottle",
+     "price": { "retail_price": 143 ,  "wholeSale_price": 135 },
+     "category": "beer",
+     "size": "330ml 06x01",
+     "quantity": 13
+   },
+   {
+     "name": "star large",
+     "price": { "retail_price": 120 ,  "wholeSale_price": 113 },
+     "category": "beer",
+     "sizes": "625ml",
+     "quantity": 0
+   },
+   {
+     "name": "star mini",
+     "price": { "retail_price": 128 ,  "wholeSale_price": 120 },
+     "category": "beer",
+     "sizes": "330ml",
+     "quantity": 0
+   },
+   {
+     "name": "gulder large",
+     "price": { "retail_price": 130 ,  "wholeSale_price": 122 },
+     "category": "beer",
+     "size": "625ml",
+     "quantity": 39
+   },
+   {
+     "name": "Heineken Bottle",
+     "price": { "retail_price": 543 ,  "wholeSale_price": 504 },
+     "category": "beer",
+     "size": "330ml 06x04",
+     "quantity": 0
+   },
+   {
+     "name": "Heineken Bot",
+     "price": { "retail_price":543 ,  "wholeSale_price": 504 },
+     "category": "Beer",
+     "size": "330ml 24x01",
+     "quantity": 0
+   },
+   {
+     "name": "Heineken Can",
+     "price": { "retail_price": 415 ,  "wholeSale_price": 386 },
+     "category": "beer",
+     "size": "330ml 06x04",
+     "quantity": 0
+   },
+   {
+     "name": "Heineken Can",
+     "price": { "retail_price": 543 ,  "wholeSale_price": 504 },
+     "category": "beer",
+     "size": "330ml 24x01",
+     "quantity": 0
+   },
+   {
+     "name": "Smirnoff Ice Red",
+     "price": { "retail_price": 286 ,  "wholeSale_price": 267 },
+     "category": "beer",
+     "size": "330ml",
+     "quantity": 0
+   },
+   {
+     "name": "Smirnoff Ice D Black",
+     "price": { "retail_price": 286 ,  "wholeSale_price": 267 },
+     "category": "Beer",
+     "size": "330ml",
+     "quantity": 0
+   },
+   {
+     "name": "Smirnoff Ice Pine Punch",
+     "price": { "retail_price": 286 ,  "wholeSale_price": 267 },
+     "category": "beer",
+     "size": "330ml",
+     "quantity": 0
+   },
+   {
+     "name": "Smir Ice Bk Grn CAN",
+     "price": { "retail_price": 381 ,  "wholeSale_price": 353 },
+     "category": "beer",
+     "sizes": "330ml 24x01",
+     "quantity": 0
+   },
+   {
+     "name": "Smir Ice Bk Grn CAN",
+     "price": { "retail_price": 191 ,  "wholeSale_price": 177 },
+     "category": "Beer",
+     "sizes": "330ml 12x01",
+     "quantity": 0
+   },
+   {
+     "name": "orjin large",
+     "price": { "retail_price": 120 ,  "wholeSale_price": 112 },
+     "category": "Beer",
+     "sizes": "625ml",
+     "quantity": 2
+   },
+   {
+     "name": "orjin mini",
+     "price": { "retail_price": 143 ,  "wholeSale_price": 134 },
+     "category": "Beer",
+     "size": "300ml",
+     "quantity": 0
+   },
+   {
+     "name": "orjin can",
+     "price": { "retail_price": 204 ,  "wholeSale_price": 190 },
+     "category": "Beer",
+     "size": "300ml 24x01",
+     "quantity": 0
+   },
+   {
+     "name": "ABC mini",
+     "price": { "retail_price": 119 ,  "wholeSale_price": 112 },
+     "category": "beer",
+     "size": "300ml",
+     "quantity": 60
+   },
+   {
+     "name": "guinness can",
+     "price": { "retail_price": 93 ,  "wholeSale_price": 86 },
+     "category": "beer",
+     "size": "330ml 12x01",
+     "quantity": 0
+   },
+   {
+     "name": "guinness can",
+     "price": { "retail_price": 184 ,  "wholeSale_price": 170 },
+     "category": "Beer",
+     "size": "24x1",
+     "quantity": 0
+   },
+   {
+     "name": "guinness can",
+     "price": { "retail_price": 49 ,  "wholeSale_price": 45 },
+     "category": "Beer",
+     "size": "6x1",
+     "quantity": 0
+   },
+   {
+     "name": "guniness malt can",
+     "price": { "retail_price": 123.5 ,  "wholeSale_price": 114.5 },
+     "category": "Beer",
+     "size": "330ml 12x1",
+     "quantity": 0
+   },
+   {
+     "name": "Alvaro Pine",
+     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "category": "beer",
+     "sizes": "",
+     "quantity": 0
+   },
+   {
+     "name": "Alvaro Pear",
+     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "category": "beer",
+     "sizes": "",
+     "quantity": 0
+   },
+   {
+     "name": "Alvaro Passion",
+     "price": { "retail_price": 98 ,  "wholeSale_price": 90 },
+     "category": "beer",
+     "sizes": "",
+     "quantity": 0
+   },
+   {
+     "name": "jw black 1L 12Y",
+     "price": { "retail_price": 493 ,  "wholeSale_price": 455 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw black  20cl 12Y",
+     "price": { "retail_price": 97.38 ,  "wholeSale_price": 89.5 },
+     "category": "",
+     "size": "24x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw black  75cl 12Y",
+     "price": { "retail_price": 443.58 ,  "wholeSale_price": 409.5 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw BLK ICONS 1L   12Y",
+     "price": { "retail_price": 360.92 ,  "wholeSale_price": 333.17 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Red 1L   12Y",
+     "price": { "retail_price": 245.21 ,  "wholeSale_price": 227.05 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Red 20cl    12Y",
+     "price": { "retail_price": 60.92 ,  "wholeSale_price": 56.21 },
+     "category": "",
+     "size": "24x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Red 75cl    12Y",
+     "price": { "retail_price": 219.88 ,  "wholeSale_price": 203.91 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Red ICONS 1L    12Y",
+     "price": { "retail_price": 192.75 ,  "wholeSale_price": 177.83 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Blue 75cl   12Y",
+     "price": { "retail_price": 3219.83 ,  "wholeSale_price": 2931.33},
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Gold Rsv 75cl   ",
+     "price": { "retail_price": 831.67 ,  "wholeSale_price": 681.33 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Gold Rsv 75cl icons  ",
+     "price": { "retail_price": 527.5 ,  "wholeSale_price": 486.67 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw Aged 18 Yrs75cl 18Y  ",
+     "retails_price": 1305.33,
+     "wholeSale_price": 1188.5,
+     "price": { "retail_price": 1305.33 ,  "wholeSale_price": 1188.5 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw BLACK HIGHLAND 1L ",
+     "retails_price": 266.67,
+     "wholeSale_price": 245.54,
+     "price": { "retail_price": 266.67 ,  "wholeSale_price": 245.54 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "jw BLACK ASLAY 1L ",
+     "price": { "retail_price": 266.67 ,  "wholeSale_price": 245.54 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "Tanq Lndn Gin 75cl ",
+     "price": { "retail_price": 261.67 ,  "wholeSale_price": 237.54 },
+     "category": "",
+     "sizes": "60x01",
+     "quantity": 0
+   },
+   {
+     "name": "Tanq Ten 70cl ",
+     "price": { "retail_price": 391.67 ,  "wholeSale_price": 356.67 },
+     "category": "",
+     "size": "60x01",
+     "quantity": 0
+   },
+   {
+     "name": "Ciroc 1L ",
+     "price": { "retail_price": 687.58 ,  "wholeSale_price": 626.25 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "Ciroc Pinapple 1L ",
+     "price": { "retail_price": 465.5 ,  "wholeSale_price": 465.5 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Ciroc Pinapple 70cL ",
+     "price": { "retail_price": 698.83 ,  "wholeSale_price": 646.17 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+
+   {
+     "name": "Don Julio Anejo 75cl ",
+     "price":{ "retail_price": 1537, "wholeSale_price": 14441.67} ,
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Don Julio Blnco 75cl ",
+     "price":{ "retail_price": 904.17, "wholeSale_price": 848.33 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Ketel One Vodka 75cl ",
+     "retails_price": 242.08,
+     "wholeSale_price": 222.67,
+     "price":{ "retail_price": 242.67, "wholeSale_price": 222.54} ,
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Cardhu 70cl 12Y ",
+     "retails_price": 330,
+     "wholeSale_price": 303.5,
+     "price": { "retail_price": 330 , "wholeSale_price": 303.5},
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Taliska 70cl 10Y ",
+     "price": { "retail_price": 350 ,  "wholeSale_price": 322.17 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Dtown-Sngltn 75cl 12Y ",
+     "price": { "retail_price": 696.17 ,  "wholeSale_price": 634.08 },
+     "category": "",
+     "sizes": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "Dtown-Sngltn 70cl 15Y ",
+     "price": { "retail_price": 1131.5 ,  "wholeSale_price": 1030.57 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Zacapa Cent 23 75cl 15Y ",
+     "price": { "retail_price": 729 ,  "wholeSale_price": 672.17 },
+     "category": "",
+     "size": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Zacapa Cent XO 70cl ",
+     "price": { "retail_price": 1628 ,  "wholeSale_price": 1500 },
+     "category": "",
+     "sizes": "06x01",
+     "quantity": 0
+   },
+   {
+     "name": "Baileys Orig 1L  ",
+     "price": { "retail_price": 345.33 ,  "wholeSale_price": 319.08 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+
+   {
+     "name": "Baileys Orig 20cl  ",
+     "price": { "retail_price": 74.42 ,  "wholeSale_price": 68.54 },
+     "category": "",
+     "size": "24x01",
+     "quantity": 0
+   },
+   {
+     "name": "Baileys Orig 75cl  ",
+     "price": { "retail_price": 299.42 ,  "wholeSale_price": 276.33 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+
+   {
+     "name": "Black & White 75cl  ",
+     "price": { "retail_price": 164.42 ,  "wholeSale_price": 149.67 },
+     "category": "",
+     "size": "12x1",
+     "quantity": 0
+   },
+
+   {
+     "name": "Black & White 20cl  ",
+     "price": { "retail_price": 49.33 ,  "wholeSale_price": 44.9 },
+     "category": "",
+     "size": "08x06",
+     "quantity": 0
+   },
+   {
+     "name": "CptMrg Jam Rum 1L  ",
+     "price": { "retail_price": 185.5 ,  "wholeSale_price": 171.33 },
+     "category": "",
+     "size": "12x01",
+     "quantity": 0
+   },
+   {
+     "name": "bel cocktail",
+     "price": { "retail_price": 38 ,  "wholeSale_price": 37 },
+     "category": "bell product",
+     "quantity": 299
+   },
+   {
+     "name": "bel squeeze",
+     "price": { "retail_price": 38 ,  "wholeSale_price": 37 },
+     "category": "bell product",
+     "quantity": 376
+   },
+   {
+     "name": "puka",
+     "price": { "retail_price": 43 ,  "wholeSale_price": 41 },
+     "category": "bell product",
+     "quantity": 1199
+   },
+   {
+     "name": "tamarinda",
+     "price": { "retail_price": 43 ,  "wholeSale_price": 41 },
+     "category": "bell product",
+     "quantity": 56
+   },
+   {
+     "name": "bel cola",
+     "price": { "retail_price": 43 ,  "wholeSale_price": 41 },
+     "category": "bell product",
+     "quantity": 2475
+   },
+   {
+     "name": "bel water meduim",
+     "price": { "retail_price": 28 ,  "wholeSale_price": 26 },
+     "category": "bell product",
+     "quantity": 0,
+     "size": "500ml"
+   },
+   {
+     "name": "bel water small",
+     "price": { "retail_price": 26 ,  "wholeSale_price": 24},
+     "category": "bell product",
+     "quantity": 0,
+     "size": "720ml"
+   },
+   {
+     "name": "bigo cocktail",
+     "price": { "retail_price": 48 ,  "wholeSale_price": 46 },
+     "category": "trillium product",
+     "quantity": 91
+   },
+   {
+     "name": "bigo grape",
+     "price": { "retail_price": 48 ,  "wholeSale_price": 46 },
+     "category": "trillium product",
+     "quantity": 26
+   },
+   {
+     "name": "bigo cola",
+     "price": { "retail_price": 48 ,  "wholeSale_price": 46 },
+     "category": "trillium product",
+     "quantity": 290
+   },
+   {
+     "name": "rush",
+     "price": { "retail_price": 45 ,  "wholeSale_price": 43 },
+     "category": "trillium product",
+     "quantity": 393
+   },
+   {
+     "name": "slemfit meduim",
+     "price": { "retail_price": 25 ,  "wholeSale_price": 22.5 },
+     "category": "trillium product",
+     "quantity": 96
+   },
+   {
+     "name": "slemfit small",
+     "price": { "retail_price": 22 ,  "wholeSale_price": 20 },
+     "category": "trillium product",
+     "quantity": 96
+   },
+   {
+     "name": "verna mineral water medium",
+     "price": { "retail_price": 26 ,  "wholeSale_price": 24 },
+     "category": "twellium product",
+     "quantity": 169
+   },
+   {
+     "name": "peeva tangy",
+     "price": { "retail_price": 40 ,  "wholeSale_price": 38 },
+     "category": "peeva product",
+     "quantity": 549
+   },
+   {
+     "name": "peeva grape",
+     "price": { "retail_price": 39 ,  "wholeSale_price": 37 },
+     "category": "peeva product",
+     "quantity": 490
+   },
+   {
+     "name": "peeva cola",
+     "price": { "retail_price": 40 ,  "wholeSale_price": 38 },
+     "category": "peeva product",
+     "quantity": 760
+   },
+   {
+     "name": "peeva water",
+     "price": { "retail_price": 22 ,  "wholeSale_price": 20},
+     "category": "peeva product",
+     "quantity": 1876
+   },
+   {
+     "name": "the game",
+     "price": { "retail_price": 40 ,  "wholeSale_price": 38 },
+     "category": "peeva product",
+     "quantity": 100
+   },
+   {
+     "name": "verna water small",
+     "price": { "retail_price": 24 ,  "wholeSale_price": 22 },
+     "category": "twellium product",
+     "quantity": 100,
+     "size": "500ml 16x01"
+   },
+   {
+     "name": "verna water small",
+     "price": { "retail_price": 47 ,  "wholeSale_price": 45 },
+     "category": "twellium product",
+     "quantity": 100,
+     "size": "500ml 36x01"
+   },
+   {
+     "name": "verna water small",
+     "price": { "retail_price": 28 ,  "wholeSale_price": 26 },
+     "category": "twellium product",
+     "quantity": 100,
+     "size": "500ml 24x01"
+   },
+   {
+     "name": "bel ice",
+     "price": { "retail_price": 55 ,  "wholeSale_price": 52 },
+     "category": "bel product",
+     "quantity": 3065
+   },
+   {
+     "name": "kaiser",
+     "price": { "retail_price": 48 ,  "wholeSale_price": 4 },
+     "category": "multipac product",
+     "quantity": 84
+   },
+   {
+     "name": "beta malta",
+     "price": { "retail_price": 70 ,  "wholeSale_price": 68 },
+     "category": "beer",
+     "quantity": 100
+   },
+   {
+     "name": "perla water small",
+     "price": { "retail_price": 26 ,  "wholeSale_price": 24 },
+     "category": "multipac product",
+     "quantity": 5
+   },
+
+   {
+      "name": "tampico medium",
+         "price": { "retail_price": 62 ,  "wholeSale_price": 59 },
+      "category": "tampico",
+      "quantity": 75,
+      "size": "medium"
+   },
+   {
+      "name": "tampico small",
+         "price": { "retail_price": 44 ,  "wholeSale_price": 46 },
+      "category": "tampico",
+      "quantity": 0,
+      "size": "small"
+   },
+   {
+      "name": "tampico large",
+         "price": { "retail_price": 62 ,  "wholeSale_price": 59 },
+      "category": "tampico",
+      "quantity": 42,
+      "size": "large"
+   },
+
+   {
+      "name": "club large",
+         "price": { "retail_price": 130 ,  "wholeSale_price": 125 },
+      "category": "abl products",
+      "quantity": 19,
+      "size": "large"
+   },
+   {
+      "name": "club mini",
+         "price": { "retail_price": 170 ,  "wholeSale_price": 160 },
+      "category": "abl products",
+      "quantity": 6,
+      "size": "mini"
+   },
+   {
+      "name": "shandy large",
+         "price": { "retail_price": 95,  "wholeSale_price": 90 },
+      "category": "abl products",
+      "quantity": 18,
+      "size": "large"
+   },
+   {
+      "name": "shandy mini",
+         "price": { "retail_price": 145,  "wholeSale_price": 140 },
+      "category": "abl products",
+      "quantity": 1,
+      "size": "mini"
+   },
+   {
+      "name": "eagle stout",
+         "price": { "retail_price": 150,  "wholeSale_price": 145 },
+      "category": "abl products",
+      "quantity": 13,
+      "size": "stout"
+   },
+   {
+      "name": "eagle mini",
+         "price": { "retail_price": 128,  "wholeSale_price": 122 },
+      "category": "abl products",
+      "quantity": 42,
+      "size": "mini"
+   },
+   
+   {
+      "name": "awake small",
+         "price": { "retail_price": 25,  "wholeSale_price": 23 },
+      "category": "water",
+      "quantity": 0,
+      "size": "small"
+   },
+   {
+      "name": "darling lemon small",
+         "price": { "retail_price": 55,  "wholeSale_price": 53 },
+      "category": "water",
+      "quantity": 8,
+      "size": "small"
+   },
+   {
+      "name": "storm medium",
+         "price": { "retail_price": 65,  "wholeSale_price": 63 },
+      "category": "water",
+      "quantity": 57,
+      "size": "medium"
+   },
+   {
+      "name": "storm small",
+         "price": { "retail_price": 47,  "wholeSale_price": 45 },
+      "category": "water",
+      "quantity": 0,
+      "size": "small"
+   },
+   {
+      "name": "wheat small",
+         "price": { "retail_price": 100,  "wholeSale_price": 95 },
+      "category": "water",
+      "quantity": 0,
+      "size": "small"
+   },
+   {
+      "name": "wheat big",
+         "price": { "retail_price": 140,  "wholeSale_price": 135 },
+      "category": "water",
+      "quantity": 64,
+      "size": "big"
+   },
+   {
+      "name": "BB cocktail",
+         "price": { "retail_price": 135,  "wholeSale_price": 130 },
+      "category": "water",
+      "quantity": 0,
+      "size": "big"
+   },
+   {
+      "name": "kalyppo",
+         "price": { "retail_price": 95,  "wholeSale_price": 93 },
+      "category": "water",
+      "quantity": 0
+   },
+   {
+      "name": "pukka extra",
+         "price": { "retail_price": 55,  "wholeSale_price": 52 },
+      "category": "water",
+      "quantity": 612,
+      "size": "big"
+   },
+   {
+      "name": "pukka",
+         "price": { "retail_price": 43,  "wholeSale_price": 41 },
+      "category": "water",
+      "quantity": 255,
+      "size": "big"
+   },
+   {
+      "name": "coke big 1.5L",
+         "price": { "retail_price": 135,  "wholeSale_price": 130},
+      "category": "water",
+      "quantity": 39,
+      "size": "big 1.5L"
+   },
+   {
+      "name": "fanta big 1.5L",
+         "price": { "retail_price": 135,  "wholeSale_price": 130},
+      "category": "water",
+      "quantity": 15,
+      "size": "big 1.5L"
+   },
+   {
+      "name": "coke RGB",
+         "price": { "retail_price": 85,  "wholeSale_price": 80},
+      "category": "water",
+      "quantity": 0,
+      "size": "big 1.5L"
+   },
+   {
+      "name": "fanta RGB",
+         "price": { "retail_price": 85,  "wholeSale_price": 80},
+      "category": "water",
+      "quantity": 7,
+      "size": "big 1.5L"
+   },
+   {
+      "name": "coke pet medium 0.5L",
+         "price": { "retail_price": 88,  "wholeSale_price": 84},
+      "category": "water",
+      "quantity": 8,
+      "size": "medium 0.5L"
+   },
+   {
+      "name": "coke pet small 0.3L",
+         "price": { "retail_price": 62,  "wholeSale_price": 58},
+      "category": "water",
+      "quantity": 33,
+      "size": "small 0.3L"
+   },
+   {
+      "name": "can coke",
+         "price": { "retail_price": 195,  "wholeSale_price": 190},
+      "category": "water",
+      "quantity": 0
+   },
+   {
+      "name": "can malt",
+         "price": { "retail_price": 247,  "wholeSale_price": 238},
+      "category": "water",
+      "quantity": 79
+   },
+   {
+      "name": "appela",
+         "price": { "retail_price": 38,  "wholeSale_price": 37},
+      "category": "water",
+      "quantity": 97
+   },
+   {
+      "name": "bel soda",
+         "price": { "retail_price": 38,  "wholeSale_price": 37},
+      "category": "water",
+      "quantity": 286
+   },
+   {
+      "name": "bel tropical",
+         "price": { "retail_price": 38,  "wholeSale_price": 37},
+      "category": "water",
+      "quantity": 337
+   },  
+   {
+      "name": "bel aqua water box 1.5L",
+         "price": { "retail_price": 56,  "wholeSale_price": 54},
+      "category": "water",
+      "quantity": 3
+   } , 
+   {
+      "name": "bel aqua water medium",
+         "price": { "retail_price": 30,  "wholeSale_price": 27},
+      "category": "water",
+      "quantity": 54
+   },
+   {
+      "name": "bel aqua water small",
+         "price": { "retail_price": 27,  "wholeSale_price": 25},
+      "category": "water",
+      "quantity": 50
+   }, 
+   {
+      "name": "5Star largge",
+         "price": { "retail_price": 45,  "wholeSale_price": 43},
+      "category": "water",
+      "quantity": 127
+   },
+   {
+      "name": "Fanta small",
+         "price": { "retail_price": 62,  "wholeSale_price": 58},
+      "category": "water",
+      "quantity": 18
+   } ,
+   {
+      "name": "Fanta medium",
+         "price": { "retail_price": 88,  "wholeSale_price": 84},
+      "category": "water",
+      "quantity": 15
+   } ,
+   {
+      "name": "sprit medium",
+         "price": { "retail_price": 88,  "wholeSale_price": 84},
+      "category": "water",
+      "quantity": 0
+   }, 
+     {
+      "name": "sprit small",
+         "price": { "retail_price": 62,  "wholeSale_price": 58},
+      "category": "water",
+      "quantity": 4
+   } ,
+     {
+      "name": "sprit large",
+         "price": { "retail_price": 62,  "wholeSale_price": 58},
+      "category": "water",
+      "quantity": 15
+   } ,
+     {
+      "name": "sprit RGB",
+         "price": { "retail_price": 62,  "wholeSale_price": 58},
+      "category": "water",
+      "quantity": 8
+   } 
+>>>>>>> 97e05c18e7d04786bdefc534ce840a5ec71f1cf3
 ]

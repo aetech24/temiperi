@@ -16,7 +16,11 @@ export const Sidebar = () => {
 
       <div className="content">
          <img src={asset.analytics_icon} alt="" />
+<<<<<<< HEAD
          <NavLink to={'/'}>
+=======
+         <NavLink to={'/analysis'}>
+>>>>>>> 97e05c18e7d04786bdefc534ce840a5ec71f1cf3
             Analysis
          </NavLink>
       </div>
