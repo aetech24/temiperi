@@ -20,7 +20,20 @@
    border-radius: 10px;
 }
 
+<<<<<<< HEAD
+.invoice_details {
+   align-items: center;
+   padding: 20px;
+}
 
+.invoice_details p {
+   font-weight: 500;
+   padding-bottom: 10px;
+   border-bottom: solid 1px #ccc;
+}
+=======
+
+>>>>>>> 97e05c18e7d04786bdefc534ce840a5ec71f1cf3
 
 .invoice_btn {
    width: 80%;
@@ -57,6 +70,8 @@
 .purchase_company_info p {
    font-weight: 700;
    padding: 10px 0;
+<<<<<<< HEAD
+=======
 }
 
 .invoice_details {
@@ -217,4 +232,5 @@
     font-size: 0.7em;
     color: #333;
   }
+>>>>>>> 97e05c18e7d04786bdefc534ce840a5ec71f1cf3
 }

@@ -1,94 +1,41 @@
 .table_container {
    padding: 40px;
+   align-items: center;
+   justify-content: center;
    margin: auto;
-   text-align: left;
-   width: 100%;
-   max-width: 1200px;
- }
- 
- .table_container h2 {
-   padding-bottom: 20px;
-   font-size: 24px;
-   font-weight: bold;
-   color: #333;
- }
- 
- table {
+   text-align: center;
+}
+
+.table_container h2 {
+   padding-bottom: 30px;
+}
+
+table {
+   border: solid 1px #ccc;
+   align-items: center;
+   margin: auto auto;
+   overflow: auto;
    width: 100%;
    border-spacing: 0;
    border-collapse: collapse;
-   margin-top: 20px;
-   background-color: #fff;
- }
- 
- thead {
-   background-color: #f9fafb;
- }
- 
- thead tr th {
-   padding: 12px;
-   text-align: left;
-   font-size: 14px;
-   font-weight: 600;
-   color: #4a4a4a;
-   border-bottom: 2px solid #ddd;
- }
- 
- tbody tr td {
-   padding: 12px;
-   text-align: left;
-   font-size: 14px;
-   color: #333;
-   border-bottom: 1px solid #ddd;
-   word-wrap: break-word;
- }
- 
- tbody tr:nth-child(even) {
-   background-color: #f7f7f7;
- }
- 
- tbody tr:hover {
-   background-color: #f1f1f1;
-   cursor: pointer;
- }
- 
- tbody tr td {
-   max-width: 250px;
-   overflow: hidden;
-   text-overflow: ellipsis;
- }
- 
- tbody tr td:first-child {
-   font-weight: 600;
- }
- 
- tfoot tr td {
-   padding: 12px;
-   font-size: 14px;
-   text-align: center;
-   font-weight: bold;
- }
- 
- .table_btn {
+   display: block;
+}
+
+tbody {
+   white-space: no-wrap;
+}
+
+thead tr th {
+   padding: 3px;
+   border: solid 1px #ccc;
+   font-size: 13px;
+}
+
+tbody tr td {
+   border: solid 1px #ccc;
+   padding: 5px;
+}
+
+.table_btn {
    padding: 20px;
-   text-align: center;
- }
- 
- @media (max-width: 768px) {
-   .table_container {
-     padding: 20px;
-   }
- 
-   table {
-     font-size: 12px;
-   }
- 
-   thead tr th, tbody tr td {
-     padding: 10px;
-   }
- 
-   tbody tr td {
-     font-size: 12px;
-   }
- }
- 
+}

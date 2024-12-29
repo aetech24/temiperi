@@ -1,38 +1,52 @@
-import React from 'react'
-import './analysis.css'
-import { Sidebar } from '../Sidebar/Sidebar'
-import { NavLink } from 'react-router-dom'
-import { Bar , Doughnut, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto'
-import Orders from '../Orders/Orders';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-
+import React from "react";
+import "./analysis.css";
+import { Sidebar } from "../Sidebar/Sidebar";
+import { NavLink } from "react-router-dom";
+import { Bar, Doughnut, Pie } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
+import Orders from "../Orders/Orders";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const Analysis = () => {
-  
+  //url endpoints for the order component
+  const url = "https://temiperi-backend.onrender.com";
+  const devUrl = "http://localhost:4000/temiperi";
+
   const MyBarChart = () => {
     // Define the data for the chart
     const data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      labels: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
       datasets: [
         {
-          label: 'Sales (gh)',
-          data: [3000, 2000, 5000, 4000, 6000, 7000, 100, 500, 3030,],
-          backgroundColor: 'rgba(75, 192, 192, 0.6)', // Bar color
-          borderColor: 'rgba(75, 192, 192, 1)',
+          label: "Sales (gh)",
+          data: [3000, 2000, 5000, 4000, 6000, 7000, 100, 500, 3030],
+          backgroundColor: "rgba(75, 192, 192, 0.6)", // Bar color
+          borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
         },
       ],
     };
-  
     // Define optional settings for the chart
     const options = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'top',
+          position: "top",
         },
         tooltip: {
           enabled: true,
@@ -43,31 +57,29 @@ const Analysis = () => {
           beginAtZero: true,
           title: {
             display: true,
-            text: 'Sales in Cedis',
+            text: "Sales in Cedis",
           },
         },
         x: {
           title: {
             display: true,
-            text: 'Months',
+            text: "Months",
           },
         },
       },
     };
-  
+
     return (
-      <div style={{ width: '600px', height: '400px' }}>
+      <div style={{ width: "600px", height: "400px" }}>
         <Bar data={data} options={options} />
       </div>
     );
   };
-  
-  
 
   return (
     <div>
-      <Header />
-      <Orders />
+      {/* <Header /> */}
+      <Orders url={devUrl} />
       <h2>Perfomance Analysis</h2>
 
       <div className="container">
@@ -76,13 +88,12 @@ const Analysis = () => {
 
         <div className="div">
           <div className="filer">
-
             {/* ================= filter container for products ================ */}
 
             <div className="product_filter_container">
               <label htmlFor="">
-                Category 
-                <select >
+                Category
+                <select>
                   <option value="">ABL</option>
                   <option value="">Water</option>
                   <option value="">Pet Drinks</option>
@@ -90,25 +101,23 @@ const Analysis = () => {
                 </select>
               </label>
 
-              <label htmlFor="">
-                product
-              </label>
+              <label htmlFor="">product</label>
 
               <label htmlFor="">
-                Month 
-                <select name="" id="">
-                  <option value="">January</option>
-                  <option value="">Febuary</option>
-                  <option value="">March</option>
-                  <option value="">April</option>
-                  <option value="">May</option>
-                  <option value="">June</option>
-                  <option value="">July</option>
-                  <option value="">August</option>
-                  <option value="">September</option>
-                  <option value="">October</option>
-                  <option value="">November</option>
-                  <option value="">Decembber</option>
+                Month
+                <select name="month" id="">
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
                 </select>
               </label>
 
@@ -123,7 +132,7 @@ const Analysis = () => {
               </label>
 
               <label htmlFor="">
-                Date 
+                Date
                 <input type="date" />
               </label>
             </div>
@@ -137,22 +146,22 @@ const Analysis = () => {
             <div className="best_performing_product">
               <h4>Best Performing Products</h4>
               <div className="best_products">
-                <div className='products_details'>
+                <div className="products_details">
                   <p>Product 1</p>
                   <small></small>
                 </div>
 
-                <div className='products_details'>
+                <div className="products_details">
                   <p>Product 2</p>
                   <small></small>
                 </div>
 
-                <div className='products_details'>
+                <div className="products_details">
                   <p>Product 2</p>
                   <small></small>
                 </div>
 
-                <div className='products_details'>
+                <div className="products_details">
                   <p>Product 2</p>
                   <small></small>
                 </div>
@@ -162,27 +171,41 @@ const Analysis = () => {
 
           {/* ========================= Report btn ===================== */}
           <div className="btn report">
-            <NavLink to={'/report'}>
-              <button >Write Report</button>
+            <NavLink to={"/report"}>
+              <button>Write Report</button>
             </NavLink>
           </div>
         </div>
-         
       </div>
 
       {/* ==================== brife Report Summary ============= */}
       <div className="performance_summary">
         <h3>Performance Summary</h3>
-        <p></p>
+        <p>
+          <small>1. </small>Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Repudiandae distinctio harum mollitia suscipit ullam sint? Illo
+          repellendus repellat magnam, eaque iste odit provident sunt similique
+          inventore, quibusdam consequatur, enim ipsa?
+        </p>
 
-        <p></p>
+        <p>
+          <small>2. </small>Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Repudiandae distinctio harum mollitia suscipit ullam sint? Illo
+          repellendus repellat magnam, eaque iste odit provident sunt similique
+          inventore, quibusdam consequatur, enim ipsa?
+        </p>
 
-        <p></p>
+        <p>
+          <small>3. </small>Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Repudiandae distinctio harum mollitia suscipit ullam sint? Illo
+          repellendus repellat magnam, eaque iste odit provident sunt similique
+          inventore, quibusdam consequatur, enim ipsa?
+        </p>
       </div>
 
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Analysis
+export default Analysis;
