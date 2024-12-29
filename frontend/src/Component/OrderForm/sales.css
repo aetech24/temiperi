@@ -492,6 +492,31 @@ select {
   background-color: #c82333;
 }
 
+/* Phone Input Styles */
+.phone-input-container {
+  margin: 15px 0;
+  width: 100%;
+}
+
+.phone-input {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 8px 45px !important;
+  font-size: 16px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+}
+
+.phone-input:focus {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25) !important;
+  outline: none !important;
+}
+
+.react-tel-input .flag-dropdown {
+  border-radius: 4px 0 0 4px !important;
+}
+
 /* Hide buttons in print */
 @media print {
   .invoice-actions,

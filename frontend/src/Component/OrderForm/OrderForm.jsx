@@ -5,6 +5,9 @@ import axios from "axios";
 import InvoiceGenerator from "../Invoice/InvoiceGenerator";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import html2pdf from 'html2pdf.js';
 
 const baseURL = process.env.NODE_ENV === 'production' 
   ? "https://temiperi-stocks-backend.onrender.com/temiperi"
@@ -181,7 +184,16 @@ const OrderForm = () => {
       );
       
       if (response.status === 201) {
-        toast.success("Order submitted successfully!");
+      toast.success("Order submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+        alert("Order submitted successfully!");
         
         // Reset form after successful submission
         setData({
@@ -496,7 +508,7 @@ const OrderForm = () => {
     setShowPhonePrompt(true);
   };
 
-  const sendToWhatsApp = () => {
+  const sendToWhatsApp = async () => {
     if (!customerPhone) {
       toast.error("Please enter a phone number", {
         position: "top-right",
@@ -510,34 +522,44 @@ const OrderForm = () => {
       return;
     }
 
-    // Format phone number (remove spaces and ensure it starts with country code)
-    const formattedPhone = customerPhone.replace(/\s+/g, '').replace(/^0/, '233');
+    try {
+      // Generate PDF from invoice element
+      const element = document.getElementById('invoice-content');
+      const opt = {
+        margin: 1,
+        filename: `invoice-${data.invoiceNumber}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
 
-    // Create message content with proper formatting
-    const message = `*TEMIPERI ENTERPRISE*\n\n` +
-      `*Invoice #:* ${data.invoiceNumber}\n` +
-      `*Customer:* ${data.customerName}\n` +
-      `*Date:* ${formattedDate}\n` +
-      `*Time:* ${formattedTime}\n\n` +
-      `*ORDER SUMMARY*\n` +
-      previewItems.map((item, index) => 
-        `${index + 1}. ${item.description}\n` +
-        `   Quantity: ${item.quantity}\n` +
-        `   Unit Price: GH₵${item.price.toFixed(2)}\n` +
-        `   Total: GH₵${(item.quantity * item.price).toFixed(2)}`
-      ).join('\n\n') +
-      `\n\n*Total Amount: GH₵${previewItems.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}*\n\n` +
-      `Thank you for your business!`;
+      const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+      const pdfFile = new File([pdfBlob], `invoice-${data.invoiceNumber}.pdf`, { type: 'application/pdf' });
 
-    // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
-    
-    // Open WhatsApp in new window
-    window.open(whatsappUrl, '_blank');
-    
-    // Reset prompt
-    setShowPhonePrompt(false);
-    setCustomerPhone("");
+      // Create message content
+      const message = `*TEMIPERI ENTERPRISE*\n\n` +
+        `*Invoice #:* ${data.invoiceNumber}\n` +
+        `*Customer:* ${data.customerName}\n` +
+        `*Date:* ${formattedDate}\n` +
+        `*Time:* ${formattedTime}\n\n` +
+        `Please find your invoice attached.\n\n` +
+        `Thank you for your business!`;
+
+      // Create WhatsApp URL with the formatted phone number
+      const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+      
+      // Open WhatsApp in new window
+      window.open(whatsappUrl, '_blank');
+      
+      // Reset prompt
+      setShowPhonePrompt(false);
+      setCustomerPhone("");
+    } catch (error) {
+      toast.error("Error generating PDF. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -676,7 +698,7 @@ const OrderForm = () => {
               {/* Preview Section */}
               {previewItems.length > 0 && (
                 <>
-                  <div className="preview-section">
+                  <div id="invoice-content" className="preview-section">
                     <div className="preview-header">
                       <img src={asset.logo} alt="Company Logo" width={100} />
                       <div className="preview-date">
@@ -761,12 +783,16 @@ const OrderForm = () => {
                     <div className="phone-prompt-overlay">
                       <div className="phone-prompt">
                         <h4>Enter Customer's Phone Number</h4>
-                        <input
-                          type="tel"
+                        <PhoneInput
+                          country={'gh'}
                           value={customerPhone}
-                          onChange={(e) => setCustomerPhone(e.target.value)}
-                          placeholder="Enter phone number"
-                          className="phone-input"
+                          onChange={phone => setCustomerPhone(phone)}
+                          inputProps={{
+                            required: true,
+                            placeholder: 'Enter phone number'
+                          }}
+                          containerClass="phone-input-container"
+                          inputClass="phone-input"
                         />
                         <div className="prompt-buttons">
                           <button onClick={sendToWhatsApp} className="send">
