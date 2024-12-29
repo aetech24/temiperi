@@ -6,8 +6,10 @@ import Header from "../Header/Header";
 import axios from "axios";
 
 const AddProduct = () => {
-  // URL endpoints
-  const devUrl = "http://localhost:4000/temiperi";
+  // Determine base URL dynamically
+  const devUrl = "http://localhost:4000/temiperi/products";
+  const prodUrl = "https://temiperi-backend.onrender.com/temiperi/products";
+  const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
 
   // State for form fields
   const [productData, setProductData] = useState({
@@ -19,10 +21,6 @@ const AddProduct = () => {
     },
     quantity: "",
   });
-
-  // URL Endpoint
-  const url = "http://localhost:4000/temiperi/products";
-  const productionUrl = "https://temiperi-backend.onrender.com";
 
   // Handle Input Change
   const handleInputChange = (e) => {
@@ -42,7 +40,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(url, productData);
+      const response = await axios.post(baseUrl, productData);
       alert("Product added successfully!");
       console.log(response.data);
     } catch (error) {
@@ -55,7 +53,7 @@ const AddProduct = () => {
     <>
       {/* <Header /> */}
       <div>
-        <Orders url={devUrl} />
+        <Orders url={baseUrl} />
 
         <h2>Add New Products</h2>
         <p>Please enter the product details in the table below</p>

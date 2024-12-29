@@ -1,59 +1,60 @@
-import { useEffect, useRef, useState } from 'react'
-import './invoice.css'
-import { asset } from '../../assets/assets'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import { useEffect, useRef, useState } from "react";
+import "./invoice.css";
+import { asset } from "../../assets/assets";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const baseURL = "https://temiperi-stocks-backend.onrender.com/temiperi";
+const devUrl = "http://localhost:4000/temiperi";
+const prodUrl = "https://temiperi-backend.onrender.com/temiperi";
+const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
 
 const Invoice = () => {
-   const [invoices, setInvoices] = useState([]);
-   const printRef= useRef();
+  const [invoices, setInvoices] = useState([]);
+  const printRef = useRef();
 
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}`);
+        if (response.data && response.data.data) {
+          setInvoices(response.data.data);
+        } else {
+          setInvoices([]);
+        }
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+        toast.error("Failed to fetch invoices. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    };
+    fetchInvoices();
+  }, []);
 
-   useEffect(() => {
-      const fetchInvoices = async () => {
-         try {
-            const response = await axios.get(`${baseURL}/get-invoices`);
-            if (response.data && response.data.data) {
-               setInvoices(response.data.data);
-            } else {
-               setInvoices([]);
-            }
-         } catch (error) {
-           console.error('Error fetching invoices:', error);
-           toast.error('Failed to fetch invoices. Please try again.', {
-             position: "top-right",
-             autoClose: 3000,
-             hideProgressBar: false,
-             closeOnClick: true,
-             pauseOnHover: true,
-             draggable: true,
-             progress: undefined,
-           });
-         }
-      };
-      fetchInvoices();
-   }, [])
+  const handlePrint = (invoice) => {
+    // Convert logo to base64 to ensure it prints
+    const getBase64Image = (img) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      return canvas.toDataURL("image/png");
+    };
 
-   const handlePrint = (invoice) => {
-      // Convert logo to base64 to ensure it prints
-      const getBase64Image = (img) => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        return canvas.toDataURL("image/png");
-      };
+    // Preload the image
+    const logoImg = new Image();
+    logoImg.src = asset.logo;
+    logoImg.onload = () => {
+      const base64Logo = getBase64Image(logoImg);
 
-      // Preload the image
-      const logoImg = new Image();
-      logoImg.src = asset.logo;
-      logoImg.onload = () => {
-        const base64Logo = getBase64Image(logoImg);
-        
-        const printableContent = `
+      const printableContent = `
           <!DOCTYPE html>
           <html>
           <head>
@@ -221,25 +222,36 @@ const Invoice = () => {
                 </tr>
               </thead>
               <tbody>
-                ${invoice.items.map((item, index) => {
-                  const price = item.price.retail_price || item.price.wholeSale_price || 0;
-                  return `
+                ${invoice.items
+                  .map((item, index) => {
+                    const price =
+                      item.price.retail_price ||
+                      item.price.wholeSale_price ||
+                      0;
+                    return `
                     <tr>
                       <td>${index + 1}</td>
                       <td>${item.description}</td>
                       <td>${item.quantity}</td>
-                      <td><span class="currency-symbol">GH₵</span>${Number(price).toFixed(2)}</td>
-                      <td><span class="currency-symbol">GH₵</span>${(item.quantity * price).toFixed(2)}</td>
+                      <td><span class="currency-symbol">GH₵</span>${Number(
+                        price
+                      ).toFixed(2)}</td>
+                      <td><span class="currency-symbol">GH₵</span>${(
+                        item.quantity * price
+                      ).toFixed(2)}</td>
                     </tr>
                   `;
-                }).join('')}
+                  })
+                  .join("")}
               </tbody>
               <tfoot>
                 <tr>
                   <td colspan="4"><strong>Total Amount:</strong></td>
                   <td>
                     <strong>
-                      <span class="currency-symbol">GH₵</span>${invoice.totalAmount.toFixed(2)}
+                      <span class="currency-symbol">GH₵</span>${invoice.totalAmount.toFixed(
+                        2
+                      )}
                     </strong>
                   </td>
                 </tr>
@@ -260,20 +272,18 @@ const Invoice = () => {
           </html>
         `;
 
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        printWindow.document.write(printableContent);
-        printWindow.document.close();
-        
-        // Wait for images to load before printing
-        setTimeout(() => {
-          printWindow.print();
-          // Optional: close the window after printing
-          // printWindow.close();
-        }, 500);
-      };
-   };
+      const printWindow = window.open("", "_blank", "width=800,height=600");
+      printWindow.document.write(printableContent);
+      printWindow.document.close();
 
-
+      // Wait for images to load before printing
+      setTimeout(() => {
+        printWindow.print();
+        // Optional: close the window after printing
+        // printWindow.close();
+      }, 500);
+    };
+  };
 
   const now = new Date();
   const formattedDate = now.toLocaleDateString("en-US", {
@@ -285,8 +295,6 @@ const Invoice = () => {
     hour: "2-digit",
     minute: "2-digit",
   });
-
- 
 
   return (
     <div className="invoice_container">
@@ -314,22 +322,26 @@ const Invoice = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(invoices) && invoices.map((invoice) => (
-            <tr key={invoice._id}>
-              <td>{invoice.invoiceNumber}</td>
-              <td>{invoice.customerName}</td>
-              <td>GH{invoice.totalAmount}</td>
-              <td>
-                <button onClick={() => handlePrint(invoice)} className="print_btn">
-                  Print
-                </button>
-              </td>
-            </tr>
-          ))}
+          {Array.isArray(invoices) &&
+            invoices.map((invoice) => (
+              <tr key={invoice._id}>
+                <td>{invoice.invoiceNumber}</td>
+                <td>{invoice.customerName}</td>
+                <td>GH{invoice.totalAmount}</td>
+                <td>
+                  <button
+                    onClick={() => handlePrint(invoice)}
+                    className="print_btn"
+                  >
+                    Print
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
 
-export default Invoice
+export default Invoice;
