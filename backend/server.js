@@ -33,6 +33,7 @@ app.use(
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "*"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
 
