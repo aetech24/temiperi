@@ -123,7 +123,7 @@
       "whole_sale_price": 133
     },
     "category": "bell product",
-    "quantity": 0
+    "quantity": 127
   },
   {
     "name": "star mini",
@@ -222,7 +222,7 @@
       "retail_price": 204,
       "whole_sale_price": 192
     },
-    "quantity": 100
+    "quantity": 162
   },
   {
     "category": "beer",
@@ -285,7 +285,16 @@
       "whole_sale_price": 85
     },
     "category": "beer",
-    "quantity": 0
+    "quantity": 7
+  },
+  {
+    "name": "sprite RGB",
+    "price": {
+      "retail_price": 80,
+      "whole_sale_price": 85
+    },
+    "category": "beer",
+    "quantity": 7
   },
   {
     "name": "fanta pet Large 1.5L",
@@ -376,7 +385,7 @@
       "whole_sale_price": 122
     },
     "category": "beer",
-    "quantity": 0
+    "quantity": 39
   },
   {
     "name": "Smirnoff Ice Red",
@@ -424,7 +433,7 @@
     "price": { "retail_price": 120, "whole_sale_price": 112 },
     "category": "Beer",
     "sizes": "625ml",
-    "quantity": 0
+    "quantity": 2
   },
   {
     "name": "orjin mini",
@@ -445,28 +454,7 @@
     "price": { "retail_price": 119, "whole_sale_price": 112 },
     "category": "beer",
     "size": "300ml",
-    "quantity": 0
-  },
-  {
-    "name": "guinness can",
-    "price": { "retail_price": 93, "whole_sale_price": 86 },
-    "category": "beer",
-    "size": "330ml 12x01",
-    "quantity": 0
-  },
-  {
-    "name": "guinness can",
-    "price": { "retail_price": 184, "whole_sale_price": 170 },
-    "category": "Beer",
-    "size": "24x1",
-    "quantity": 0
-  },
-  {
-    "name": "guinness can",
-    "price": { "retail_price": 49, "whole_sale_price": 45 },
-    "category": "Beer",
-    "size": "6x1",
-    "quantity": 0
+    "quantity": 60
   },
   {
     "name": "malta guniness can",
@@ -848,7 +836,7 @@
       "wholesale": 140
     },
     "category": "kasaperko company limited",
-    "quantity": 18
+    "quantity": 1
   },
   {
     "name": "eagle mini",
