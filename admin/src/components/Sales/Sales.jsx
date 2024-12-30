@@ -6,12 +6,14 @@ const Sales = () => {
   const [sales, setSales] = useState(0);
   const [percentage, setPercentage] = useState(0);
 
+  const devUrl = "http://localhost:4000";
+  const prodUrl = "https://temiperi-backend.onrender.com";
+  const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
+
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(
-          "https://temiperi-backend.onrender.com/invoices"
-        );
+        const response = await axios.get(`${baseUrl}/invoices`);
         const invoices = response.data.data;
 
         // Get the current time and calculate 24 hours ago
@@ -21,7 +23,7 @@ const Sales = () => {
         // Filter invoices created within the last 24 hours
         const recentInvoices = invoices.filter((invoice) => {
           return new Date(invoice.createdAt) > last24Hours;
-        });
+        }, 0);
 
         // Calculate total sales for recent invoices
         const totalSales = recentInvoices.reduce(
