@@ -34,6 +34,12 @@ const OrderForm = () => {
   const [customerPhone, setCustomerPhone] = useState("");
 
   useEffect(() => {
+    //save the items to localStorage
+    const savedPreviewItems = localStorage.getItem("previewItems");
+    if (savedPreviewItems) {
+      setPreviewItems(JSON.parse(savedPreviewItems));
+      localStorage.removeItem("previewItems"); // Clear storage after use
+    }
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`${baseURL}/products`);
@@ -235,10 +241,6 @@ const OrderForm = () => {
           }
         }
 
-        //refresh the page after response is provided
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
         // Reset form after successful submission
         setData({
           invoiceNumber: "",
@@ -626,6 +628,19 @@ const OrderForm = () => {
       `*Customer:* ${data.customerName}\n` +
       `*Date:* ${formattedDate}\n` +
       `*Time:* ${formattedTime}\n\n` +
+      `*Order Details:*\n` +
+      `${data.items
+        .map(
+          (item, index) =>
+            `${index + 1}. ${item.description} - Qty: ${
+              item.quantity
+            }, Price: ${item.price}`
+        )
+        .join("\n")}\n\n` +
+      `*Total Amount:* ${data.items.reduce(
+        (sum, item) => sum + item.quantity * item.price,
+        0
+      )}\n\n` +
       `Please find your invoice attached.\n\n` +
       `Thank you for your business!`;
 

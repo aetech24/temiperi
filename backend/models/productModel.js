@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     whole_sale_price: { type: Number, required: true },
   },
 
-  quantity: { type: Number, require: true },
+  quantity: { type: Number, require: true, default: 0 },
   category: { type: String, require: true },
   createdAt: { type: Date, required: false, default: Date.now() },
 });
