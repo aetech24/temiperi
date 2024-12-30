@@ -1,4 +1,4 @@
-import axios from '/node_modules/axios/dist/axios.js';
+import axios from 'axios';
 
 const devUrl = "http://localhost:4000/temiperi";
 const prodUrl = "https://temiperi-backend.onrender.com/temiperi";

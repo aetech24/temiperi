@@ -190,7 +190,7 @@ const Products = () => {
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input "
+                  className="search-input"
                 />
                 <span className="search-icon">{icons.search}</span>
               </div>

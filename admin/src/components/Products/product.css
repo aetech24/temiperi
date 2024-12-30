@@ -244,9 +244,8 @@
   right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #000;
+  color: #7f8c8d;
   pointer-events: none;
-  background-color: white;
 }
 
 .category-select {
