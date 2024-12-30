@@ -1,12 +1,5 @@
-// import { defineConfig } from "vite";
-// import { visualizer } from "rollup-plugin-visualizer";
-
-// export default defineConfig({
-//   plugins: [visualizer()],
-// });
-
-
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -19,7 +12,19 @@ export default defineConfig({
         'html2pdf.js',
         'react-phone-input-2',
         'react-toastify'
-      ]
+      ],
+      output: {
+        globals: {
+          'react-router-dom': 'ReactRouterDOM',
+          'axios': 'axios',
+          'html2pdf.js': 'html2pdf',
+          'react-phone-input-2': 'ReactPhoneInput',
+          'react-toastify': 'ReactToastify'
+        }
+      }
     }
+  },
+  server: {
+    port: 3000
   }
 })
