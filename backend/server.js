@@ -48,9 +48,9 @@ app.get("/", (req, res) => {
   res.send("software is working");
 });
 
-app.use("/invoices", fetchInvoices);
-app.use("/product-update", updateProduct);
-app.use("/clear-products", clearDatabase);
+app.get("/invoices", fetchInvoices);
+app.patch("/product-update", updateProduct);
+app.delete("/clear-products", clearDatabase);
 
 app.patch(`/temiperi/products`, updateProductField);
 
