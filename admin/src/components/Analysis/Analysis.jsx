@@ -79,16 +79,16 @@ const Analysis = () => {
   };
 
   return (
-    <div>
+    <div className="mt-10">
       {/* <Header /> */}
-      <Orders url={baseUrl} />
-      <h2>Perfomance Analysis</h2>
+      {/* <Orders url={baseUrl} /> */}
+      <h2>Performance Analysis</h2>
 
       <div className="container">
         {/* ====================== sidebar Component ============================ */}
         <Sidebar />
 
-        <div className="div">
+        <div className="div ">
           <div className="filer">
             {/* ================= filter container for products ================ */}
 

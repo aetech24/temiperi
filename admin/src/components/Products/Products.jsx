@@ -34,7 +34,7 @@ const Products = () => {
 
   return (
     <div>
-      <Orders url={baseUrl} />
+      {/* <Orders url={baseUrl} /> */}
       <div className="body_container">
         <Sidebar />
 
