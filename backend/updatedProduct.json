@@ -2,7 +2,7 @@
   {
     "name": "bel aqua water box 1.5L",
     "price": {
-      "retails_price": 56,
+      "retail_price": 56,
       "whole_sale_price": 54
     },
     "category": "bell product",
@@ -11,7 +11,7 @@
   {
     "name": "bel aqua water meduim 750ml",
     "price": {
-      "retails_price": 30,
+      "retail_price": 30,
       "whole_sale_price": 28
     },
     "category": "bell product",
@@ -20,7 +20,7 @@
   {
     "name": "bel aqua water small",
     "price": {
-      "retails_price": 27,
+      "retail_price": 27,
       "whole_sale_price": 25
     },
     "category": "bell product",
@@ -29,7 +29,7 @@
   {
     "name": "tamarinda",
     "price": {
-      "retails_price": 43,
+      "retail_price": 43,
       "whole_sale_price": 41
     },
     "category": "bell product",
@@ -38,7 +38,7 @@
   {
     "name": "bigo cola",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -47,7 +47,7 @@
   {
     "name": "bigo cocktail",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -56,7 +56,7 @@
   {
     "name": "bigo grape",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -65,7 +65,7 @@
   {
     "name": "rush",
     "price": {
-      "retails_price": 45,
+      "retail_price": 45,
       "whole_sale_price": 43
     },
     "category": "bell product",
@@ -74,7 +74,7 @@
   {
     "name": "verna mineral water meduim",
     "price": {
-      "retails_price": 25,
+      "retail_price": 25,
       "whole_sale_price": 23
     },
     "category": "bell product",
@@ -83,7 +83,7 @@
   {
     "name": "verna mineral water small",
     "price": {
-      "retails_price": 24,
+      "retail_price": 24,
       "whole_sale_price": 22
     },
     "category": "bell product",
@@ -92,7 +92,7 @@
   {
     "name": "the game",
     "price": {
-      "retails_price": 24,
+      "retail_price": 24,
       "whole_sale_price": 22
     },
     "category": "bell product",
@@ -101,7 +101,7 @@
   {
     "name": "storm energy big",
     "price": {
-      "retails_price": 65,
+      "retail_price": 65,
       "whole_sale_price": 63
     },
     "category": "bell product",
@@ -110,7 +110,7 @@
   {
     "name": "5 Star ",
     "price": {
-      "retails_price": 45,
+      "retail_price": 45,
       "whole_sale_price": 43
     },
     "category": "bell product",
@@ -119,7 +119,7 @@
   {
     "name": "star large",
     "price": {
-      "retails_price": 143,
+      "retail_price": 143,
       "whole_sale_price": 133
     },
     "category": "bell product",
@@ -128,7 +128,7 @@
   {
     "name": "star mini",
     "price": {
-      "retails_price": 128,
+      "retail_price": 128,
       "whole_sale_price": 120
     },
     "category": "bell product",
@@ -137,7 +137,7 @@
   {
     "name": "Darlin lemon",
     "price": {
-      "retails_price": 55,
+      "retail_price": 55,
       "whole_sale_price": 53
     },
     "category": "bell product",
@@ -146,7 +146,7 @@
   {
     "name": "wheat big",
     "price": {
-      "retails_price": 140,
+      "retail_price": 140,
       "whole_sale_price": 135
     },
     "category": "bell product",
@@ -155,7 +155,7 @@
   {
     "name": "wheat small",
     "price": {
-      "retails_price": 100,
+      "retail_price": 100,
       "whole_sale_price": 95
     },
     "category": "bell product",
@@ -164,7 +164,7 @@
   {
     "name": "bel ice",
     "price": {
-      "retails_price": 55,
+      "retail_price": 55,
       "whole_sale_price": 52
     },
     "category": "bell product",
@@ -173,7 +173,7 @@
   {
     "name": "tampico medium",
     "price": {
-      "retails_price": 61,
+      "retail_price": 61,
       "whole_sale_price": 59
     },
     "category": "bell product",
@@ -182,7 +182,7 @@
   {
     "name": "tampico small",
     "price": {
-      "retails_price": 44,
+      "retail_price": 44,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -191,7 +191,7 @@
   {
     "name": "tampico large",
     "price": {
-      "retails_price": 60,
+      "retail_price": 60,
       "whole_sale_price": 58
     },
     "category": "bell product",
@@ -200,7 +200,7 @@
   {
     "name": "kaiser apple",
     "price": {
-      "retails_price": 47,
+      "retail_price": 47,
       "whole_sale_price": 49
     },
     "category": "bell product",
@@ -209,7 +209,7 @@
   {
     "name": "squeeze appela",
     "price": {
-      "retails_price": 37,
+      "retail_price": 37,
       "whole_sale_price": 38
     },
     "category": "bell product",
@@ -499,7 +499,7 @@
       "whole_sale_price": 90
     },
     "category": "beer",
-    "sizes": "",
+    "size": "",
     "quantity": 0
   },
   {
