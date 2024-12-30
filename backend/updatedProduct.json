@@ -108,13 +108,31 @@
     "quantity": 57
   },
   {
-    "name": "5 Star",
+    "name": "5 Star ",
     "price": {
       "retails_price": 45,
       "whole_sale_price": 43
     },
     "category": "bell product",
     "quantity": 15
+  },
+  {
+    "name": "star large",
+    "price": {
+      "retails_price": 143,
+      "whole_sale_price": 133
+    },
+    "category": "bell product",
+    "quantity": 0
+  },
+  {
+    "name": "star mini",
+    "price": {
+      "retails_price": 128,
+      "whole_sale_price": 120
+    },
+    "category": "bell product",
+    "quantity": 0
   },
   {
     "name": "Darlin lemon",
@@ -199,10 +217,10 @@
   },
   {
     "category": "beer",
-    "name": "guniness bottle",
+    "name": "guniness",
     "price": {
-      "retail_price": 192,
-      "whole_sale_price": 204
+      "retail_price": 204,
+      "whole_sale_price": 192
     },
     "quantity": 100
   },
@@ -259,6 +277,15 @@
     },
     "category": "beer",
     "quantity": 39
+  },
+  {
+    "name": "fanta RGB",
+    "price": {
+      "retail_price": 80,
+      "whole_sale_price": 85
+    },
+    "category": "beer",
+    "quantity": 0
   },
   {
     "name": "fanta pet Large 1.5L",
@@ -349,39 +376,6 @@
       "whole_sale_price": 122
     },
     "category": "beer",
-    "quantity": 0
-  },
-  {
-    "name": "Heineken Bottle",
-    "price": {
-      "retail_price": 543,
-      "whole_sale_price": 504
-    },
-    "category": "beer",
-
-    "quantity": 0
-  },
-  {
-    "name": "Heineken Bot",
-    "price": {
-      "retail_price": 543,
-      "whole_sale_price": 504
-    },
-    "category": "Beer",
-    "quantity": 0
-  },
-  {
-    "name": "Heineken Can",
-    "price": { "retail_price": 415, "whole_sale_price": 386 },
-    "category": "beer",
-    "size": "330ml 06x04",
-    "quantity": 0
-  },
-  {
-    "name": "Heineken Can",
-    "price": { "retail_price": 543, "whole_sale_price": 504 },
-    "category": "beer",
-    "size": "330ml 24x01",
     "quantity": 0
   },
   {
