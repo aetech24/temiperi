@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "clean-build": "sh ./build.sh",
     "lint": "eslint .",
     "preview": "vite preview"
   },
