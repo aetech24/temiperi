@@ -400,54 +400,6 @@
     "size": "06x01",
     "quantity": 0
   },
-  {
-    "name": "Taliska 70cl 10Y ",
-    "retails_price": 350,
-    "whole_sale_price": 322.17,
-    "category": "",
-    "size": "06x01",
-    "quantity": 0
-  },
-  {
-    "name": "Dtown-Sngltn 75cl 12Y ",
-    "retails_price": 696.17,
-    "whole_sale_price": 634.08,
-    "category": "",
-    "sizes": "12x01",
-    "quantity": 0
-  },
-  {
-    "name": "Dtown-Sngltn 70cl 15Y ",
-    "retails_price": 1131.5,
-    "whole_sale_price": 1030.57,
-    "category": "",
-    "size": "06x01",
-    "quantity": 0
-  },
-  {
-    "name": "Zacapa Cent 23 75cl 15Y ",
-    "retails_price": 729,
-    "whole_sale_price": 672.17,
-    "category": "",
-    "size": "06x01",
-    "quantity": 0
-  },
-  {
-    "name": "Zacapa Cent XO 70cl ",
-    "retails_price": 1628,
-    "whole_sale_price": 1500,
-    "category": "",
-    "sizes": "06x01",
-    "quantity": 0
-  },
-  {
-    "name": "Baileys Orig 1L  ",
-    "retails_price": 345.33,
-    "whole_sale_price": 319.08,
-    "category": "",
-    "size": "12x01",
-    "quantity": 0
-  },
 
   {
     "name": "Baileys Orig 20cl  ",
@@ -496,21 +448,28 @@
     "retails_price": 38,
     "whole_sale_price": 37,
     "category": "bell product",
-    "quantity": 299
+    "quantity": 202
   },
   {
     "name": "bel squeeze",
     "retails_price": 38,
     "whole_sale_price": 37,
     "category": "bell product",
-    "quantity": 797
+    "quantity": 376
   },
   {
     "name": "puka",
     "retails_price": 43,
     "whole_sale_price": 41,
     "category": "bell product",
-    "quantity": 1199
+    "quantity": 255
+  },
+  {
+    "name": "puka extra",
+    "retails_price": 55,
+    "whole_sale_price": 52,
+    "category": "bell product",
+    "quantity": 612
   },
   {
     "name": "tamarinda",
@@ -524,7 +483,21 @@
     "retails_price": 43,
     "whole_sale_price": 41,
     "category": "bell product",
-    "quantity": 1792
+    "quantity": 290
+  },
+  {
+    "name": "bel soda",
+    "retails_price": 38,
+    "whole_sale_price": 38,
+    "category": "bell product",
+    "quantity": 286
+  },
+  {
+    "name": "bel tropical",
+    "retails_price": 43,
+    "whole_sale_price": 41,
+    "category": "bell product",
+    "quantity": 337
   },
   {
     "name": "bel water meduim",
@@ -547,7 +520,7 @@
     "retails_price": 48,
     "whole_sale_price": 46,
     "category": "trillium product",
-    "quantity": 147
+    "quantity": 91
   },
   {
     "name": "bigo grape",
@@ -626,36 +599,13 @@
     "category": "peeva product",
     "quantity": 100
   },
-  {
-    "name": "verna water small",
-    "retails_price": 24,
-    "whole_sale_price": 22,
-    "category": "twellium product",
-    "quantity": 100,
-    "size": "500ml 16x01"
-  },
-  {
-    "name": "verna water small",
-    "retails_price": 47,
-    "whole_sale_price": 45,
-    "category": "twellium product",
-    "quantity": 100,
-    "size": "500ml 36x01"
-  },
-  {
-    "name": "verna water small",
-    "retails_price": 28,
-    "whole_sale_price": 26,
-    "category": "twellium product",
-    "quantity": 100,
-    "size": "500ml 24x01"
-  },
+  
   {
     "name": "bel ice",
     "retails_price": 55,
     "whole_sale_price": 52,
     "category": "bel product",
-    "quantity": 100
+    "quantity": 3065
   },
   {
     "name": "kaiser",
