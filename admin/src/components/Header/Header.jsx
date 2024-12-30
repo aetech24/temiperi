@@ -22,17 +22,17 @@ const Header = ({ showLogin, setShowLogin }) => {
           <img src={asset.logo} alt="" />
         </div>
 
-        <div className="nav_menu">
-          <Link to={"/product"}>
-            <p className="stock">Stock</p>
-          </Link>
-          <Link to={"/orders"}>
-            <p className="ord">Orders</p>
-          </Link>
-          <Link to={"/report"}>
-            <p className="rep">Report</p>
-          </Link>
-        </div>
+         <div className="nav_menu">
+            <Link to='/product'>
+               <p className='stock'>Stock</p>
+            </Link>
+            <Link to='/orders'>
+               <p className='ord'>Orders</p>
+            </Link>
+            <Link to='/report'>
+               <p className='rep'>Report</p>
+            </Link>
+         </div>
 
         <div className="notification">
           <div className="message">
