@@ -71,14 +71,34 @@ export const updateProduct = async (req, res) => {
 
 //controller to update specific fields of a product
 
-export const updateProductField = (req, res) => {
-  const payload = req.body;
+export const updateProductField = async (req, res) => {
+  const { id } = req.params; // Get product ID from URL parameters
+  const updates = req.body; // Get updates from request body
 
-  if (!payload) {
-    return res.status(400).json({ message: "There was no payload provided" });
+  // Check if updates were provided
+  if (!updates || Object.keys(updates).length === 0) {
+    return res.status(400).json({ message: "No updates provided." });
   }
 
-  //fetch the 
+  try {
+    // Find product by ID and apply updates
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: updates }, // Update only specified fields
+      { new: true, runValidators: true } // Return updated document and run schema validation
+    );
+
+    // If no product was found, return error
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    // Respond with the updated product
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while updating product." });
+  }
 };
 
 //delete all products
