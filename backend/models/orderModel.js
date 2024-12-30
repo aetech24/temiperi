@@ -1,18 +1,16 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-   CustomerName: {type: String},
-   items: [
-      {
-         quantity: {type: Number},
-         description: {type: String},
-         price: {type: Number},
-      }
-   ],
-   createdAt: {type: Date, default: Date.now()},
-   
-})
+  customerName: { type: String },
+  items: [
+    {
+      quantity: { type: Number },
+      description: { type: String, required: false },
+      price: { type: Number },
+    },
+  ],
+  createdAt: { type: Date, default: Date.now() },
+  invoiceNumber: { type: String, required: true },
+});
 
-export default mongoose.model('Order', orderSchema);
-
-;
+export const OrderModel = mongoose.model("Order", orderSchema);

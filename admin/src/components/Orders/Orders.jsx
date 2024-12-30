@@ -3,25 +3,25 @@ import "./order.css";
 import axios from "axios";
 
 const Orders = ({ url }) => {
-  const [productList, setProductList] = useState();
+  const [orderList, setOrderList] = useState([]);
 
-  const fetchList = async () => {
+  // Fetch orders from API
+  const fetchOrders = async () => {
     try {
       const response = await axios.get(`${url}/orders`);
       if (response.data) {
-        setProductList(response.data.data);
-        console.log(productList);
-        console.log("I am active and working");
+        setOrderList(response.data.data);
+        console.log("Orders fetched successfully");
       } else {
-        console.log("Error fetching orders");
+        console.log("No orders found");
       }
     } catch (error) {
-      console.log("Error: ", error);
+      console.error("Error fetching orders: ", error);
     }
   };
 
   useEffect(() => {
-    fetchList();
+    fetchOrders();
   }, []);
 
   return (
@@ -32,29 +32,36 @@ const Orders = ({ url }) => {
         <table className="table table-xs">
           <thead>
             <tr>
-              <th>Product Id</th>
-              <th>Product Name</th>
+              <th>Invoice Number</th>
+              <th>Customer Name</th>
               <th>Order Date</th>
-              <th>Delivery Date</th>
-              <th>Company Name</th>
-              <th>Status</th>
-              <th>Payment</th>
+              <th>Items</th>
+              <th>Total Price</th>
             </tr>
           </thead>
           <tbody>
-            {productList?.map((order) => (
+            {orderList?.map((order) => (
               <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.name}</td>
+                <td>{order.invoiceNumber}</td>
+                <td>{order.customerName}</td>
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td>
-                  {order.delivery
-                    ? new Date(order.delivery).toLocaleDateString()
-                    : "N/A"}
+                  <ul>
+                    {order.items.map((item, index) => (
+                      <li key={index}>
+                        {item.quantity} x {item.description || "N/A"} @ $
+                        {item.price}
+                      </li>
+                    ))}
+                  </ul>
                 </td>
-                <td>{order.company || "N/A"}</td>
-                <td>{order.status || "N/A"}</td>
-                <td>{order.payment || "N/A"}</td>
+                <td>
+                  $
+                  {order.items.reduce(
+                    (total, item) => total + item.quantity * item.price,
+                    0
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

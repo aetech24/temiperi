@@ -1,18 +1,25 @@
-import Order from "../models/orderModel.js";
+import { OrderModel } from "../models/orderModel.js";
 
-const addOrder = async (req, res) => {
-  const order = await Order.create(req.body);
-  await order.save();
-  res.status(201).json({ success: "new order add successfully", data: order });
+export const addOrder = async (req, res) => {
+  try {
+    const order = new OrderModel(req.body);
+    await order.save();
+    res
+      .status(201)
+      .json({ success: "new order add successfully", data: order });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // fetching all order list
-const orderList = async (req, res) => {
+export const orderList = async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: 1 });
+    const orders = await OrderModel.find().sort({ createdAt: 1 });
     if (orders.length === 0) {
       return res.status(404).json({ message: "No orders Available" });
     }
+    console.log("I am from the orders controller ");
     return res.json({ success: true, data: orders });
   } catch (error) {
     console.log(error);
@@ -21,10 +28,10 @@ const orderList = async (req, res) => {
 };
 
 //fetching an order
-const singleOrder = async (req, res) => {
+export const singleOrder = async (req, res) => {
   try {
     const { id: orderID } = req.params;
-    const order = await Order.findOne({ _id: orderID });
+    const order = await OrderModel.findOne({ _id: orderID });
 
     if (!order) {
       return res.status(404).json({ message: "No order found. Thank You" });
@@ -35,5 +42,3 @@ const singleOrder = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
-
-export { addOrder, orderList, singleOrder };

@@ -3,15 +3,16 @@ import { asset } from "../../assets/assets";
 import "./sales.css";
 import axios from "axios";
 import InvoiceGenerator from "../Invoice/InvoiceGenerator";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import html2pdf from 'html2pdf.js';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import html2pdf from "html2pdf.js";
 
-const baseURL = process.env.NODE_ENV === 'production' 
-  ? "https://temiperi-stocks-backend.onrender.com/temiperi"
-  : "http://localhost:4000/temiperi";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://temiperi-stocks-backend.onrender.com/temiperi"
+    : "http://localhost:4000/temiperi";
 
 const OrderForm = () => {
   const [data, setData] = useState({
@@ -49,26 +50,30 @@ const OrderForm = () => {
     const generateInvoiceNumber = async () => {
       try {
         setLoading(true);
-        const response = await axios.post(
-          `${baseURL}/invoice/number`
-        );
+        const response = await axios.post(`${baseURL}/invoice/number`);
         const { invoiceNumber } = response.data;
-        if (!invoiceNumber || typeof invoiceNumber !== 'string' || !invoiceNumber.startsWith('tm')) {
-          throw new Error('Invalid invoice number format');
+        if (
+          !invoiceNumber ||
+          typeof invoiceNumber !== "string" ||
+          !invoiceNumber.startsWith("tm")
+        ) {
+          throw new Error("Invalid invoice number format");
         }
-        setData(prevData => ({
+        setData((prevData) => ({
           ...prevData,
-          invoiceNumber: invoiceNumber
+          invoiceNumber: invoiceNumber,
         }));
       } catch (error) {
         console.error("Error generating invoice number:", error);
         // Use a more sophisticated fallback that's less likely to conflict
         const timestamp = Date.now().toString().slice(-6);
-        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        const randomNum = Math.floor(Math.random() * 1000)
+          .toString()
+          .padStart(3, "0");
         const fallbackNumber = `tm${timestamp}${randomNum}`;
-        setData(prevData => ({
+        setData((prevData) => ({
           ...prevData,
-          invoiceNumber: fallbackNumber
+          invoiceNumber: fallbackNumber,
         }));
       } finally {
         setLoading(false);
@@ -98,21 +103,25 @@ const OrderForm = () => {
     items[index][field] = value;
 
     if (field === "description") {
-      const selectedProduct = products.find(p => p.name === value);
+      const selectedProduct = products.find((p) => p.name === value);
       if (selectedProduct) {
         // Default to retail price when product is first selected
         items[index].price = selectedProduct.price?.retail_price || 0;
-        items[index].wholesalePrice = selectedProduct.price?.wholeSale_price || 0;
+        items[index].wholesalePrice =
+          selectedProduct.price?.wholeSale_price || 0;
       }
     }
 
     if (field === "quantity") {
-      const selectedProduct = products.find(p => p.name === items[index].description);
+      const selectedProduct = products.find(
+        (p) => p.name === items[index].description
+      );
       if (selectedProduct) {
         // Use wholesale price if quantity > 10, otherwise use retail price
-        items[index].price = value > 10 
-          ? (selectedProduct.price?.wholeSale_price || 0)
-          : (selectedProduct.price?.retail_price || 0);
+        items[index].price =
+          value > 10
+            ? selectedProduct.price?.wholeSale_price || 0
+            : selectedProduct.price?.retail_price || 0;
       }
     }
 
@@ -121,7 +130,6 @@ const OrderForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       // Check if there are any items to submit
       if (previewItems.length === 0) {
@@ -134,8 +142,13 @@ const OrderForm = () => {
 
         // If current item has data, add it first
         if (currentItem.description && currentItem.quantity > 0) {
-          const selectedProduct = products.find((product) => product.name === currentItem.description);
-          if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
+          const selectedProduct = products.find(
+            (product) => product.name === currentItem.description
+          );
+          if (
+            selectedProduct &&
+            selectedProduct.quantity < currentItem.quantity
+          ) {
             toast.error("Not enough stock available for this product.");
             return;
           }
@@ -152,28 +165,47 @@ const OrderForm = () => {
 
       // Calculate total amount
       const totalAmount = finalItems.reduce((sum, item) => {
-        return sum + (item.quantity * item.price);
+        return sum + item.quantity * item.price;
       }, 0);
 
       // Prepare the invoice data
       const invoiceData = {
         invoiceNumber: data.invoiceNumber,
         customerName: data.customerName,
-        items: finalItems.map(item => ({
+        items: finalItems.map((item) => ({
           description: item.description,
           quantity: item.quantity,
-          price: item.price
+          price: item.price,
         })),
-        totalAmount
+        totalAmount,
+      };
+
+      //order payload
+      const orderPayload = {
+        invoiceNumber: data.invoiceNumber,
+        customerName: data.customerName,
+        items: finalItems.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price,
+        })),
       };
 
       // Submit the invoice
-      const response = await axios.post(
-        `${baseURL}/invoice`,
-        invoiceData
-      );
-      
-      if (response.status === 201) {
+      const response = await axios.post(`${baseURL}/invoice`, invoiceData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      //submit the order
+      const orderResponse = await axios.post(`${baseURL}/order`, orderPayload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (orderResponse.status === 201) {
         toast.success("Order submitted successfully!", {
           position: "top-right",
           autoClose: 3000,
@@ -183,35 +215,47 @@ const OrderForm = () => {
           draggable: true,
           progress: undefined,
         });
-        
+
+        await axios.post(
+          `https://temiperi-stocks-backend.onrender.com/product-update`,
+          {}
+        );
+        //refresh the page after response is provided
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
         // Reset form after successful submission
         setData({
           invoiceNumber: "",
           customerName: "",
-          items: [{ description: "", quantity: 0, price: 0 }]
+          items: [{ description: "", quantity: 0, price: 0 }],
         });
         setPreviewItems([]);
-        
+
         // Generate new invoice number
         generateInvoiceNumber();
       }
     } catch (error) {
       console.error("Error submitting invoice:", error);
-      toast.error(error.response?.data?.error || "Failed to submit invoice. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(
+        error.response?.data?.error ||
+          "Failed to submit invoice. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
     }
   };
 
   const handleAddItem = () => {
     const currentItem = data.items[0];
-    
+
     // Validate item
     if (!currentItem.description || currentItem.quantity <= 0) {
       toast.error("Please select a product and ensure quantity is valid.");
@@ -219,7 +263,9 @@ const OrderForm = () => {
     }
 
     // Check stock
-    const selectedProduct = products.find(product => product.name === currentItem.description);
+    const selectedProduct = products.find(
+      (product) => product.name === currentItem.description
+    );
     if (selectedProduct && selectedProduct.quantity < currentItem.quantity) {
       toast.error("Not enough stock available for this product.");
       return;
@@ -227,11 +273,11 @@ const OrderForm = () => {
 
     // Add item to preview
     setPreviewItems([...previewItems, { ...currentItem }]);
-    
+
     // Reset current item
     setData({
       ...data,
-      items: [{ description: "", quantity: 0, price: 0 }]
+      items: [{ description: "", quantity: 0, price: 0 }],
     });
   };
 
@@ -258,28 +304,31 @@ const OrderForm = () => {
   });
 
   const generatePDF = async () => {
-    const invoice = document.getElementById('invoice-content');
+    const invoice = document.getElementById("invoice-content");
     if (!invoice) return null;
-    
+
     const options = {
       margin: 1,
       filename: `Invoice-${data.invoiceNumber}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
-    
+
     try {
-      const pdfBlob = await html2pdf().set(options).from(invoice).outputPdf('blob');
+      const pdfBlob = await html2pdf()
+        .set(options)
+        .from(invoice)
+        .outputPdf("blob");
       return pdfBlob;
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error("Error generating PDF:", error);
       return null;
     }
   };
 
   const handlePrintInvoice = () => {
-    const printContent = document.querySelector('.preview-section');
+    const printContent = document.querySelector(".preview-section");
     if (!printContent) {
       toast.error("Print reference not found", {
         position: "top-right",
@@ -308,7 +357,7 @@ const OrderForm = () => {
     logoImg.src = asset.logo;
     logoImg.onload = () => {
       const base64Logo = getBase64Image(logoImg);
-      
+
       const printableContent = `
         <!DOCTYPE html>
         <html>
@@ -471,22 +520,35 @@ const OrderForm = () => {
               </tr>
             </thead>
             <tbody>
-              ${previewItems.map((item, index) => `
+              ${previewItems
+                .map(
+                  (item, index) => `
                 <tr>
                   <td>${index + 1}</td>
                   <td>${item.description}</td>
                   <td>${item.quantity}</td>
-                  <td><span class="currency-symbol">GH₵</span>${Number(item.price).toFixed(2)}</td>
-                  <td><span class="currency-symbol">GH₵</span>${(item.quantity * item.price).toFixed(2)}</td>
+                  <td><span class="currency-symbol">GH₵</span>${Number(
+                    item.price
+                  ).toFixed(2)}</td>
+                  <td><span class="currency-symbol">GH₵</span>${(
+                    item.quantity * item.price
+                  ).toFixed(2)}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join("")}
             </tbody>
             <tfoot>
               <tr>
                 <td colspan="4"><strong>Total Amount:</strong></td>
                 <td>
                   <strong>
-                    <span class="currency-symbol">GH₵</span>${previewItems.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}
+                    <span class="currency-symbol">GH₵</span>${previewItems
+                      .reduce(
+                        (sum, item) => sum + item.quantity * item.price,
+                        0
+                      )
+                      .toFixed(2)}
                   </strong>
                 </td>
               </tr>
@@ -507,10 +569,10 @@ const OrderForm = () => {
         </html>
       `;
 
-      const printWindow = window.open('', '_blank', 'width=800,height=600');
+      const printWindow = window.open("", "_blank", "width=800,height=600");
       printWindow.document.write(printableContent);
       printWindow.document.close();
-      
+
       // Wait for images to load before printing
       setTimeout(() => {
         printWindow.print();
@@ -546,7 +608,8 @@ const OrderForm = () => {
     }
 
     // Create message content with proper formatting
-    const message = `*TEMIPERI ENTERPRISE*\n\n` +
+    const message =
+      `*TEMIPERI ENTERPRISE*\n\n` +
       `*Invoice #:* ${data.invoiceNumber}\n` +
       `*Customer:* ${data.customerName}\n` +
       `*Date:* ${formattedDate}\n` +
@@ -555,11 +618,13 @@ const OrderForm = () => {
       `Thank you for your business!`;
 
     // Create WhatsApp URL with the formatted phone number
-    const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
-    
+    const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(
+      message
+    )}`;
+
     // Open WhatsApp in new window
-    window.open(whatsappUrl, '_blank');
-    
+    window.open(whatsappUrl, "_blank");
+
     // Reset prompt
     setShowPhonePrompt(false);
     setCustomerPhone("");
@@ -624,7 +689,7 @@ const OrderForm = () => {
               <h1>Submit Order</h1>
               <label>
                 Invoice Number
-                <InvoiceGenerator 
+                <InvoiceGenerator
                   value={data.invoiceNumber}
                   loading={loading}
                 />
@@ -686,7 +751,10 @@ const OrderForm = () => {
                   </span>
                   <span className="total-display">
                     <strong>
-                      Total: GH₵{(data.items[0].quantity * data.items[0].price).toFixed(2)}
+                      Total: GH₵
+                      {(data.items[0].quantity * data.items[0].price).toFixed(
+                        2
+                      )}
                     </strong>
                   </span>
                 </label>
@@ -747,11 +815,19 @@ const OrderForm = () => {
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colSpan="4"><strong>Total Amount:</strong></td>
+                          <td colSpan="4">
+                            <strong>Total Amount:</strong>
+                          </td>
                           <td>
                             <strong>
                               <span className="currency-symbol">GH₵</span>
-                              {previewItems.reduce((sum, item) => sum + (item.quantity * item.price), 0).toFixed(2)}
+                              {previewItems
+                                .reduce(
+                                  (sum, item) =>
+                                    sum + item.quantity * item.price,
+                                  0
+                                )
+                                .toFixed(2)}
                             </strong>
                           </td>
                         </tr>
@@ -773,10 +849,16 @@ const OrderForm = () => {
 
                   {/* Action buttons outside the preview section */}
                   <div className="invoice-actions">
-                    <button onClick={handlePrintInvoice} className="action-button print">
+                    <button
+                      onClick={handlePrintInvoice}
+                      className="action-button print"
+                    >
                       Print Invoice
                     </button>
-                    <button onClick={handleShareWhatsApp} className="action-button whatsapp">
+                    <button
+                      onClick={handleShareWhatsApp}
+                      className="action-button whatsapp"
+                    >
                       Share via WhatsApp
                     </button>
                   </div>
@@ -787,16 +869,18 @@ const OrderForm = () => {
                       <div className="phone-prompt">
                         <h3>Enter Customer's Phone Number</h3>
                         <PhoneInput
-                          country={'gh'}
+                          country={"gh"}
                           value={customerPhone}
-                          onChange={phone => setCustomerPhone(phone)}
+                          onChange={(phone) => setCustomerPhone(phone)}
                           inputProps={{
                             required: true,
                           }}
                         />
                         <div className="phone-prompt-buttons">
                           <button onClick={sendToWhatsApp}>Send</button>
-                          <button onClick={() => setShowPhonePrompt(false)}>Cancel</button>
+                          <button onClick={() => setShowPhonePrompt(false)}>
+                            Cancel
+                          </button>
                         </div>
                       </div>
                     </div>

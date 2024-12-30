@@ -10,8 +10,10 @@ import Footer from "../Footer/Footer";
 
 const Analysis = () => {
   //url endpoints for the order component
-  const url = "https://temiperi-backend.onrender.com";
+  // Determine base URL dynamically
   const devUrl = "http://localhost:4000/temiperi";
+  const prodUrl = "https://temiperi-backend.onrender.com/temiperi";
+  const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
 
   const MyBarChart = () => {
     // Define the data for the chart
@@ -79,7 +81,7 @@ const Analysis = () => {
   return (
     <div>
       {/* <Header /> */}
-      <Orders url={devUrl} />
+      <Orders url={baseUrl} />
       <h2>Perfomance Analysis</h2>
 
       <div className="container">

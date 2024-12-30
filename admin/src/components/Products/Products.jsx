@@ -7,7 +7,8 @@ import Orders from "../Orders/Orders";
 const Products = () => {
   // URL endpoints
   const devUrl = "http://localhost:4000/temiperi";
-  const productionUrl = "https://temiperi-backend.onrender.com";
+  const prodUrl = "https://temiperi-backend.onrender.com/temiperi";
+  const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
 
   // State to manage products data
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const Products = () => {
   // Fetch products data
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${devUrl}/products`);
+      const response = await axios.get(`${baseUrl}/products`);
       setProducts(response.data.products);
       setLoading(false);
     } catch (err) {
@@ -33,7 +34,7 @@ const Products = () => {
 
   return (
     <div>
-      <Orders url={devUrl} />
+      <Orders url={baseUrl} />
       <div className="body_container">
         <Sidebar />
 

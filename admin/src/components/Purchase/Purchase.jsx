@@ -9,7 +9,9 @@ const Purchase = () => {
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/invoices");
+        const response = await axios.get(
+          "https://temiperi-backend.onrender.com/invoices"
+        );
         const invoices = response.data.data;
 
         // Get the current time and calculate 24 hours ago
