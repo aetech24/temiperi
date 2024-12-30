@@ -254,8 +254,8 @@
   {
     "name": "coke pet small 0.3L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 62,
+      "whole_sale_price": 58
     },
     "category": "beer",
     "quantity": 33
@@ -263,8 +263,8 @@
   {
     "name": "coke pet medium 0.45L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 88,
+      "whole_sale_price": 84
     },
     "category": "beer",
     "quantity": 8
@@ -299,8 +299,8 @@
   {
     "name": "fanta pet medium 0.45L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 88,
+      "whole_sale_price": 84
     },
     "category": "beer",
     "quantity": 0
@@ -308,8 +308,8 @@
   {
     "name": "fanta pet small 0.3L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 62,
+      "whole_sale_price": 58
     },
     "category": "beer",
     "quantity": 18
@@ -335,8 +335,8 @@
   {
     "name": "sprite pet medium 0.45L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 88,
+      "whole_sale_price": 84
     },
     "category": "beer",
     "quantity": 0
@@ -344,8 +344,8 @@
   {
     "name": "sprite pet small 0.3L",
     "price": {
-      "retail_price": 143,
-      "whole_sale_price": 135
+      "retail_price": 62,
+      "whole_sale_price": 58
     },
     "category": "beer",
     "quantity": 4
