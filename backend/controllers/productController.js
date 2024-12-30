@@ -72,9 +72,13 @@ export const updateProduct = async (req, res) => {
 //controller to update specific fields of a product
 
 export const updateProductField = async (req, res) => {
-  const { id } = req.params; // Get product ID from URL parameters
+  const { id } = req.query; // Get product ID from URL parameters
   const updates = req.body; // Get updates from request body
 
+  //check if Id is present
+  if (!id) {
+    return res.status(400).json({ message: "Id not provided" });
+  }
   // Check if updates were provided
   if (!updates || Object.keys(updates).length === 0) {
     return res.status(400).json({ message: "No updates provided." });
@@ -108,6 +112,7 @@ export const updateProductField = async (req, res) => {
 
     // If no product was found, return error
     if (!updatedProduct) {
+      console.log("No product was found");
       return res.status(404).json({ message: "Product not found." });
     }
 
@@ -162,15 +167,4 @@ export const deleteProduct = async (req, res) => {
   return res.status(200).json({
     message: "Product deleted successfully",
   });
-  //////////////////////////////////////////////////////////
-  const updateFunction = (req, res) => {
-    const body = req.body;
-
-    const nonEmptyField = {};
-
-    //check for non-empty fields
-    Object.keys(body).forEach((key) => {
-      const value = body[key];
-    });
-  };
 };

@@ -22,7 +22,7 @@ const Products = () => {
     category: "",
     retail_price: "",
     whole_sale_price: "",
-    quantity: ""
+    quantity: "",
   });
 
   // Fetch products
@@ -50,7 +50,7 @@ const Products = () => {
       category: product.category,
       retail_price: product.price.retail_price,
       whole_sale_price: product.price.whole_sale_price,
-      quantity: product.quantity
+      quantity: product.quantity,
     });
     setShowEditModal(true);
   };
@@ -58,29 +58,31 @@ const Products = () => {
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditForm(prev => ({
+    setEditForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
+    console.log(editingProduct);
+    console.log(editForm);
   };
 
   // Handle update submission
   const handleUpdate = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Show loading toast
       const loadingToast = toast.loading("Updating product...");
-      
+
       // Format the data
       const updateData = {
         name: editForm.name,
         category: editForm.category,
         price: {
           retail_price: parseFloat(editForm.retail_price),
-          whole_sale_price: parseFloat(editForm.whole_sale_price)
+          whole_sale_price: parseFloat(editForm.whole_sale_price),
         },
-        quantity: parseInt(editForm.quantity)
+        quantity: parseInt(editForm.quantity),
       };
 
       // Send update request
@@ -89,8 +91,8 @@ const Products = () => {
         updateData,
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -109,8 +111,10 @@ const Products = () => {
           category: "",
           retail_price: "",
           whole_sale_price: "",
-          quantity: ""
+          quantity: "",
         });
+
+        console.log(response.data.message);
 
         // Show success message
         toast.dismiss(loadingToast);
@@ -128,14 +132,18 @@ const Products = () => {
       }
     } catch (err) {
       console.error("Error updating product:", err);
-      toast.error(err.response?.data?.message || "Failed to update product. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to update product. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     }
   };
 
