@@ -9,7 +9,6 @@ import { fetchInvoices } from "./controllers/invoiceControllers.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import invoiceRouter from "./route/inoviceRoute.js";
 import cors from "cors";
-import { updateProduct } from "./controllers/productController.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -22,7 +21,6 @@ app.use(
     origin: [
       "http://localhost:5174",
       "http://localhost:5173",
-      "http://localhost:5175",
       "https://temiperi-stocks-frontend.onrender.com",
     ],
     credentials: true,
@@ -41,7 +39,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/invoices", fetchInvoices);
-app.use("/product-update", updateProduct);
 
 // app.use(notFound);
 // app.use(errorHandler);
