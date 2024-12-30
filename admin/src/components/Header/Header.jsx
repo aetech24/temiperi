@@ -27,13 +27,13 @@ const Header = ({showLogin, setShowLogin}) => {
          </div>
 
          <div className="nav_menu">
-            <Link to={'/product'}>
+            <Link to='/product'>
                <p className='stock'>Stock</p>
             </Link>
-            <Link to={'/orders'}>
+            <Link to='/orders'>
                <p className='ord'>Orders</p>
             </Link>
-            <Link to={'/report'}>
+            <Link to='/report'>
                <p className='rep'>Report</p>
             </Link>
          </div>
