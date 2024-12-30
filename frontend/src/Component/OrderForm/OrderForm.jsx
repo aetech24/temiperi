@@ -14,6 +14,11 @@ const baseURL =
     ? "https://temiperi-stocks-backend.onrender.com/temiperi"
     : "http://localhost:4000/temiperi";
 
+const rootBaseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://temiperi-stocks-backend.onrender.com"
+    : "http://localhost:4000";
+
 const OrderForm = () => {
   const [data, setData] = useState({
     invoiceNumber: "",
@@ -192,7 +197,7 @@ const OrderForm = () => {
       };
 
       // Submit the invoice
-      const response = await axios.post(`${baseURL}/invoice`, invoiceData, {
+      await axios.post(`${baseURL}/invoice`, invoiceData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -216,8 +221,21 @@ const OrderForm = () => {
           progress: undefined,
         });
 
-        //refresh the page after response is provided
+        //update the products to undertake the deduction
+        for (const item of finalItems) {
+          const selectedProduct = products.find(
+            (product) => product.name === item.description
+          );
 
+          if (selectedProduct) {
+            await axios.post(`${rootBaseUrl}/product-update`, {
+              productId: selectedProduct._id,
+              quantityToDeduct: item.quantity,
+            });
+          }
+        }
+
+        //refresh the page after response is provided
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -228,9 +246,6 @@ const OrderForm = () => {
           items: [{ description: "", quantity: 0, price: 0 }],
         });
         setPreviewItems([]);
-
-        // Generate new invoice number
-        generateInvoiceNumber();
       }
     } catch (error) {
       console.error("Error submitting invoice:", error);
