@@ -2,7 +2,7 @@
   {
     "name": "bel aqua water box 1.5L",
     "price": {
-      "retails_price": 56,
+      "retail_price": 56,
       "whole_sale_price": 54
     },
     "category": "bell product",
@@ -11,7 +11,7 @@
   {
     "name": "bel aqua water meduim 750ml",
     "price": {
-      "retails_price": 30,
+      "retail_price": 30,
       "whole_sale_price": 28
     },
     "category": "bell product",
@@ -20,7 +20,7 @@
   {
     "name": "bel aqua water small",
     "price": {
-      "retails_price": 27,
+      "retail_price": 27,
       "whole_sale_price": 25
     },
     "category": "bell product",
@@ -29,7 +29,7 @@
   {
     "name": "tamarinda",
     "price": {
-      "retails_price": 43,
+      "retail_price": 43,
       "whole_sale_price": 41
     },
     "category": "bell product",
@@ -38,7 +38,7 @@
   {
     "name": "bigo cola",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -47,7 +47,7 @@
   {
     "name": "bigo cocktail",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -56,7 +56,7 @@
   {
     "name": "bigo grape",
     "price": {
-      "retails_price": 48,
+      "retail_price": 48,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -65,7 +65,7 @@
   {
     "name": "rush",
     "price": {
-      "retails_price": 45,
+      "retail_price": 45,
       "whole_sale_price": 43
     },
     "category": "bell product",
@@ -74,7 +74,7 @@
   {
     "name": "verna mineral water meduim",
     "price": {
-      "retails_price": 25,
+      "retail_price": 25,
       "whole_sale_price": 23
     },
     "category": "bell product",
@@ -83,7 +83,7 @@
   {
     "name": "verna mineral water small",
     "price": {
-      "retails_price": 24,
+      "retail_price": 24,
       "whole_sale_price": 22
     },
     "category": "bell product",
@@ -92,7 +92,7 @@
   {
     "name": "the game",
     "price": {
-      "retails_price": 24,
+      "retail_price": 24,
       "whole_sale_price": 22
     },
     "category": "bell product",
@@ -101,7 +101,7 @@
   {
     "name": "storm energy big",
     "price": {
-      "retails_price": 65,
+      "retail_price": 65,
       "whole_sale_price": 63
     },
     "category": "bell product",
@@ -110,7 +110,7 @@
   {
     "name": "5 Star ",
     "price": {
-      "retails_price": 45,
+      "retail_price": 45,
       "whole_sale_price": 43
     },
     "category": "bell product",
@@ -119,7 +119,7 @@
   {
     "name": "star large",
     "price": {
-      "retails_price": 143,
+      "retail_price": 143,
       "whole_sale_price": 133
     },
     "category": "bell product",
@@ -128,7 +128,7 @@
   {
     "name": "star mini",
     "price": {
-      "retails_price": 128,
+      "retail_price": 128,
       "whole_sale_price": 120
     },
     "category": "bell product",
@@ -137,7 +137,7 @@
   {
     "name": "Darlin lemon",
     "price": {
-      "retails_price": 55,
+      "retail_price": 55,
       "whole_sale_price": 53
     },
     "category": "bell product",
@@ -146,7 +146,7 @@
   {
     "name": "wheat big",
     "price": {
-      "retails_price": 140,
+      "retail_price": 140,
       "whole_sale_price": 135
     },
     "category": "bell product",
@@ -155,7 +155,7 @@
   {
     "name": "wheat small",
     "price": {
-      "retails_price": 100,
+      "retail_price": 100,
       "whole_sale_price": 95
     },
     "category": "bell product",
@@ -164,7 +164,7 @@
   {
     "name": "bel ice",
     "price": {
-      "retails_price": 55,
+      "retail_price": 55,
       "whole_sale_price": 52
     },
     "category": "bell product",
@@ -173,7 +173,7 @@
   {
     "name": "tampico medium",
     "price": {
-      "retails_price": 61,
+      "retail_price": 61,
       "whole_sale_price": 59
     },
     "category": "bell product",
@@ -182,7 +182,7 @@
   {
     "name": "tampico small",
     "price": {
-      "retails_price": 44,
+      "retail_price": 44,
       "whole_sale_price": 46
     },
     "category": "bell product",
@@ -191,7 +191,7 @@
   {
     "name": "tampico large",
     "price": {
-      "retails_price": 60,
+      "retail_price": 60,
       "whole_sale_price": 58
     },
     "category": "bell product",
@@ -200,7 +200,7 @@
   {
     "name": "kaiser apple",
     "price": {
-      "retails_price": 47,
+      "retail_price": 47,
       "whole_sale_price": 49
     },
     "category": "bell product",
@@ -209,7 +209,7 @@
   {
     "name": "squeeze appela",
     "price": {
-      "retails_price": 37,
+      "retail_price": 37,
       "whole_sale_price": 38
     },
     "category": "bell product",
@@ -487,14 +487,14 @@
       "whole_sale_price": 90
     },
     "category": "beer",
-    "sizes": "",
+    "size": "",
     "quantity": 0
   },
   {
     "name": "Black & White 20cl",
     "price": {
-      "retail": 49.33,
-      "wholesale": 44.9
+      "retail_price": 49.33,
+      "whole_sale_price": 44.9
     },
     "category": "",
     "size": "08x06",
@@ -503,8 +503,8 @@
   {
     "name": "bel cocktail",
     "price": {
-      "retail": 38,
-      "wholesale": 37
+      "retail_price": 38,
+      "whole_sale_price": 37
     },
     "category": "bell product",
     "quantity": 202
@@ -512,8 +512,8 @@
   {
     "name": "bel squeeze",
     "price": {
-      "retail": 38,
-      "wholesale": 37
+      "retail_price": 38,
+      "whole_sale_price": 37
     },
     "category": "bell product",
     "quantity": 376
@@ -521,8 +521,8 @@
   {
     "name": "bel soda",
     "price": {
-      "retail": 38,
-      "wholesale": 37
+      "retail_price": 38,
+      "whole_sale_price": 37
     },
     "category": "bell product",
     "quantity": 286
@@ -530,8 +530,8 @@
   {
     "name": "puka",
     "price": {
-      "retail": 43,
-      "wholesale": 41
+      "retail_price": 43,
+      "whole_sale_price": 41
     },
     "category": "bell product",
     "quantity": 255
@@ -539,8 +539,8 @@
   {
     "name": "puka extra",
     "price": {
-      "retail": 55,
-      "wholesale": 52
+      "retail_price": 55,
+      "whole_sale_price": 52
     },
     "category": "bell product",
     "quantity": 612
@@ -548,8 +548,8 @@
   {
     "name": "tamarinda",
     "price": {
-      "retail": 43,
-      "wholesale": 41
+      "retail_price": 43,
+      "whole_sale_price": 41
     },
     "category": "bell product",
     "quantity": 400
@@ -557,8 +557,8 @@
   {
     "name": "bel cola",
     "price": {
-      "retail": 43,
-      "wholesale": 41
+      "retail_price": 43,
+      "whole_sale_price": 41
     },
     "category": "bell product",
     "quantity": 2475
@@ -566,8 +566,8 @@
   {
     "name": "bel tropical",
     "price": {
-      "retail": 37,
-      "wholesale": 38
+      "retail_price": 37,
+      "whole_sale_price": 38
     },
     "category": "bell product",
     "quantity": 337
@@ -575,8 +575,8 @@
   {
     "name": "bel water meduim",
     "price": {
-      "retail": 28,
-      "wholesale": 26
+      "retail_price": 28,
+      "whole_sale_price": 26
     },
     "category": "bell product",
     "quantity": 0,
@@ -585,8 +585,8 @@
   {
     "name": "bel water small",
     "price": {
-      "retail": 26,
-      "wholesale": 24
+      "retail_price": 26,
+      "whole_sale_price": 24
     },
     "category": "bell product",
     "quantity": 0,
@@ -595,8 +595,8 @@
   {
     "name": "bigo cocktail",
     "price": {
-      "retail": 48,
-      "wholesale": 46
+      "retail_price": 48,
+      "whole_sale_price": 46
     },
     "category": "trillium product",
     "quantity": 147
@@ -604,8 +604,8 @@
   {
     "name": "bigo grape",
     "price": {
-      "retail": 48,
-      "wholesale": 46
+      "retail_price": 48,
+      "whole_sale_price": 46
     },
     "category": "trillium product",
     "quantity": 294
@@ -613,8 +613,8 @@
   {
     "name": "bigo cola",
     "price": {
-      "retail": 48,
-      "wholesale": 46
+      "retail_price": 48,
+      "whole_sale_price": 46
     },
     "category": "trillium product",
     "quantity": 292
@@ -622,8 +622,8 @@
   {
     "name": "rush",
     "price": {
-      "retail": 45,
-      "wholesale": 43
+      "retail_price": 45,
+      "whole_sale_price": 43
     },
     "category": "trillium product",
     "quantity": 504
@@ -631,8 +631,8 @@
   {
     "name": "slemfit meduim",
     "price": {
-      "retail": 25,
-      "wholesale": 22.5
+      "retail_price": 25,
+      "whole_sale_price": 22.5
     },
     "category": "trillium product",
     "quantity": 96
@@ -640,8 +640,8 @@
   {
     "name": "slemfit small",
     "price": {
-      "retail": 22,
-      "wholesale": 20
+      "retail_price": 22,
+      "whole_sale_price": 20
     },
     "category": "trillium product",
     "quantity": 96
@@ -649,8 +649,8 @@
   {
     "name": "verna mineral water meduim",
     "price": {
-      "retail": 26,
-      "wholesale": 24
+      "retail_price": 26,
+      "whole_sale_price": 24
     },
     "category": "twellium product",
     "quantity": 107
@@ -658,8 +658,8 @@
   {
     "name": "peeva tangy",
     "price": {
-      "retail": 39,
-      "wholesale": 37
+      "retail_price": 39,
+      "whole_sale_price": 37
     },
     "category": "peeva product",
     "quantity": 149
@@ -667,8 +667,8 @@
   {
     "name": "peeva grape",
     "price": {
-      "retail": 39,
-      "wholesale": 37
+      "retail_price": 39,
+      "whole_sale_price": 37
     },
     "category": "peeva product",
     "quantity": 90
@@ -676,8 +676,8 @@
   {
     "name": "peeva cola",
     "price": {
-      "retail": 39,
-      "wholesale": 37
+      "retail_price": 39,
+      "whole_sale_price": 37
     },
     "category": "peeva product",
     "quantity": 560
@@ -685,8 +685,8 @@
   {
     "name": "peeva water",
     "price": {
-      "retail": 22,
-      "wholesale": 20
+      "retail_price": 22,
+      "whole_sale_price": 20
     },
     "category": "peeva product",
     "quantity": 1876
@@ -694,8 +694,8 @@
   {
     "name": "the game",
     "price": {
-      "retail": 40,
-      "wholesale": 38
+      "retail_price": 40,
+      "whole_sale_price": 38
     },
     "category": "peeva product",
     "quantity": 100
@@ -703,8 +703,8 @@
   {
     "name": "verna water small",
     "price": {
-      "retail": 24,
-      "wholesale": 22
+      "retail_price": 24,
+      "whole_sale_price": 22
     },
     "category": "twellium product",
     "quantity": 100,
@@ -713,8 +713,8 @@
   {
     "name": "verna water small",
     "price": {
-      "retail": 47,
-      "wholesale": 45
+      "retail_price": 47,
+      "whole_sale_price": 45
     },
     "category": "twellium product",
     "quantity": 100,
@@ -723,8 +723,8 @@
   {
     "name": "verna water small",
     "price": {
-      "retail": 28,
-      "wholesale": 26
+      "retail_price": 28,
+      "whole_sale_price": 26
     },
     "category": "twellium product",
     "quantity": 100,
@@ -733,8 +733,8 @@
   {
     "name": "bel ice",
     "price": {
-      "retail": 55,
-      "wholesale": 52
+      "retail_price": 55,
+      "whole_sale_price": 52
     },
     "category": "bel product",
     "quantity": 3065
@@ -742,8 +742,8 @@
   {
     "name": "kaiser",
     "price": {
-      "retail": 49,
-      "wholesale": 47
+      "retail_price": 49,
+      "whole_sale_price": 47
     },
     "category": "multipac product",
     "quantity": 100
@@ -751,8 +751,8 @@
   {
     "name": "beta malta",
     "price": {
-      "retail": 70,
-      "wholesale": 68
+      "retail_price": 70,
+      "whole_sale_price": 68
     },
     "category": "beer",
     "quantity": 100
@@ -760,8 +760,8 @@
   {
     "name": "perla small",
     "price": {
-      "retail": 26,
-      "wholesale": 24
+      "retail_price": 26,
+      "whole_sale_price": 24
     },
     "category": "multipac product",
     "quantity": 5
@@ -769,8 +769,8 @@
   {
     "name": "tampico",
     "price": {
-      "retail": 62,
-      "wholesale": 59
+      "retail_price": 62,
+      "whole_sale_price": 59
     },
     "category": "tampico",
     "quantity": 100
@@ -778,8 +778,8 @@
   {
     "name": "eagle stout",
     "price": {
-      "retail": 150,
-      "wholesale": 145
+      "retail_price": 150,
+      "whole_sale_price": 145
     },
     "category": "beer",
     "quantity": 100
@@ -787,8 +787,8 @@
   {
     "name": "eagle mini",
     "price": {
-      "retail": 130,
-      "wholesale": 122
+      "retail_price": 130,
+      "whole_sale_price": 122
     },
     "category": "beer",
     "quantity": 100
@@ -796,8 +796,8 @@
   {
     "name": "awake water small",
     "price": {
-      "retail": 25,
-      "wholesale": 23
+      "retail_price": 25,
+      "whole_sale_price": 23
     },
     "category": "kasaperko company limited",
     "quantity": 100
@@ -805,8 +805,8 @@
   {
     "name": "club large",
     "price": {
-      "retail": 130,
-      "wholesale": 125
+      "retail_price": 130,
+      "whole_sale_price": 125
     },
     "category": "kasaperko company limited",
     "quantity": 19
@@ -814,8 +814,8 @@
   {
     "name": "club mini",
     "price": {
-      "retail": 160,
-      "wholesale": 170
+      "retail_price": 160,
+      "whole_sale_price": 170
     },
     "category": "kasaperko company limited",
     "quantity": 6
@@ -823,8 +823,8 @@
   {
     "name": "shabdy large",
     "price": {
-      "retail": 95,
-      "wholesale": 90
+      "retail_price": 95,
+      "whole_sale_price": 90
     },
     "category": "kasaperko company limited",
     "quantity": 18
@@ -832,8 +832,8 @@
   {
     "name": "shabdy mini",
     "price": {
-      "retail": 145,
-      "wholesale": 140
+      "retail_price": 145,
+      "whole_sale_price": 140
     },
     "category": "kasaperko company limited",
     "quantity": 1
@@ -841,8 +841,8 @@
   {
     "name": "eagle mini",
     "price": {
-      "retail": 130,
-      "wholesale": 122
+      "retail_price": 130,
+      "whole_sale_price": 122
     },
     "category": "kasaperko company limited",
     "quantity": 42
@@ -850,8 +850,8 @@
   {
     "name": "eagle stout",
     "price": {
-      "retail": 150,
-      "wholesale": 145
+      "retail_price": 150,
+      "whole_sale_price": 145
     },
     "category": "kasaperko company limited",
     "quantity": 13
