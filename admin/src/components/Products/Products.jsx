@@ -122,7 +122,7 @@ const Products = () => {
         console.log(response.data.message);
 
         // Show success message
-        toast.dismiss(loadingToast);
+        // toast.dismiss(loadingToast);
         toast.success("Product updated successfully!", {
           position: "top-right",
           autoClose: 3000,

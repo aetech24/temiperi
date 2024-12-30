@@ -125,9 +125,9 @@ export const updateProductField = async (req, res) => {
 };
 
 //handle delete of a single product
-export const handleProductDelete = (req, res) => {
-  const payload = req.params;
-};
+// export const handleProductDelete = (req, res) => {
+//   const payload = req.params;
+// };
 
 //delete all products
 export const clearDatabase = async (req, res) => {
