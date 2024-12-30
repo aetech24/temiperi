@@ -14,23 +14,29 @@ export const createInvoice = async (req, res) => {
 };
 
 //Get all invoices
-export const getInvoices = async (req, res) => {
+export const fetchInvoices = async (req, res) => {
   try {
     const invoices = await InvoiceModel.find();
+
+    // Check if there are no invoices and respond immediately
     if (invoices.length === 0) {
       console.log("There are no invoices");
       return res.status(404).json({ message: "No invoices found" });
     }
-    return res.status(200).json({ success: true, data: invoices });
+
+    // Log and send the response
+    console.log("Fetched invoices successfully");
+    res.status(200).json({ success: true, data: invoices });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching invoices:", error.message);
+    res.status(500).json({ error: error.message }); // Always send a response
   }
 };
 
 // Get invoice by id
 export const getInvoice = async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id);
+    const invoice = await InvoiceModel.findById(req.params.id);
     if (!invoice) {
       return res.status(404).json({ message: "Invoice not Found" });
     }

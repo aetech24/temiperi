@@ -20,7 +20,7 @@ const InvoiceList = () => {
   const fetchInvoices = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${baseURL}/invoice`);
+      const response = await axios.get(`${baseURL}/get-invoices`);
       setInvoices(response.data.invoices);
     } catch (error) {
       console.error('Error fetching invoices:', error);
