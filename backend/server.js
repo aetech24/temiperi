@@ -48,7 +48,6 @@ app.get("/", (req, res) => {
   res.send("software is working");
 });
 
-app.get("/invoices", fetchInvoices);
 app.patch("/product-update", updateProduct);
 app.delete("/clear-products", clearDatabase);
 
