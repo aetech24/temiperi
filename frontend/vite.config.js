@@ -7,7 +7,6 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       external: [
-        'react-router-dom',
         'axios',
         'html2pdf.js',
         'react-phone-input-2',
@@ -15,7 +14,6 @@ export default defineConfig({
       ],
       output: {
         globals: {
-          'react-router-dom': 'ReactRouterDOM',
           'axios': 'axios',
           'html2pdf.js': 'html2pdf',
           'react-phone-input-2': 'ReactPhoneInput',
@@ -23,5 +21,5 @@ export default defineConfig({
         }
       }
     }
-  },
-})
+  }
+});
