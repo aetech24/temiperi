@@ -26,6 +26,7 @@ app.use(
       "http://localhost:5174",
       "http://localhost:5173",
       "https://temiperi-stocks-frontend.onrender.com",
+      "https://temiperi-stocks-admin.onrender.com",
     ],
     credentials: true,
   })

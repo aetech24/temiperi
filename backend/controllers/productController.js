@@ -69,6 +69,18 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+//controller to update specific fields of a product
+
+export const updateProductField = (req, res) => {
+  const payload = req.body;
+
+  if (!payload) {
+    return res.status(400).json({ message: "There was no payload provided" });
+  }
+
+  //fetch the 
+};
+
 //delete all products
 export const clearDatabase = async (req, res) => {
   try {
