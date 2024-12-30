@@ -119,8 +119,8 @@ const OrderForm = () => {
       if (selectedProduct) {
         // Default to retail price when product is first selected
         items[index].price = selectedProduct.price?.retail_price || 0;
-        items[index].wholesalePrice =
-          selectedProduct.price?.wholeSale_price || 0;
+        items[index].whole_sale_price =
+          selectedProduct.price?.whole_sale_price || 0;
       }
     }
 
@@ -132,7 +132,7 @@ const OrderForm = () => {
         // Use wholesale price if quantity > 10, otherwise use retail price
         items[index].price =
           value > 10
-            ? selectedProduct.price?.wholeSale_price || 0
+            ? selectedProduct.price?.whole_sale_price || 0
             : selectedProduct.price?.retail_price || 0;
       }
     }
@@ -366,8 +366,8 @@ const OrderForm = () => {
         printWindow.print();
         // Reload page after print dialog is closed
         if (printWindow.matchMedia) {
-          const mediaQueryList = printWindow.matchMedia('print');
-          mediaQueryList.addEventListener('change', function(mql) {
+          const mediaQueryList = printWindow.matchMedia("print");
+          mediaQueryList.addEventListener("change", function (mql) {
             if (!mql.matches) {
               window.location.reload();
             }
@@ -397,24 +397,29 @@ const OrderForm = () => {
       return;
     }
 
-    const message = `*TEMIPERI ENTERPRISE*\n\n` +
+    const message =
+      `*TEMIPERI ENTERPRISE*\n\n` +
       `*Invoice #:* ${data.invoiceNumber}\n` +
       `*Customer:* ${data.customerName}\n` +
       `*Date:* ${formattedDate}\n` +
       `*Time:* ${formattedTime}\n\n` +
       `*Order Details:*\n` +
       `${previewItems
-        .map((item, index) =>
-          `${index + 1}. ${item.description} - Qty: ${item.quantity}, Price: GH₵${item.price.toFixed(2)}`
+        .map(
+          (item, index) =>
+            `${index + 1}. ${item.description} - Qty: ${
+              item.quantity
+            }, Price: GH₵${item.price.toFixed(2)}`
         )
         .join("\n")}\n\n` +
-      `*Total Amount:* GH₵${previewItems.reduce(
-        (sum, item) => sum + item.quantity * item.price,
-        0
-      ).toFixed(2)}\n\n` +
+      `*Total Amount:* GH₵${previewItems
+        .reduce((sum, item) => sum + item.quantity * item.price, 0)
+        .toFixed(2)}\n\n` +
       `Thank you for your business!`;
 
-    const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${customerPhone}?text=${encodeURIComponent(
+      message
+    )}`;
     window.open(whatsappUrl, "_blank");
 
     // Only reload after phone number is entered and WhatsApp window is opened
@@ -457,13 +462,13 @@ const OrderForm = () => {
                       <td>{product.name || "Unnamed Product"}</td>
                       <td>
                         <span className="currency-symbol">GH₵</span>
-                        {product.price?.wholeSale_price?.toFixed(2) || "N/A"}
+                        {product.price?.whole_sale_price?.toFixed(2) || "N/A"}
                       </td>
                       <td>
                         <span className="currency-symbol">GH₵</span>
-                        {product.price?.retail_price?.toFixed(2) || "N/A"}
+                        {product.price?.retail_price?.toFixed(2) || 0}
                       </td>
-                      <td>{product.quantity || "N/A"}</td>
+                      <td>{product.quantity || 0}</td>
                     </tr>
                   ))
                 ) : (
@@ -689,16 +694,20 @@ const OrderForm = () => {
           <div className="modal-content">
             <h2>Order Submitted Successfully!</h2>
             <div className="modal-buttons">
-              <button onClick={() => {
-                setShowActionModal(false);
-                handleShareWhatsApp();
-              }}>
+              <button
+                onClick={() => {
+                  setShowActionModal(false);
+                  handleShareWhatsApp();
+                }}
+              >
                 Share on WhatsApp
               </button>
-              <button onClick={() => {
-                setShowActionModal(false);
-                handlePrintInvoice();
-              }}>
+              <button
+                onClick={() => {
+                  setShowActionModal(false);
+                  handlePrintInvoice();
+                }}
+              >
                 Print Invoice
               </button>
               <button
