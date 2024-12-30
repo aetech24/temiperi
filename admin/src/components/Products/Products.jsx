@@ -3,6 +3,7 @@ import axios from "axios";
 import { Sidebar } from "../Sidebar/Sidebar";
 import "./product.css";
 import { icons } from "../../icons/heroIcons";
+import { toast } from "react-toastify";
 
 const Products = () => {
   // URL endpoints
@@ -14,8 +15,15 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingProduct, setEditingProduct] = useState(null); // Track product being edited
-  const [updatedField, setUpdatedField] = useState({ field: "", value: "" }); // Field & value
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    category: "",
+    retail_price: "",
+    whole_sale_price: "",
+    quantity: ""
+  });
 
   // Fetch products
   const fetchProducts = async () => {
@@ -37,40 +45,97 @@ const Products = () => {
   // Handle edit click
   const handleEditClick = (product) => {
     setEditingProduct(product);
-    console.log(editingProduct);
-    setUpdatedField({ field: "", value: "" }); // Reset field and value
+    setEditForm({
+      name: product.name,
+      category: product.category,
+      retail_price: product.price.retail_price,
+      whole_sale_price: product.price.whole_sale_price,
+      quantity: product.quantity
+    });
+    setShowEditModal(true);
   };
 
-  // Handle field update submission
-  const handleUpdateField = async () => {
-    if (!updatedField.field || updatedField.value === "") {
-      alert("Field and value are required!");
-      return;
-    }
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
+  // Handle update submission
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    
     try {
-      // Send PATCH request
+      // Show loading toast
+      const loadingToast = toast.loading("Updating product...");
+      
+      // Format the data
+      const updateData = {
+        name: editForm.name,
+        category: editForm.category,
+        price: {
+          retail_price: parseFloat(editForm.retail_price),
+          whole_sale_price: parseFloat(editForm.whole_sale_price)
+        },
+        quantity: parseInt(editForm.quantity)
+      };
+
+      // Send update request
       const response = await axios.patch(
         `${baseUrl}/products/${editingProduct._id}`,
+        updateData,
         {
-          field: updatedField.field,
-          value: updatedField.value,
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
 
-      // Update local state with updated product
-      const updatedProducts = products.map((prod) =>
-        prod._id === response.data._id ? response.data : prod
-      );
-      setProducts(updatedProducts);
+      if (response.data) {
+        // Update local state
+        const updatedProducts = products.map((prod) =>
+          prod._id === editingProduct._id ? response.data : prod
+        );
+        setProducts(updatedProducts);
 
-      // Reset editing state
-      setEditingProduct(null);
-      setUpdatedField({ field: "", value: "" });
-      alert("Field updated successfully!");
+        // Close modal and reset form
+        setShowEditModal(false);
+        setEditingProduct(null);
+        setEditForm({
+          name: "",
+          category: "",
+          retail_price: "",
+          whole_sale_price: "",
+          quantity: ""
+        });
+
+        // Show success message
+        toast.dismiss(loadingToast);
+        toast.success("Product updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
+        // Refresh the products list
+        fetchProducts();
+      }
     } catch (err) {
       console.error("Error updating product:", err);
-      alert("Failed to update product!");
+      toast.error(err.response?.data?.message || "Failed to update product. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -104,14 +169,13 @@ const Products = () => {
                     <tr key={product._id}>
                       <td>{product.name}</td>
                       <td>{product.category}</td>
-                      <td>${product.price.retail_price}</td>
-                      <td>${product.price.whole_sale_price}</td>
+                      <td>GH₵{product.price.retail_price}</td>
+                      <td>GH₵{product.price.whole_sale_price}</td>
                       <td>{product.quantity}</td>
                       <td>
                         {new Date(product.createdAt).toLocaleDateString()}
                       </td>
                       <td>
-                        {/* Edit Button */}
                         <span
                           className="cursor-pointer"
                           onClick={() => handleEditClick(product)}
@@ -126,30 +190,78 @@ const Products = () => {
             </div>
           )}
 
-          {/* Edit Form */}
-          {editingProduct && (
-            <div className="edit-form">
-              <h3>Edit Product: {editingProduct.name}</h3>
-              <label>Field:</label>
-              <input
-                type="text"
-                placeholder="e.g., quantity, price.retail_price"
-                value={updatedField.field}
-                onChange={(e) =>
-                  setUpdatedField({ ...updatedField, field: e.target.value })
-                }
-              />
-              <label>Value:</label>
-              <input
-                type="text"
-                placeholder="New value"
-                value={updatedField.value}
-                onChange={(e) =>
-                  setUpdatedField({ ...updatedField, value: e.target.value })
-                }
-              />
-              <button onClick={handleUpdateField}>Update Field</button>
-              <button onClick={() => setEditingProduct(null)}>Cancel</button>
+          {/* Edit Modal */}
+          {showEditModal && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h2>Edit Product</h2>
+                <form onSubmit={handleUpdate}>
+                  <div className="form-group">
+                    <label>Product Name:</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={editForm.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Category:</label>
+                    <input
+                      type="text"
+                      name="category"
+                      value={editForm.category}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Retail Price:</label>
+                    <input
+                      type="number"
+                      name="retail_price"
+                      value={editForm.retail_price}
+                      onChange={handleInputChange}
+                      required
+                      step="0.01"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Wholesale Price:</label>
+                    <input
+                      type="number"
+                      name="whole_sale_price"
+                      value={editForm.whole_sale_price}
+                      onChange={handleInputChange}
+                      required
+                      step="0.01"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Quantity:</label>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={editForm.quantity}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="modal-buttons">
+                    <button type="submit" className="update-btn">
+                      Update Product
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowEditModal(false)}
+                      className="cancel-btn"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
         </div>
