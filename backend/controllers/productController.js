@@ -150,18 +150,16 @@ export const clearDatabase = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-  const productId = req.params;
+  const { id } = req.query;
 
-  if (!productId) {
+  if (!id) {
     return res
       .status(400)
       .json({ message: "There was no payload for the product id" });
   }
 
   //delete from the database
-  await Product.findByIdAndDelete({
-    productId,
-  });
+  await Product.findByIdAndDelete({ _id: id });
 
   //return a response to the client
   return res.status(200).json({

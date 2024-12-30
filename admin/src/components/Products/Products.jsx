@@ -43,11 +43,13 @@ const Products = () => {
       const productsData = response.data.products;
       setProducts(productsData);
       setFilteredProducts(productsData);
-      
+
       // Extract unique categories
-      const uniqueCategories = [...new Set(productsData.map(product => product.category))];
+      const uniqueCategories = [
+        ...new Set(productsData.map((product) => product.category)),
+      ];
       setCategories(uniqueCategories);
-      
+
       setLoading(false);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -63,21 +65,24 @@ const Products = () => {
   // Filter products based on search term and category
   useEffect(() => {
     let result = products;
-    
+
     // Filter by category
     if (selectedCategory !== "all") {
-      result = result.filter(product => product.category === selectedCategory);
+      result = result.filter(
+        (product) => product.category === selectedCategory
+      );
     }
-    
+
     // Filter by search term
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      result = result.filter(product => 
-        product.name.toLowerCase().includes(searchLower) ||
-        product.category.toLowerCase().includes(searchLower)
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchLower) ||
+          product.category.toLowerCase().includes(searchLower)
       );
     }
-    
+
     setFilteredProducts(result);
   }, [searchTerm, selectedCategory, products]);
 
@@ -199,10 +204,12 @@ const Products = () => {
       const loadingToast = toast.loading("Deleting product...");
 
       // Send delete request
-      await axios.delete(`${baseUrl}/products/${productToDelete._id}`);
+      await axios.delete(
+        `${baseUrl}/delete-product?id=${productToDelete._id}`
+      );
 
       // Update local state
-      setProducts(products.filter(prod => prod._id !== productToDelete._id));
+      setProducts(products.filter((prod) => prod._id !== productToDelete._id));
 
       // Close modal
       setShowDeleteModal(false);
@@ -220,14 +227,18 @@ const Products = () => {
       });
     } catch (err) {
       console.error("Error deleting product:", err);
-      toast.error(err.response?.data?.message || "Failed to delete product. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to delete product. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     }
   };
 
@@ -315,7 +326,9 @@ const Products = () => {
                 </tbody>
               </table>
               {filteredProducts.length === 0 && (
-                <p className="no-results">No products found matching your criteria.</p>
+                <p className="no-results">
+                  No products found matching your criteria.
+                </p>
               )}
             </div>
           )}
@@ -399,9 +412,20 @@ const Products = () => {
           {showDeleteModal && (
             <div className="modal-overlay">
               <div className="modal-content-delete delete-modal">
-                <h2 style={{ textAlign: "center", fontWeight: "bold" }}>Delete Product</h2>
-                <div style={{ textAlign: "center", display:"flex", flexDirection: "column", gap: "10px" }}>
-                  <p>Are you sure you want to delete {productToDelete?.name}?</p>
+                <h2 style={{ textAlign: "center", fontWeight: "bold" }}>
+                  Delete Product
+                </h2>
+                <div
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                  }}
+                >
+                  <p>
+                    Are you sure you want to delete {productToDelete?.name}?
+                  </p>
                 </div>
                 <p className="warning-text">This action cannot be undone.</p>
                 <div className="modal-buttons">

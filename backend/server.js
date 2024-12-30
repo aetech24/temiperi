@@ -11,6 +11,7 @@ import invoiceRouter from "./route/inoviceRoute.js";
 import cors from "cors";
 import {
   clearDatabase,
+  deleteProduct,
   updateProduct,
   updateProductField,
 } from "./controllers/productController.js";
@@ -49,6 +50,8 @@ app.use("/product-update", updateProduct);
 app.use("/clear-products", clearDatabase);
 
 app.patch(`/temiperi/products`, updateProductField);
+
+app.delete(`/temiperi/delete-product`, deleteProduct);
 // app.use(notFound);
 // app.use(errorHandler);
 
