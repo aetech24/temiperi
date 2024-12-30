@@ -13,10 +13,16 @@ const Products = () => {
 
   // State management
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [productToDelete, setProductToDelete] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [editForm, setEditForm] = useState({
     name: "",
     category: "",
@@ -29,7 +35,14 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(`${baseUrl}/products`);
-      setProducts(response.data.products);
+      const productsData = response.data.products;
+      setProducts(productsData);
+      setFilteredProducts(productsData);
+      
+      // Extract unique categories
+      const uniqueCategories = [...new Set(productsData.map(product => product.category))];
+      setCategories(uniqueCategories);
+      
       setLoading(false);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -41,6 +54,27 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  // Filter products based on search term and category
+  useEffect(() => {
+    let result = products;
+    
+    // Filter by category
+    if (selectedCategory !== "all") {
+      result = result.filter(product => product.category === selectedCategory);
+    }
+    
+    // Filter by search term
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(searchLower) ||
+        product.category.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    setFilteredProducts(result);
+  }, [searchTerm, selectedCategory, products]);
 
   // Handle edit click
   const handleEditClick = (product) => {
@@ -139,13 +173,85 @@ const Products = () => {
     }
   };
 
+  // Handle delete click
+  const handleDeleteClick = (product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    try {
+      // Show loading toast
+      const loadingToast = toast.loading("Deleting product...");
+
+      // Send delete request
+      await axios.delete(`${baseUrl}/products/${productToDelete._id}`);
+
+      // Update local state
+      setProducts(products.filter(prod => prod._id !== productToDelete._id));
+
+      // Close modal
+      setShowDeleteModal(false);
+      setProductToDelete(null);
+
+      // Show success message
+      toast.dismiss(loadingToast);
+      toast.success("Product deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      console.error("Error deleting product:", err);
+      toast.error(err.response?.data?.message || "Failed to delete product. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
   return (
     <div>
       <div className="body_container">
         <Sidebar />
 
         <div className="product_container">
-          <h2>Products</h2>
+          <div className="header-section">
+            <h2 className="text-2xl font-bold">Products</h2>
+            <div className="filter-section">
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                <span className="search-icon">{icons.search}</span>
+              </div>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="category-select"
+              >
+                <option value="all">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {loading ? (
             <p>Loading products...</p>
           ) : error ? (
@@ -165,7 +271,7 @@ const Products = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
+                  {filteredProducts.map((product) => (
                     <tr key={product._id}>
                       <td>{product.name}</td>
                       <td>{product.category}</td>
@@ -176,17 +282,28 @@ const Products = () => {
                         {new Date(product.createdAt).toLocaleDateString()}
                       </td>
                       <td>
-                        <span
-                          className="cursor-pointer"
-                          onClick={() => handleEditClick(product)}
-                        >
-                          {icons.edit}
-                        </span>
+                        <div className="action-buttons">
+                          <span
+                            className="cursor-pointer edit-icon"
+                            onClick={() => handleEditClick(product)}
+                          >
+                            {icons.edit}
+                          </span>
+                          <span
+                            className="cursor-pointer text-red-600 delete-icon"
+                            onClick={() => handleDeleteClick(product)}
+                          >
+                            {icons.trash}
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              {filteredProducts.length === 0 && (
+                <p className="no-results">No products found matching your criteria.</p>
+              )}
             </div>
           )}
 
@@ -261,6 +378,38 @@ const Products = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteModal && (
+            <div className="modal-overlay">
+              <div className="modal-content-delete delete-modal">
+                <h2 style={{ textAlign: "center", fontWeight: "bold" }}>Delete Product</h2>
+                <div style={{ textAlign: "center", display:"flex", flexDirection: "column", gap: "10px" }}>
+                  <p>Are you sure you want to delete {productToDelete?.name}?</p>
+                </div>
+                <p className="warning-text">This action cannot be undone.</p>
+                <div className="modal-buttons">
+                  <button
+                    type="button"
+                    onClick={handleDeleteConfirm}
+                    className="delete-btn"
+                  >
+                    Delete Product
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setProductToDelete(null);
+                    }}
+                    className="bg-gray-400 text-white rounded-md hover:bg-gray-500 duration-300 ease-linear"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}
