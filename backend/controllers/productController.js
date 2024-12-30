@@ -81,11 +81,29 @@ export const updateProductField = async (req, res) => {
   }
 
   try {
-    // Find product by ID and apply updates
+    // Create an object for storing non-empty fields only
+    const nonEmptyFields = {};
+
+    // Filter out empty or null fields
+    Object.keys(updates).forEach((key) => {
+      const value = updates[key];
+      if (value !== "" && value !== null && value !== undefined) {
+        nonEmptyFields[key] = value; // Add only non-empty values
+      }
+    });
+
+    // If no valid updates after filtering, return an error
+    if (Object.keys(nonEmptyFields).length === 0) {
+      return res
+        .status(400)
+        .json({ message: "All provided fields are empty or invalid." });
+    }
+
+    // Update product using filtered fields
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { $set: updates }, // Update only specified fields
-      { new: true, runValidators: true } // Return updated document and run schema validation
+      { $set: nonEmptyFields }, // Update only non-empty fields
+      { new: true, runValidators: true } // Return updated document and validate input
     );
 
     // If no product was found, return error
@@ -99,6 +117,11 @@ export const updateProductField = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error while updating product." });
   }
+};
+
+//handle delete of a single product
+export const handleProductDelete = (req, res) => {
+  const payload = req.params;
 };
 
 //delete all products
@@ -121,4 +144,33 @@ export const clearDatabase = async (req, res) => {
   }
 };
 
-export const deleteProduct = async (req, res) => {};
+export const deleteProduct = async (req, res) => {
+  const productId = req.params;
+
+  if (!productId) {
+    return res
+      .status(400)
+      .json({ message: "There was no payload for the product id" });
+  }
+
+  //delete from the database
+  await Product.findByIdAndDelete({
+    productId,
+  });
+
+  //return a response to the client
+  return res.status(200).json({
+    message: "Product deleted successfully",
+  });
+  //////////////////////////////////////////////////////////
+  const updateFunction = (req, res) => {
+    const body = req.body;
+
+    const nonEmptyField = {};
+
+    //check for non-empty fields
+    Object.keys(body).forEach((key) => {
+      const value = body[key];
+    });
+  };
+};
