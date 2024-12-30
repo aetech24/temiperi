@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Sidebar } from "../Sidebar/Sidebar";
 import "./product.css";
 import { icons } from "../../icons/heroIcons";
 import { toast } from "react-toastify";
 
 const Products = () => {
-  // URL endpoints
-  const devUrl = "http://localhost:4000/temiperi";
-  const prodUrl = "https://temiperi-backend.onrender.com/temiperi";
-  const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
-
-  const editDevUrl = "http://localhost:4000";
-  const editProdUrl = "https://temiperi-backend.onrender.com";
-  const editBaseUrl =
-    window.location.hostname === "localhost" ? devUrl : prodUrl;
-
   // State management
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -33,21 +23,19 @@ const Products = () => {
     category: "",
     retail_price: "",
     whole_sale_price: "",
-    quantity: "",
+    quantity: ""
   });
 
   // Fetch products
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/products`);
+      const response = await api.get('/products');
       const productsData = response.data.products;
       setProducts(productsData);
       setFilteredProducts(productsData);
 
       // Extract unique categories
-      const uniqueCategories = [
-        ...new Set(productsData.map((product) => product.category)),
-      ];
+      const uniqueCategories = [...new Set(productsData.map(product => product.category))];
       setCategories(uniqueCategories);
 
       setLoading(false);
@@ -115,39 +103,29 @@ const Products = () => {
     e.preventDefault();
 
     try {
-      // Show loading toast
       const loadingToast = toast.loading("Updating product...");
 
-      // Format the data
       const updateData = {
         name: editForm.name,
         category: editForm.category,
         price: {
           retail_price: parseFloat(editForm.retail_price),
-          whole_sale_price: parseFloat(editForm.whole_sale_price),
+          whole_sale_price: parseFloat(editForm.whole_sale_price)
         },
-        quantity: parseInt(editForm.quantity),
+        quantity: parseInt(editForm.quantity)
       };
 
-      // Send update request
-      const response = await axios.patch(
-        `${baseUrl}/products/?id=${editingProduct._id}`,
-        updateData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await api.patch(
+        `/products/?id=${editingProduct._id}`,
+        updateData
       );
 
       if (response.data) {
-        // Update local state
         const updatedProducts = products.map((prod) =>
           prod._id === editingProduct._id ? response.data : prod
         );
         setProducts(updatedProducts);
 
-        // Close modal and reset form
         setShowEditModal(false);
         setEditingProduct(null);
         setEditForm({
@@ -155,38 +133,17 @@ const Products = () => {
           category: "",
           retail_price: "",
           whole_sale_price: "",
-          quantity: "",
+          quantity: ""
         });
 
-        console.log(response.data.message);
-
-        // Show success message
-        // toast.dismiss(loadingToast);
-        toast.success("Product updated successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-
-        // Refresh the products list
+        toast.dismiss(loadingToast);
+        toast.success("Product updated successfully!");
         fetchProducts();
       }
     } catch (err) {
       console.error("Error updating product:", err);
       toast.error(
-        err.response?.data?.message ||
-          "Failed to update product. Please try again.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
+        err.response?.data?.message || "Failed to update product. Please try again."
       );
     }
   };
@@ -200,44 +157,20 @@ const Products = () => {
   // Handle delete confirmation
   const handleDeleteConfirm = async () => {
     try {
-      // Show loading toast
       const loadingToast = toast.loading("Deleting product...");
 
-      // Send delete request
-      await axios.delete(
-        `${baseUrl}/delete-product?id=${productToDelete._id}`
-      );
+      await api.delete(`/delete-product?id=${productToDelete._id}`);
 
-      // Update local state
       setProducts(products.filter((prod) => prod._id !== productToDelete._id));
-
-      // Close modal
       setShowDeleteModal(false);
       setProductToDelete(null);
 
-      // Show success message
       toast.dismiss(loadingToast);
-      toast.success("Product deleted successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("Product deleted successfully!");
     } catch (err) {
       console.error("Error deleting product:", err);
       toast.error(
-        err.response?.data?.message ||
-          "Failed to delete product. Please try again.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
+        err.response?.data?.message || "Failed to delete product. Please try again."
       );
     }
   };
