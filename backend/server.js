@@ -29,7 +29,7 @@ app.use(
       "http://localhost:5173",
       "https://temiperi-stocks-frontend.onrender.com",
       "https://temiperi-stocks-admin.onrender.com",
-      "https://temiperi-frontend.vercel.app/",
+      "https://temiperi-frontend.vercel.app",
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "*"],
