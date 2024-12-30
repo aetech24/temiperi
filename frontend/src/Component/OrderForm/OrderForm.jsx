@@ -216,8 +216,11 @@ const OrderForm = () => {
           progress: undefined,
         });
 
+        await axios.post(
+          `https://temiperi-stocks-backend.onrender.com/product-update`,
+          {}
+        );
         //refresh the page after response is provided
-
         setTimeout(() => {
           window.location.reload();
         }, 1000);
