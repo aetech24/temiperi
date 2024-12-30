@@ -855,5 +855,23 @@
     },
     "category": "kasaperko company limited",
     "quantity": 13
+  },
+  {
+    "name": "kalyppo",
+    "price": {
+      "retail": 100,
+      "wholesale": 95
+    },
+    "category": "kasaperko company limited",
+    "quantity": 2
+  },
+  {
+    "name": "BB cocktail",
+    "price": {
+      "retail": 100,
+      "wholesale": 95
+    },
+    "category": "kasaperko company limited",
+    "quantity": 82
   }
 ]
