@@ -14,14 +14,17 @@ export const getAllProducts = async (req, res) => {
 //create products
 export const addProduct = async (req, res) => {
   try {
-    const products = new Product(req.body);
-    const savedProduct = await products.save();
-    res.status(201).json({ data: savedProduct });
+    const products = Array.isArray(req.body) ? req.body : [req.body]; // assuming it's an array of product objects
+
+    // Save each product to the database
+    const savedProducts = await Product.insertMany(products); // Insert multiple products
+    res.status(201).json({ data: savedProducts });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 };
+
 //get a product
 export const getProduct = async (req, res) => {};
 
@@ -66,6 +69,24 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-//delete a product
+//delete all products
+export const clearDatabase = async (req, res) => {
+  try {
+    // Delete all documents in the 'products' collection
+    await Product.deleteMany({});
+
+    res.status(200).json({
+      success: true,
+      message: "All products have been deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error clearing database:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to clear database.",
+      error: error.message,
+    });
+  }
+};
 
 export const deleteProduct = async (req, res) => {};
