@@ -8,7 +8,6 @@ rm -f package-lock.json
 # Install dependencies
 npm install --legacy-peer-deps --force
 
-<<<<<<< HEAD
 # Create dist directory
 mkdir -p dist
 
@@ -22,7 +21,5 @@ else
     echo "Build failed - dist directory is empty or doesn't exist"
     exit 1
 fi
-=======
 # Build the project
 npm run build
->>>>>>> parent of 946e9d8 (Added a build.sh file to solve all deployment issues)
