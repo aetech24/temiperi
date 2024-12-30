@@ -48,7 +48,7 @@ app.use("/invoices", fetchInvoices);
 app.use("/product-update", updateProduct);
 app.use("/clear-products", clearDatabase);
 
-app.patch(`/products`, updateProductField);
+app.patch(`/temiperi/products`, updateProductField);
 // app.use(notFound);
 // app.use(errorHandler);
 

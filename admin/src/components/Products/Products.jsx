@@ -11,6 +11,11 @@ const Products = () => {
   const prodUrl = "https://temiperi-backend.onrender.com/temiperi";
   const baseUrl = window.location.hostname === "localhost" ? devUrl : prodUrl;
 
+  const editDevUrl = "http://localhost:4000";
+  const editProdUrl = "https://temiperi-backend.onrender.com";
+  const editBaseUrl =
+    window.location.hostname === "localhost" ? devUrl : prodUrl;
+
   // State management
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +92,7 @@ const Products = () => {
 
       // Send update request
       const response = await axios.patch(
-        `${baseUrl}/products/${editingProduct._id}`,
+        `${baseUrl}/products/?id=${editingProduct._id}`,
         updateData,
         {
           headers: {
