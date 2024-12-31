@@ -30,10 +30,12 @@ app.use(
       "Content-Type",
       "Content-Length",
       "Keep-Alive",
+      "Authorization",
       "X-Requested-With",
       "X-Powered-By",
       "Connection",
     ],
+    exposedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
