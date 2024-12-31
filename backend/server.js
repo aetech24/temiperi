@@ -20,9 +20,6 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 connectDB();
-
-app.use(express.urlencoded({ extended: true }));
-
 app.use(
   cors({
     origin: [
@@ -46,6 +43,9 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
+app.options("*", cors()); // Explicitly handle OPTIONS
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use(morgan("tiny"));
