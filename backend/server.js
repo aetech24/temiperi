@@ -39,9 +39,9 @@ app.use(
 // Handle OPTIONS requests globally
 app.options("*", cors()); // Explicitly handle OPTIONS
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.json());
 app.use(morgan("tiny"));
 app.use("/temiperi", router);
 app.use("/temiperi", orderRouter);

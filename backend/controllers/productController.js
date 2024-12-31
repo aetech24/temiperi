@@ -14,16 +14,30 @@ export const getAllProducts = async (req, res) => {
 //create products
 export const addProduct = async (req, res) => {
   try {
-    const products = Array.isArray(req.body) ? req.body : [req.body]; // assuming it's an array of product objects
+    console.log("Received body:", req.body); // Debug input
 
-    // Save each product to the database
+    const products = Array.isArray(req.body) ? req.body : [req.body];
+
+    // Validate price structure
+    products.forEach((product) => {
+      if (
+        !product.price ||
+        typeof product.price !== "object" ||
+        !product.price.retail_price ||
+        !product.price.whole_sale_price
+      ) {
+        throw new Error("Invalid price format");
+      }
+    });
+
     const savedProducts = await Product.insertMany(products); // Insert multiple products
     return res.status(201).json({ data: savedProducts });
   } catch (error) {
-    console.log(error);
+    console.log("Validation error:", error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 //get a product
 export const getProduct = async (req, res) => {};
