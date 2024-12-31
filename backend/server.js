@@ -22,6 +22,8 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.options("*", cors());
 app.use(
   cors({
     origin: [
@@ -32,7 +34,15 @@ app.use(
       "https://temiperi-frontend.vercel.app",
     ],
     credentials: true,
-    allowedHeaders: ["Content-Type", "*"],
+    allowedHeaders: [
+      "Content-Type",
+      "Content-Length",
+      "Access-Control-Allow-Credentials",
+      "Keep-Alive",
+      "X-Requested-With",
+      "X-Powered-By",
+      "Connection",
+    ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
@@ -43,7 +53,6 @@ app.use("/temiperi", router);
 app.use("/temiperi", orderRouter);
 app.use("/temiperi", products);
 app.use("/temiperi", invoiceRouter);
-app.options("*", cors());
 
 app.get("/", (req, res) => {
   res.send("software is working");

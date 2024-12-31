@@ -17,21 +17,27 @@ export const createInvoice = async (req, res) => {
 export const fetchInvoices = async (req, res) => {
   console.log("Request received for invoices"); // Log request start
   try {
-    const invoices = await InvoiceModel.find(); // Database query
+    const invoices = await InvoiceModel.find().lean(); // Database query
     console.log("Fetched invoices:", invoices); // Log fetched data
 
     if (invoices.length === 0) {
       console.log("No invoices found");
       return res.status(404).json({ message: "No invoices found" });
     }
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader(
+      "Content-Length",
+      Buffer.byteLength(JSON.stringify(invoices))
+    );
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Cache-Control", "no-cache");
 
-    res.status(200).json({ success: true, data: invoices });
+    return res.status(200).json({ success: true, data: invoices });
   } catch (error) {
     console.error("Error fetching invoices:", error.message);
     res.status(500).json({ error: error.message }); // Send response even on error
   }
 };
-
 
 // Get invoice by id
 export const getInvoice = async (req, res) => {
