@@ -18,7 +18,7 @@ export const addProduct = async (req, res) => {
 
     // Save each product to the database
     const savedProducts = await Product.insertMany(products); // Insert multiple products
-    res.status(201).json({ data: savedProducts });
+    return res.status(201).json({ data: savedProducts });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -59,7 +59,7 @@ export const updateProduct = async (req, res) => {
     await product.save();
 
     // Respond with success message and updated product
-    res.status(200).json({
+    return res.status(200).json({
       message: "Product quantity updated successfully",
       product,
     });
@@ -117,7 +117,7 @@ export const updateProductField = async (req, res) => {
     }
 
     // Respond with the updated product
-    res.status(200).json(updatedProduct);
+    return res.status(200).json(updatedProduct);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error while updating product." });
@@ -135,7 +135,7 @@ export const clearDatabase = async (req, res) => {
     // Delete all documents in the 'products' collection
     await Product.deleteMany({});
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "All products have been deleted successfully.",
     });
