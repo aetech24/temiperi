@@ -13,7 +13,8 @@ export const getAllProducts = async (req, res) => {
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, PATCH, DELETE, OPTIONS"
     );
-    return res.status(201).json({ products });
+    console.log("Products fetched");
+    return res.status(200).json({ products });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error });
