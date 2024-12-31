@@ -9,6 +9,7 @@ import { fetchInvoices } from "./controllers/invoiceControllers.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import invoiceRouter from "./route/inoviceRoute.js";
 import cors from "cors";
+import { configDotenv } from "dotenv";
 import {
   clearDatabase,
   deleteProduct,
@@ -16,8 +17,9 @@ import {
   updateProductField,
 } from "./controllers/productController.js";
 
+configDotenv();
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 
 connectDB();
 app.use(
