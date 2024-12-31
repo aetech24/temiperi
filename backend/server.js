@@ -30,17 +30,9 @@ app.use(
   cors({
     origin: "*", // Allow all origins (change to specific domains for production)
     credentials: false, // No cookies or Authorization headers needed
-    allowedHeaders: [
-      "Content-Type",
-      "Content-Length",
-      "Keep-Alive",
-      "Authorization",
-      "X-Requested-With",
-      "X-Powered-By",
-      "Connection",
-    ],
-    exposedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: "*", // Allow all headers (use this if you want to accept any header)
+    exposedHeaders: "*", // Expose all headers (use this if you want to allow access to all response headers)
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Allow all methods
   })
 );
 
