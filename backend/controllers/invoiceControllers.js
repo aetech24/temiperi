@@ -15,23 +15,23 @@ export const createInvoice = async (req, res) => {
 
 //Get all invoices
 export const fetchInvoices = async (req, res) => {
+  console.log("Request received for invoices"); // Log request start
   try {
-    const invoices = await InvoiceModel.find();
+    const invoices = await InvoiceModel.find(); // Database query
+    console.log("Fetched invoices:", invoices); // Log fetched data
 
-    // Check if there are no invoices and respond immediately
     if (invoices.length === 0) {
-      console.log("There are no invoices");
+      console.log("No invoices found");
       return res.status(404).json({ message: "No invoices found" });
     }
 
-    // Log and send the response
-    console.log("Fetched invoices successfully");
-    res.status(200).json({ success: true, data: invoices, options: "None" });
+    res.status(200).json({ success: true, data: invoices });
   } catch (error) {
     console.error("Error fetching invoices:", error.message);
-    res.status(500).json({ error: error.message }); // Always send a response
+    res.status(500).json({ error: error.message }); // Send response even on error
   }
 };
+
 
 // Get invoice by id
 export const getInvoice = async (req, res) => {
