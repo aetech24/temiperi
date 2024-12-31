@@ -22,19 +22,11 @@ const port = process.env.PORT || 4000;
 connectDB();
 app.use(
   cors({
-    origin: [
-      "http://localhost:5174",
-      "http://localhost:5173",
-      "https://temiperi-stocks-frontend.onrender.com",
-      "https://temiperi-stocks-admin.onrender.com",
-      "https://temiperi-frontend.vercel.app",
-      "https://temiperi-admin.vercel.app",
-    ],
-    credentials: true,
+    origin: "*", // Allow all origins
+    credentials: false, // No cookies or Authorization headers needed
     allowedHeaders: [
       "Content-Type",
       "Content-Length",
-      "Access-Control-Allow-Credentials",
       "Keep-Alive",
       "X-Requested-With",
       "X-Powered-By",
@@ -43,6 +35,8 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
+
+// Handle OPTIONS requests globally
 app.options("*", cors()); // Explicitly handle OPTIONS
 
 app.use(express.urlencoded({ extended: true }));
