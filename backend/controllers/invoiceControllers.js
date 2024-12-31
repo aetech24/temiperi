@@ -26,7 +26,7 @@ export const fetchInvoices = async (req, res) => {
 
     // Log and send the response
     console.log("Fetched invoices successfully");
-    res.status(200).json({ success: true, data: invoices });
+    res.status(200).json({ success: true, data: invoices, options: "None" });
   } catch (error) {
     console.error("Error fetching invoices:", error.message);
     res.status(500).json({ error: error.message }); // Always send a response

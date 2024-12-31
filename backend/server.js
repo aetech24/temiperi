@@ -43,6 +43,7 @@ app.use("/temiperi", router);
 app.use("/temiperi", orderRouter);
 app.use("/temiperi", products);
 app.use("/temiperi", invoiceRouter);
+app.options("*", cors());
 
 app.get("/", (req, res) => {
   res.send("software is working");
