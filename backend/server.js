@@ -57,8 +57,8 @@ app.get("/", (req, res) => {
   res.send("software is working");
 });
 
-app.patch("/product-update", updateProduct);
-app.delete("/clear-products", clearDatabase);
+app.use("/product-update", updateProduct);
+app.use("/clear-products", clearDatabase);
 
 app.patch(`/temiperi/products`, updateProductField);
 

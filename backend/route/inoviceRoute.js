@@ -9,7 +9,7 @@ const invoiceRouter = express.Router();
 const app = express();
 
 invoiceRouter.route("/invoice").post(createInvoice);
-invoiceRouter.route("/invoice/:id").get(getInvoice);
+invoiceRouter.route("/fetch-unit-invoice/:id").get(getInvoice);
 
 invoiceRouter.get("/invoices", fetchInvoices);
 export default invoiceRouter;
