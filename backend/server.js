@@ -31,6 +31,7 @@ app.use(
       "https://temiperi-stocks-frontend.onrender.com",
       "https://temiperi-stocks-admin.onrender.com",
       "https://temiperi-frontend.vercel.app",
+      "https://temiperi-admin.vercel.app/product",
     ],
     credentials: true,
     allowedHeaders: [
