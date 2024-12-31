@@ -15,9 +15,10 @@ const Invoice = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(`${baseUrl}`);
-        if (response.data && response.data.data) {
+        const response = await axios.get(`${devUrl}`);
+        if (response.data) {
           setInvoices(response.data.data);
+          console.log(response.data);
         } else {
           setInvoices([]);
         }
