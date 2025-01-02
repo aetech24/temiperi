@@ -42,3 +42,21 @@ export const singleOrder = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
+
+export const deleteOrder = async (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res
+      .status(400)
+      .json({ message: "There was no payload for the product id" });
+  }
+
+  //delete from the database
+  await OrderModel.findByIdAndDelete({ _id: id });
+
+  //return a response to the client
+  return res.status(200).json({
+    message: "Order deleted successfully",
+  });
+};
