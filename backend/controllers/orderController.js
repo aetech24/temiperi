@@ -58,6 +58,7 @@ export const deleteOrder = async (req, res) => {
   //return a response to the client
   return res.status(200).json({
     message: "Order deleted successfully",
+    success: true,
   });
 };
 
