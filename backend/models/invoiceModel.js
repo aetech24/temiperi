@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 const invoiceSchema = new mongoose.Schema({
   invoiceNumber: { type: String, required: true, unique: true },
   customerName: { type: String, required: true },
+  paymentMethod: {
+    type: String,
+    required: false,
+    default: "cash",
+  },
   items: [
     {
       description: { type: String, required: true },

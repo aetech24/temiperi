@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     required: false,
+    default: "cash",
   },
   items: [
     {

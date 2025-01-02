@@ -60,3 +60,58 @@ export const deleteOrder = async (req, res) => {
     message: "Order deleted successfully",
   });
 };
+
+export const updateOrderField = async (req, res) => {
+  const { id } = req.query; // Get product ID from URL parameters
+  const updates = req.body; // Get updates from request body
+
+  //check if Id is present
+  if (!id) {
+    return res.status(400).json({ message: "Id not provided" });
+  }
+  // Check if updates were provided
+  if (!updates || Object.keys(updates).length === 0) {
+    return res.status(400).json({ message: "No updates provided." });
+  }
+
+  try {
+    // Create an object for storing non-empty fields only
+    const nonEmptyFields = {};
+
+    // Filter out empty or null fields
+    Object.keys(updates).forEach((key) => {
+      const value = updates[key];
+      if (value !== "" && value !== null && value !== undefined) {
+        nonEmptyFields[key] = value; // Add only non-empty values
+      }
+    });
+
+    // If no valid updates after filtering, return an error
+    if (Object.keys(nonEmptyFields).length === 0) {
+      return res
+        .status(400)
+        .json({ message: "All provided fields are empty or invalid." });
+    }
+
+    // Update product using filtered fields
+    const updatedProduct = await OrderModel.findByIdAndUpdate(
+      id,
+      { $set: nonEmptyFields }, // Update only non-empty fields
+      { new: true, runValidators: true } // Return updated document and validate input
+    );
+
+    // If no product was found, return error
+    if (!updatedProduct) {
+      console.log("No order was found");
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    // Respond with the updated product
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Server error while updating order." });
+  }
+};
