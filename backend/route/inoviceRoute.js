@@ -1,9 +1,15 @@
-import express from 'express'
-import { createInvoice, getInvoices, getInvoice } from '../controllers/invocieControllers.js'
-const invoiceRouter = express.Router()
+import express from "express";
+import {
+  createInvoice,
+  getInvoice,
+} from "../controllers/invoiceControllers.js";
+import { fetchInvoices } from "../controllers/invoiceControllers.js";
 
-invoiceRouter.route('/invoice').post(createInvoice)
-invoiceRouter.route('/invoice').get(getInvoices)
-invoiceRouter.route('invoice/:id').get(getInvoice);
+const invoiceRouter = express.Router();
+const app = express();
 
-export default invoiceRouter
+invoiceRouter.route("/invoice").post(createInvoice);
+invoiceRouter.route("/fetch-unit-invoice/:id").get(getInvoice);
+
+invoiceRouter.get("/invoices", fetchInvoices);
+export default invoiceRouter;
