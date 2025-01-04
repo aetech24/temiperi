@@ -15,16 +15,12 @@ const orderSchema = new mongoose.Schema({
   },
   cashAmount: {
     type: Number,
-    required: function() {
-      return this.paymentType === 'partial';
-    },
+    required: false,
     default: 0
   },
   momoAmount: {
     type: Number,
-    required: function() {
-      return this.paymentType === 'partial';
-    },
+    required: false,
     default: 0
   },
   items: [
