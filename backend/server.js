@@ -9,6 +9,7 @@ import { fetchInvoices } from "./controllers/invoiceControllers.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import invoiceRouter from "./route/inoviceRoute.js";
 import cors from "cors";
+import reportRouter from "./route/reportRoutes.js";
 import { config } from "dotenv";
 import {
   clearDatabase,
@@ -54,6 +55,7 @@ app.use("/temiperi", router);
 app.use("/temiperi", orderRouter);
 app.use("/temiperi", products);
 app.use("/temiperi", invoiceRouter);
+app.use("/temiperi", reportRouter);
 
 app.use("/product-update", updateProduct);
 app.use("/clear-products", clearDatabase);

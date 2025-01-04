@@ -2,10 +2,30 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
   customerName: { type: String },
+  paymentType: {
+    type: String,
+    required: true,
+    enum: ['full', 'partial'],
+    default: 'full'
+  },
   paymentMethod: {
     type: String,
     required: false,
     default: "cash",
+  },
+  cashAmount: {
+    type: Number,
+    required: function() {
+      return this.paymentType === 'partial';
+    },
+    default: 0
+  },
+  momoAmount: {
+    type: Number,
+    required: function() {
+      return this.paymentType === 'partial';
+    },
+    default: 0
   },
   items: [
     {
