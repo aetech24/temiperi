@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema({
       quantity: { type: Number },
       description: { type: String, required: false },
       price: { type: Number },
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }
     },
   ],
   createdAt: { type: Date, default: Date.now() },
