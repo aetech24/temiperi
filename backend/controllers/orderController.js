@@ -51,7 +51,7 @@ export const addOrder = async (req, res) => {
         }
         
         if (product.quantity < item.quantity) {
-          return res.status(400).json({ 
+          return res.status(409).json({ 
             success: false, 
             message: `Insufficient quantity for product ${product.name}. Available: ${product.quantity}, Requested: ${item.quantity}` 
           });
