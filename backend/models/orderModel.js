@@ -5,8 +5,8 @@ const orderSchema = new mongoose.Schema({
   paymentType: {
     type: String,
     required: true,
-    enum: ["full", "partial"],
-    default: "full",
+    enum: ['full', 'partial'],
+    default: 'full'
   },
   paymentMethod: {
     type: String,
@@ -16,12 +16,12 @@ const orderSchema = new mongoose.Schema({
   cashAmount: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
   momoAmount: {
     type: Number,
     required: false,
-    default: 0,
+    default: 0
   },
   items: [
     {
