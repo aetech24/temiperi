@@ -25,7 +25,6 @@ const orderSchema = new mongoose.Schema({
   },
   items: [
     {
-      productId: { type: String },
       quantity: { type: Number },
       description: { type: String, required: false },
       price: { type: Number },
