@@ -3,44 +3,77 @@ import Product from "../models/productModel.js";
 
 export const addOrder = async (req, res) => {
   try {
-    console.log("Received order payload:", req.body); // Log the incoming payload
+    console.log("Received order payload:", JSON.stringify(req.body, null, 2));
     
-    const order = new OrderModel(req.body);
+    if (!req.body.items || !Array.isArray(req.body.items) || req.body.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Order must contain at least one item"
+      });
+    }
+
+    // Validate required fields
+    if (!req.body.customerName || !req.body.invoiceNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer name and invoice number are required"
+      });
+    }
+
+    const order = new OrderModel({
+      customerName: req.body.customerName,
+      invoiceNumber: req.body.invoiceNumber,
+      paymentMethod: req.body.paymentMethod || "cash",
+      paymentType: req.body.paymentType || "full",
+      items: req.body.items.map(item => ({
+        description: item.description,
+        quantity: parseInt(item.quantity),
+        price: parseFloat(item.price),
+        productId: item.productId
+      }))
+    });
+
+    // Validate the order
+    const validationError = order.validateSync();
+    if (validationError) {
+      console.error("Validation error:", validationError);
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: Object.values(validationError.errors).map(err => err.message)
+      });
+    }
     
     // Update product quantities
     for (const item of order.items) {
-      console.log("Processing item:", item); // Log each item being processed
-      
-      if (!item.productId) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "productId is required for each item" 
-        });
+      if (item.productId) {
+        const product = await Product.findById(item.productId);
+        if (!product) {
+          return res.status(404).json({ 
+            success: false, 
+            message: `Product with ID ${item.productId} not found` 
+          });
+        }
+        
+        if (product.quantity < item.quantity) {
+          return res.status(400).json({ 
+            success: false, 
+            message: `Insufficient quantity for product ${product.name}. Available: ${product.quantity}, Requested: ${item.quantity}` 
+          });
+        }
+        
+        // Deduct the ordered quantity from product stock
+        product.quantity -= item.quantity;
+        await product.save();
       }
-
-      const product = await Product.findById(item.productId);
-      if (!product) {
-        return res.status(404).json({ 
-          success: false, 
-          message: `Product with ID ${item.productId} not found` 
-        });
-      }
-      
-      if (product.quantity < item.quantity) {
-        return res.status(400).json({ 
-          success: false, 
-          message: `Insufficient quantity for product ${product.name}. Available: ${product.quantity}, Requested: ${item.quantity}` 
-        });
-      }
-      
-      // Deduct the ordered quantity from product stock
-      product.quantity -= item.quantity;
-      await product.save();
-      console.log(`Updated quantity for product ${product.name}: ${product.quantity}`);
     }
     
     await order.save();
-    res.status(201).json({ success: true, message: "New order added successfully", data: order });
+    res.status(201).json({ 
+      success: true, 
+      message: "New order added successfully", 
+      data: order 
+    });
   } catch (error) {
     console.error("Error in addOrder:", error);
     res.status(500).json({ 
