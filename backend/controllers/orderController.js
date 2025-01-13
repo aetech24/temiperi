@@ -1,15 +1,44 @@
 import { OrderModel } from "../models/orderModel.js";
+import mongoose from "mongoose";
+import Product from "../models/productModel.js";
 
 export const addOrder = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const order = new OrderModel(req.body);
     
-    await order.save();
-    res
-      .status(201)
-      .json({ success: "new order add successfully", data: order });
+    // Update product quantities
+    for (const item of order.items) {
+      const product = await Product.findOne({ _id: item.productId }).session(session);
+      if (!product) {
+        throw new Error(`Product ${item.description} not found`);
+      }
+      if (product.quantity < item.quantity) {
+        throw new Error(`Insufficient quantity for product ${item.description}`);
+      }
+      
+      product.quantity -= item.quantity;
+      await product.save({ session });
+    }
+
+    await order.save({ session });
+    await session.commitTransaction();
+    
+    res.status(201).json({ 
+      success: true, 
+      message: "New order added successfully", 
+      data: order 
+    });
   } catch (error) {
-    console.error(error);
+    await session.abortTransaction();
+    res.status(400).json({ 
+      success: false, 
+      message: error.message || "Error creating order" 
+    });
+  } finally {
+    session.endSession();
   }
 };
 
