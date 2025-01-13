@@ -1,14 +1,44 @@
 import { OrderModel } from "../models/orderModel.js";
+import ProductModel from "../models/productModel.js";
 
 export const addOrder = async (req, res) => {
+  const session = await OrderModel.startSession();
+  session.startTransaction();
+
   try {
     const order = new OrderModel(req.body);
-    await order.save();
-    res
-      .status(201)
-      .json({ success: "new order add successfully", data: order });
+    
+    // Update product quantities
+    for (const item of order.items) {
+      const product = await ProductModel.findById(item.productId);
+      if (!product) {
+        throw new Error(`Product with ID ${item.productId} not found`);
+      }
+      if (product.quantity < item.quantity) {
+        throw new Error(`Insufficient quantity for product ${product.name}`);
+      }
+      
+      product.quantity -= item.quantity;
+      await product.save({ session });
+    }
+
+    await order.save({ session });
+    await session.commitTransaction();
+
+    res.status(201).json({ 
+      success: true, 
+      message: "New order added successfully", 
+      data: order 
+    });
   } catch (error) {
+    await session.abortTransaction();
     console.error(error);
+    res.status(400).json({ 
+      success: false, 
+      message: error.message || "Error adding order" 
+    });
+  } finally {
+    session.endSession();
   }
 };
 
