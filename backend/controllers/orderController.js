@@ -29,15 +29,15 @@ export const addOrder = async (req, res) => {
     });
 
     // Validate the order
-    const validationError = order.validateSync();
-    if (validationError) {
-      console.error("Validation error:", validationError);
-      return res.status(400).json({
-        success: false,
-        message: "Validation error",
-        errors: Object.values(validationError.errors).map(err => err.message)
-      });
-    }
+    // const validationError = order.validateSync();
+    // if (validationError) {
+    //   console.error("Validation error:", validationError);
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Validation error",
+    //     errors: Object.values(validationError.errors).map(err => err.message)
+    //   });
+    // }
     
     // Update product quantities
     for (const item of order.items) {
