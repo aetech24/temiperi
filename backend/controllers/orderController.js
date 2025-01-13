@@ -3,37 +3,52 @@ import Product from "../models/productModel.js";
 
 export const addOrder = async (req, res) => {
   try {
+    console.log("Received order payload:", req.body); // Log the incoming payload
+    
     const order = new OrderModel(req.body);
     
     // Update product quantities
     for (const item of order.items) {
-      if (item.productId) {
-        const product = await Product.findById(item.productId);
-        if (!product) {
-          return res.status(404).json({ 
-            success: false, 
-            message: `Product with ID ${item.productId} not found` 
-          });
-        }
-        
-        if (product.quantity < item.quantity) {
-          return res.status(400).json({ 
-            success: false, 
-            message: `Insufficient quantity for product ${product.name}. Available: ${product.quantity}` 
-          });
-        }
-        
-        // Deduct the ordered quantity from product stock
-        product.quantity -= item.quantity;
-        await product.save();
+      console.log("Processing item:", item); // Log each item being processed
+      
+      if (!item.productId) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "productId is required for each item" 
+        });
       }
+
+      const product = await Product.findById(item.productId);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false, 
+          message: `Product with ID ${item.productId} not found` 
+        });
+      }
+      
+      if (product.quantity < item.quantity) {
+        return res.status(400).json({ 
+          success: false, 
+          message: `Insufficient quantity for product ${product.name}. Available: ${product.quantity}, Requested: ${item.quantity}` 
+        });
+      }
+      
+      // Deduct the ordered quantity from product stock
+      product.quantity -= item.quantity;
+      await product.save();
+      console.log(`Updated quantity for product ${product.name}: ${product.quantity}`);
     }
     
     await order.save();
     res.status(201).json({ success: true, message: "New order added successfully", data: order });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Error creating order", error: error.message });
+    console.error("Error in addOrder:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error creating order", 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
