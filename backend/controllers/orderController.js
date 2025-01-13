@@ -5,12 +5,12 @@ export const addOrder = async (req, res) => {
   try {
     console.log("Received order payload:", JSON.stringify(req.body, null, 2));
     
-    if (!req.body.items || !Array.isArray(req.body.items) || req.body.items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Order must contain at least one item"
-      });
-    }
+    // if (!req.body.items || !Array.isArray(req.body.items) || req.body.items.length === 0) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Order must contain at least one item"
+    //   });
+    // }
 
     // Validate required fields
     if (!req.body.customerName || !req.body.invoiceNumber) {
@@ -25,12 +25,7 @@ export const addOrder = async (req, res) => {
       invoiceNumber: req.body.invoiceNumber,
       paymentMethod: req.body.paymentMethod || "cash",
       paymentType: req.body.paymentType || "full",
-      items: req.body.items.map(item => ({
-        description: item.description,
-        quantity: parseInt(item.quantity),
-        price: parseFloat(item.price),
-        productId: item.productId
-      }))
+      items: req.body.items
     });
 
     // Validate the order
