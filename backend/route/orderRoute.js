@@ -10,7 +10,6 @@ import {
 
 orderRouter.route("/order").post(addOrder);
 orderRouter.route("/orders").get(orderList);
-orderRouter.route("/orders").get(orderList);
 orderRouter.route("/update-order").post(updateOrderField);
 orderRouter.route("/delete-order").get(deleteOrder);
 orderRouter.route("/orders/:id").get(singleOrder);

@@ -18,10 +18,8 @@ export const fetchInvoices = async (req, res) => {
   console.log("Request received for invoices"); // Log request start
   try {
     const invoices = await InvoiceModel.find().lean(); // Database query
-    console.log("Fetched invoices:", invoices); // Log fetched data
 
     if (invoices.length === 0) {
-      console.log("No invoices found");
       return res.status(404).json({ message: "No invoices found" });
     }
 

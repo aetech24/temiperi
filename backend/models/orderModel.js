@@ -37,6 +37,10 @@ const orderSchema = new mongoose.Schema({
   ],
   createdAt: { type: Date, default: Date.now() },
   invoiceNumber: { type: String, required: true },
+}, {
+  timestamps: {
+    currentTime: () => new Date().toLocaleString('en-US', { timeZone: 'Africa/Accra' })
+  }
 });
 
 export const OrderModel = mongoose.model("Order", orderSchema);
