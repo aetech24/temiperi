@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: () => Date.now(), required: false },
   invoiceNumber: { type: String, required: true },
 }, {
   timestamps: {

@@ -16,7 +16,7 @@ const invoiceSchema = new mongoose.Schema({
     },
   ],
   totalAmount: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now(), required: false },
+  createdAt: { type: Date, default: () => Date.now(), required: false },
 }, {
   timestamps: {
     currentTime: () => new Date().toLocaleString('en-US', { timeZone: 'Africa/Accra' })
