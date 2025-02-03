@@ -83,6 +83,13 @@ export const updateInvoiceField = async (req, res) => {
       { new: true, runValidators: true } // Return updated document and validate input
     );
 
+    //update the product quantity when you update the invoice
+    const product = await ProductModel.findById(updatedProduct.productId);
+    if (product) {
+      product.quantity -= updatedProduct.quantity;
+      await product.save();
+    }
+
     // If no product was found, return error
     if (!updatedProduct) {
       console.log("No invoice was found");
