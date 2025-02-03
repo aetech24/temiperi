@@ -1,6 +1,6 @@
 import { InvoiceModel } from "../models/invoiceModel.js";
 import { OrderModel } from "../models/orderModel.js";
-//import invoiceModel from "../models/invoiceModel.js";
+import ProductModel from "../models/productModel.js";
 
 //create new invoice
 export const createInvoice = async (req, res) => {
@@ -90,59 +90,72 @@ export const updateInvoiceField = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found." });
     }
 
-    // Get the invoice number of the incoming invoice
-    const invoiceNumber = updatedInvoice.invoiceNumber;
-
-    // Update the order quantity when you update the invoice
-    // Update the order quantity when you update the invoice
-    const order = await OrderModel.findOne({ invoiceNumber: invoiceNumber });
-    if (order) {
-      // Fetch the old invoice before the update
+    try {
+      // Fetch the old invoice before the update to compare quantities
       const oldInvoice = await InvoiceModel.findById(id);
       if (!oldInvoice) {
         console.log("Old invoice not found");
         return res.status(404).json({ message: "Old invoice not found." });
       }
 
-      // Assuming items order and length haven't changed
+      // Update product quantities based on the difference between old and new invoice
       await Promise.all(
-        order.items.map(async (orderItem, index) => {
-          const oldInvoiceItem = oldInvoice.items[index];
-          const newInvoiceItem = updatedInvoice.items[index];
+        updatedInvoice.items.map(async (newItem) => {
+          // Find corresponding old item
+          const oldItem = oldInvoice.items.find(
+            (item) => item.description === newItem.description
+          );
 
-          if (!oldInvoiceItem || !newInvoiceItem) {
-            console.log("Mismatch in invoice items");
+          if (!oldItem) {
+            console.log(
+              `No matching old item found for ${newItem.description}`
+            );
             return;
           }
 
-          const quantityDelta =
-            newInvoiceItem.quantity - oldInvoiceItem.quantity;
-          if (quantityDelta === 0) return; // No change
+          // Calculate quantity difference
+          const quantityDelta = newItem.quantity - oldItem.quantity;
+          if (quantityDelta === 0) return; // No change in quantity
 
-          const product = await ProductModel.findById(orderItem.productId);
+          // Find and update the product
+          const product = await ProductModel.findOne({
+            name: newItem.description,
+          });
           if (product) {
+            // Subtract from quantity if new quantity is higher (more items sold)
+            // Add to quantity if new quantity is lower (items returned/modified)
             product.quantity -= quantityDelta;
+
+            // Ensure quantity doesn't go negative
+            if (product.quantity < 0) {
+              throw new Error(`Insufficient stock for ${product.name}`);
+            }
+
             await product.save();
-            // Update order item quantity to reflect new invoice quantity
-            orderItem.quantity = newInvoiceItem.quantity;
+            console.log(
+              `Updated quantity for ${product.name}: ${product.quantity}`
+            );
           } else {
-            console.log("Product not found:", orderItem.productId);
+            console.log(`Product not found: ${newItem.description}`);
           }
         })
       );
-      // Save the updated order
-      await order.save();
-    } else {
-      console.log("No order found for invoice:", invoiceNumber);
-    }
 
-    // Respond with the updated invoice
-    return res.status(200).json(updatedInvoice);
+      // Respond with the updated invoice
+      return res.status(200).json(updatedInvoice);
+    } catch (error) {
+      console.error("Error updating product quantities:", error);
+      return res.status(500).json({
+        message: error.message || "Error updating product quantities",
+        success: false,
+      });
+    }
   } catch (error) {
     console.error("Error in updateInvoiceField:", error);
-    return res
-      .status(500)
-      .json({ message: "Server error while updating order." });
+    return res.status(500).json({
+      message: error.message || "Server error while updating invoice.",
+      success: false,
+    });
   }
 };
 
