@@ -48,7 +48,7 @@ export const updateInvoiceField = async (req, res) => {
   const { id } = req.query; // Get product ID from URL parameters
   const updates = req.body; // Get updates from request body
 
-  //check if Id is present
+  // Check if Id is present
   if (!id) {
     return res.status(400).json({ message: "Id not provided" });
   }
@@ -76,37 +76,46 @@ export const updateInvoiceField = async (req, res) => {
         .json({ message: "All provided fields are empty or invalid." });
     }
 
-    // Update product using filtered fields
+    // Update invoice using filtered fields
     const updatedInvoice = await InvoiceModel.findByIdAndUpdate(
       id,
       { $set: nonEmptyFields }, // Update only non-empty fields
       { new: true, runValidators: true } // Return updated document and validate input
     );
 
-    //get the invoice number of the incoming invoice
+    // Check if the invoice was found
+    if (!updatedInvoice) {
+      console.log("No invoice was found");
+      return res.status(404).json({ message: "Invoice not found." });
+    }
+
+    // Get the invoice number of the incoming invoice
     const invoiceNumber = updatedInvoice.invoiceNumber;
 
-    //update the order quantity when you update the invoice
+    // Update the order quantity when you update the invoice
     const order = await OrderModel.findOne({ invoiceNumber: invoiceNumber });
     if (order) {
-      order.items.forEach(async (item) => {
-        if (item.productId === nonEmptyFields.productId) {
-          item.quantity -= nonEmptyFields.quantity;
-          await product.save();
-        }
-      });
+      await Promise.all(
+        order.items.map(async (item) => {
+          if (item.productId.equals(nonEmptyFields.productId)) {
+            const product = await ProductModel.findById(item.productId);
+            if (product) {
+              product.quantity -= item.quantity; // Decrease product quantity
+              await product.save(); // Save the updated product
+            } else {
+              console.log("Product not found for productId:", item.productId);
+            }
+          }
+        })
+      );
+    } else {
+      console.log("No order found for invoiceNumber:", invoiceNumber);
     }
 
-    // If no product was found, return error
-    if (!updatedProduct) {
-      console.log("No invoice was found");
-      return res.status(404).json({ message: "Product not found." });
-    }
-
-    // Respond with the updated product
-    return res.status(200).json(updatedProduct);
+    // Respond with the updated invoice
+    return res.status(200).json(updatedInvoice);
   } catch (error) {
-    console.error(error);
+    console.error("Error in updateInvoiceField:", error);
     return res
       .status(500)
       .json({ message: "Server error while updating order." });
