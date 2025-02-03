@@ -94,23 +94,46 @@ export const updateInvoiceField = async (req, res) => {
     const invoiceNumber = updatedInvoice.invoiceNumber;
 
     // Update the order quantity when you update the invoice
+    // Update the order quantity when you update the invoice
     const order = await OrderModel.findOne({ invoiceNumber: invoiceNumber });
     if (order) {
+      // Fetch the old invoice before the update
+      const oldInvoice = await InvoiceModel.findById(id);
+      if (!oldInvoice) {
+        console.log("Old invoice not found");
+        return res.status(404).json({ message: "Old invoice not found." });
+      }
+
+      // Assuming items order and length haven't changed
       await Promise.all(
-        order.items.map(async (item) => {
-          if (item.productId.equals(nonEmptyFields.productId)) {
-            const product = await ProductModel.findById(item.productId);
-            if (product) {
-              product.quantity -= item.quantity; // Decrease product quantity
-              await product.save(); // Save the updated product
-            } else {
-              console.log("Product not found for productId:", item.productId);
-            }
+        order.items.map(async (orderItem, index) => {
+          const oldInvoiceItem = oldInvoice.items[index];
+          const newInvoiceItem = updatedInvoice.items[index];
+
+          if (!oldInvoiceItem || !newInvoiceItem) {
+            console.log("Mismatch in invoice items");
+            return;
+          }
+
+          const quantityDelta =
+            newInvoiceItem.quantity - oldInvoiceItem.quantity;
+          if (quantityDelta === 0) return; // No change
+
+          const product = await ProductModel.findById(orderItem.productId);
+          if (product) {
+            product.quantity -= quantityDelta;
+            await product.save();
+            // Update order item quantity to reflect new invoice quantity
+            orderItem.quantity = newInvoiceItem.quantity;
+          } else {
+            console.log("Product not found:", orderItem.productId);
           }
         })
       );
+      // Save the updated order
+      await order.save();
     } else {
-      console.log("No order found for invoiceNumber:", invoiceNumber);
+      console.log("No order found for invoice:", invoiceNumber);
     }
 
     // Respond with the updated invoice
