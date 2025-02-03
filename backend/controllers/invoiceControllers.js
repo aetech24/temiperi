@@ -77,17 +77,24 @@ export const updateInvoiceField = async (req, res) => {
     }
 
     // Update product using filtered fields
-    const updatedProduct = await InvoiceModel.findByIdAndUpdate(
+    const updatedInvoice = await InvoiceModel.findByIdAndUpdate(
       id,
       { $set: nonEmptyFields }, // Update only non-empty fields
       { new: true, runValidators: true } // Return updated document and validate input
     );
 
-    //update the product quantity when you update the invoice
-    const product = await ProductModel.findById(updatedProduct.productId);
-    if (product) {
-      product.quantity -= updatedProduct.quantity;
-      await product.save();
+    //get the invoice number of the incoming invoice
+    const invoiceNumber = updatedInvoice.invoiceNumber;
+
+    //update the order quantity when you update the invoice
+    const order = await OrderModel.findOne({ invoiceNumber: invoiceNumber });
+    if (order) {
+      order.items.forEach(async (item) => {
+        if (item.productId === nonEmptyFields.productId) {
+          item.quantity -= nonEmptyFields.quantity;
+          await product.save();
+        }
+      });
     }
 
     // If no product was found, return error
