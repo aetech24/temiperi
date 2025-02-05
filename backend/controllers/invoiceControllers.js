@@ -90,57 +90,18 @@ export const updateInvoiceField = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found." });
     }
 
+    //get the product id from the invoice
+    const productId = updatedInvoice.productId;
+
     try {
-      // Fetch the old invoice before the update to compare quantities
-      const oldInvoice = await InvoiceModel.findById(id);
-      if (!oldInvoice) {
-        console.log("Old invoice not found");
-        return res.status(404).json({ message: "Old invoice not found." });
-      }
-
       // Update product quantities based on the difference between old and new invoice
-      await Promise.all(
-        updatedInvoice.items.map(async (newItem) => {
-          // Find corresponding old item
-          const oldItem = oldInvoice.items.find(
-            (item) => item.description === newItem.description
-          );
-
-          if (!oldItem) {
-            console.log(
-              `No matching old item found for ${newItem.description}`
-            );
-            return;
-          }
-
-          // Calculate quantity difference
-          const quantityDelta = newItem.quantity - oldItem.quantity;
-          if (quantityDelta === 0) return; // No change in quantity
-
-          // Find and update the product
-          const product = await ProductModel.findOne({
-            name: newItem.description,
-          });
-          if (product) {
-            // Subtract from quantity if new quantity is higher (more items sold)
-            // Add to quantity if new quantity is lower (items returned/modified)
-            product.quantity -= quantityDelta;
-
-            // Ensure quantity doesn't go negative
-            if (product.quantity < 0) {
-              throw new Error(`Insufficient stock for ${product.name}`);
-            }
-
-            await product.save();
-            console.log(
-              `Updated quantity for ${product.name}: ${product.quantity}`
-            );
-          } else {
-            console.log(`Product not found: ${newItem.description}`);
-          }
-        })
-      );
-
+      if (productId) {
+        const product = await ProductModel.findById(productId);
+        if (product) {
+          product.quantity -= updatedInvoice.quantity;
+          await product.save();
+        }
+      }
       // Respond with the updated invoice
       return res.status(200).json(updatedInvoice);
     } catch (error) {
