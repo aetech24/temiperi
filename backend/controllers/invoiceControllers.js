@@ -6,11 +6,64 @@ import ProductModel from "../models/productModel.js";
 export const createInvoice = async (req, res) => {
   try {
     const invoiceData = req.body;
+
+    // Validate required fields
+    if (!invoiceData.invoiceNumber || !invoiceData.customerName) {
+      return res.status(400).json({
+        message: "Invoice number and customer name are required",
+      });
+    }
+
+    // Validate items array
+    if (
+      !invoiceData.items ||
+      !Array.isArray(invoiceData.items) ||
+      invoiceData.items.length === 0
+    ) {
+      return res.status(400).json({
+        message: "At least one item is required",
+      });
+    }
+
+    // Validate each item
+    for (const item of invoiceData.items) {
+      if (!item.description || !item.quantity || !item.price) {
+        return res.status(400).json({
+          message: "Each item must have description, quantity, and price",
+        });
+      }
+    }
+
+    // Create and save the invoice
     const invoice = new InvoiceModel(invoiceData);
     await invoice.save();
-    res.status(201).json({ message: "invoice created successfully", invoice });
+
+    res.status(201).json({
+      message: "Invoice created successfully",
+      invoice,
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Create invoice error:", error);
+
+    // Handle duplicate invoice number
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Invoice number already exists",
+      });
+    }
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: Object.values(error.errors).map((err) => err.message),
+      });
+    }
+
+    res.status(500).json({
+      message: "Error creating invoice",
+      error: error.message,
+    });
   }
 };
 
@@ -46,73 +99,144 @@ export const getInvoice = async (req, res) => {
 };
 
 export const updateInvoiceField = async (req, res) => {
-  const { id } = req.query; // Get product ID from URL parameters
-  const updates = req.body; // Get updates from request body
+  const { id } = req.query;
+  const updates = req.body;
 
   // Check if Id is present
   if (!id) {
     return res.status(400).json({ message: "Id not provided" });
   }
+
   // Check if updates were provided
   if (!updates || Object.keys(updates).length === 0) {
     return res.status(400).json({ message: "No updates provided." });
   }
 
   try {
+    // First get the original invoice to compare quantities
+    const originalInvoice = await InvoiceModel.findById(id);
+    if (!originalInvoice) {
+      return res.status(404).json({ message: "Invoice not found." });
+    }
+
     // Create an object for storing non-empty fields only
     const nonEmptyFields = {};
 
-    // Filter out empty or null fields
+    // Filter out empty or null fields and validate numbers
     Object.keys(updates).forEach((key) => {
       const value = updates[key];
-      if (value !== "" && value !== null && value !== undefined) {
-        nonEmptyFields[key] = value; // Add only non-empty values
+      
+      // Skip empty values
+      if (value === "" || value === null || value === undefined) {
+        return;
+      }
+
+      // Handle items array specially
+      if (key === 'items' && Array.isArray(value)) {
+        nonEmptyFields[key] = value.map(item => ({
+          ...item,
+          quantity: parseInt(item.quantity, 10),
+          price: parseFloat(item.price)
+        }));
+      } else {
+        nonEmptyFields[key] = value;
       }
     });
 
     // If no valid updates after filtering, return an error
     if (Object.keys(nonEmptyFields).length === 0) {
-      return res
-        .status(400)
-        .json({ message: "All provided fields are empty or invalid." });
+      return res.status(400).json({
+        message: "All provided fields are empty or invalid.",
+      });
+    }
+
+    // Validate items if they exist in the update
+    if (nonEmptyFields.items) {
+      for (const item of nonEmptyFields.items) {
+        if (isNaN(item.quantity) || item.quantity < 0) {
+          return res.status(400).json({
+            message: "Invalid quantity value provided",
+          });
+        }
+        if (isNaN(item.price) || item.price < 0) {
+          return res.status(400).json({
+            message: "Invalid price value provided",
+          });
+        }
+      }
     }
 
     // Update invoice using filtered fields
     const updatedInvoice = await InvoiceModel.findByIdAndUpdate(
       id,
-      { $set: nonEmptyFields }, // Update only non-empty fields
-      { new: true, runValidators: true } // Return updated document and validate input
+      { $set: nonEmptyFields },
+      { new: true, runValidators: true }
     );
 
-    // Check if the invoice was found
-    if (!updatedInvoice) {
-      console.log("No invoice was found");
-      return res.status(404).json({ message: "Invoice not found." });
-    }
-
-    //get the product id from the invoice
-    const productId = updatedInvoice.productId;
-
+    // Update product quantities
     try {
-      // Update product quantities based on the difference between old and new invoice
-      if (productId) {
-        const product = await ProductModel.findById(productId);
-        if (product) {
-          product.quantity -= updatedInvoice.quantity;
-          await product.save();
+      if (nonEmptyFields.items) {
+        // Create a map of original quantities
+        const originalQuantities = {};
+        originalInvoice.items.forEach(item => {
+          if (item.productId) {
+            originalQuantities[item.productId.toString()] = item.quantity;
+          }
+        });
+
+        // Process each item in the updated invoice
+        for (const item of updatedInvoice.items) {
+          if (item.productId) {
+            const product = await ProductModel.findById(item.productId);
+            if (product) {
+              const originalQty = originalQuantities[item.productId.toString()] || 0;
+              const quantityDiff = item.quantity - originalQty;
+              
+              // Calculate new product quantity
+              const newQuantity = product.quantity - quantityDiff;
+              
+              // Validate new quantity
+              if (newQuantity < 0) {
+                return res.status(400).json({
+                  message: `Insufficient stock for product ${product.name}`,
+                });
+              }
+
+              // Update product quantity
+              product.quantity = newQuantity;
+              await product.save();
+            }
+          }
         }
       }
+
       // Respond with the updated invoice
-      return res.status(200).json(updatedInvoice);
+      return res.status(200).json({
+        success: true,
+        message: "Invoice updated successfully",
+        invoice: updatedInvoice
+      });
+
     } catch (error) {
       console.error("Error updating product quantities:", error);
       return res.status(500).json({
-        message: error.message || "Error updating product quantities",
+        message: "Error updating product quantities",
+        error: error.message,
         success: false,
       });
     }
+
   } catch (error) {
     console.error("Error in updateInvoiceField:", error);
+    
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: Object.values(error.errors).map((err) => err.message),
+      });
+    }
+
     return res.status(500).json({
       message: error.message || "Server error while updating invoice.",
       success: false,
