@@ -125,18 +125,18 @@ export const updateInvoiceField = async (req, res) => {
     // Filter out empty or null fields and validate numbers
     Object.keys(updates).forEach((key) => {
       const value = updates[key];
-      
+
       // Skip empty values
       if (value === "" || value === null || value === undefined) {
         return;
       }
 
       // Handle items array specially
-      if (key === 'items' && Array.isArray(value)) {
-        nonEmptyFields[key] = value.map(item => ({
+      if (key === "items" && Array.isArray(value)) {
+        nonEmptyFields[key] = value.map((item) => ({
           ...item,
           quantity: parseInt(item.quantity, 10),
-          price: parseFloat(item.price)
+          price: parseFloat(item.price),
         }));
       } else {
         nonEmptyFields[key] = value;
@@ -178,7 +178,7 @@ export const updateInvoiceField = async (req, res) => {
       if (nonEmptyFields.items) {
         // Create a map of original quantities
         const originalQuantities = {};
-        originalInvoice.items.forEach(item => {
+        originalInvoice.items.forEach((item) => {
           if (item.productId) {
             originalQuantities[item.productId.toString()] = item.quantity;
           }
@@ -189,12 +189,13 @@ export const updateInvoiceField = async (req, res) => {
           if (item.productId) {
             const product = await ProductModel.findById(item.productId);
             if (product) {
-              const originalQty = originalQuantities[item.productId.toString()] || 0;
+              const originalQty =
+                originalQuantities[item.productId.toString()] || 0;
               const quantityDiff = item.quantity - originalQty;
-              
+
               // Calculate new product quantity
               const newQuantity = product.quantity - quantityDiff;
-              
+
               // Validate new quantity
               if (newQuantity < 0) {
                 return res.status(400).json({
@@ -203,20 +204,19 @@ export const updateInvoiceField = async (req, res) => {
               }
 
               // Update product quantity
-              product.quantity = newQuantity;
-              await product.save();
+              await ProductModel.findByIdAndUpdate(item.productId, {
+                $set: { quantity: newQuantity },
+              });
             }
           }
         }
       }
-
       // Respond with the updated invoice
       return res.status(200).json({
         success: true,
         message: "Invoice updated successfully",
-        invoice: updatedInvoice
+        invoice: updatedInvoice,
       });
-
     } catch (error) {
       console.error("Error updating product quantities:", error);
       return res.status(500).json({
@@ -225,10 +225,9 @@ export const updateInvoiceField = async (req, res) => {
         success: false,
       });
     }
-
   } catch (error) {
     console.error("Error in updateInvoiceField:", error);
-    
+
     // Handle validation errors
     if (error.name === "ValidationError") {
       return res.status(400).json({
