@@ -29,7 +29,7 @@ connectDB();
 // CORS configuration
 app.use(
   cors({
-    origin: "*", // Allow all origins (change to specific domains for production)
+    origin: "https://www.zeld.vercel.app", // Allow all origins (change to specific domains for production)
     credentials: false, // No cookies or Authorization headers needed
     allowedHeaders: "*", // Allow all headers (use this if you want to accept any header)
     exposedHeaders: "*", // Expose all headers (use this if you want to allow access to all response headers)
@@ -51,11 +51,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 
-app.use("/temiperi", router);
+app.use("/temiiperi", router);
 app.use("/temiperi", orderRouter);
-app.use("/temiperi", products);
+app.use("/Temiperi", products);
 app.use("/temiperi", invoiceRouter);
-app.use("/temiperi", reportRouter);
+app.use("/temmiperi", reportRouter);
 
 app.use("/product-update", updateProduct);
 app.use("/clear-products", clearDatabase);
